@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Mino/MinoLibrary.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://GridMap.gd" type="Script" id=2]
 [ext_resource path="res://GridBack.tscn" type="PackedScene" id=3]
 [ext_resource path="res://Mino/BackMaterial.tres" type="Material" id=4]
+[ext_resource path="res://Tetrominos/GhostPiece.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -16,9 +17,8 @@ subdivide_depth = 0
 
 [node name="GridMap" type="GridMap" index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.657175, -0.5, -1 )
 theme = ExtResource( 1 )
-cell_size = Vector3( 1, 1, 2 )
+cell_size = Vector3( 1, 1, 1 )
 cell_octant_size = 8
 cell_center_x = false
 cell_center_y = false
@@ -41,28 +41,28 @@ NB_COLLUMNS = 10
 [node name="DropTimer" type="Timer" parent="." index="0"]
 
 process_mode = 1
-wait_time = 0.5
+wait_time = 1.0
 one_shot = false
 autostart = false
 
 [node name="LockDelay" type="Timer" parent="." index="1"]
 
 process_mode = 1
-wait_time = 1.0
+wait_time = 0.5
 one_shot = true
 autostart = false
 
 [node name="AutoShiftDelay" type="Timer" parent="." index="2"]
 
 process_mode = 1
-wait_time = 0.2
+wait_time = 0.17
 one_shot = true
 autostart = false
 
 [node name="AutoShiftTimer" type="Timer" parent="." index="3"]
 
 process_mode = 1
-wait_time = 0.03
+wait_time = 0.02
 one_shot = false
 autostart = true
 
@@ -94,6 +94,10 @@ mesh = SubResource( 1 )
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, 14, 16, -1 )
 mesh = SubResource( 1 )
+
+[node name="GhostPiece" parent="." index="9" instance=ExtResource( 5 )]
+
+_sections_unfolded = [ "Transform" ]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 

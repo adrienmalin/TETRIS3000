@@ -1,4 +1,4 @@
 extends "Tetromino.gd"
 
-func rotate(grid, direction):
+func rotate(direction):
 	pass

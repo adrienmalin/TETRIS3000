@@ -32,7 +32,7 @@ render_priority = 0
 trail_divisor = 2
 trail_color_modifier = SubResource( 4 )
 emission_shape = 2
-emission_box_extents = Vector3( 8, 0.5, 1 )
+emission_box_extents = Vector3( 8, 0.5, 0.5 )
 flag_align_y = false
 flag_rotate_y = true
 flag_disable_z = false
@@ -74,7 +74,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="ExplodingLine" type="Particles"]
+[node name="ExplodingLine" type="Particles" index="0"]
 
 layers = 1
 material_override = null

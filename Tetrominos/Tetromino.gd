@@ -3,8 +3,9 @@ extends Spatial
 const NB_MINOES = 4
 const CLOCKWISE = -1
 const COUNTERCLOCKWISE = 1
-const T_SPIN = 2
-const MINI_T_SPIN = 1
+const NO_T_SPIN = 0
+const T_SPIN = 1
+const MINI_T_SPIN = 2
 const SUPER_ROTATION_SYSTEM = [
     {
         COUNTERCLOCKWISE: [
@@ -74,7 +75,7 @@ const SUPER_ROTATION_SYSTEM = [
 
 var minoes
 var orientation = 0
-var t_spin = 0
+var t_spin = NO_T_SPIN
 
 func _ready():
 	minoes = [$Mino0, $Mino1, $Mino2, $Mino3]
@@ -102,20 +103,20 @@ func apply_positions(positions):
 	for i in range(4):
 		minoes[i].translation = to_local(positions[i])
 
-func move(grid, movement):
-	var new_positions = grid.possible_positions(positions(), movement)
+func move(movement):
+	var new_positions = get_parent().possible_positions(positions(), movement)
 	if new_positions:
 		translate(movement)
 		return true
 	else:
 		return false
 	
-func rotate(grid, direction):
+func rotate(direction):
 	var rotated_positions = rotated_positions(direction)
 	var movements = rotation_movement_liberty(direction)
 	var test_position
 	for movement in movements:
-		test_position = grid.possible_positions(rotated_positions, movement)
+		test_position = get_parent().possible_positions(rotated_positions, movement)
 		if test_position:
 			orientation -= direction
 			orientation %= NB_MINOES

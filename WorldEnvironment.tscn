@@ -95,7 +95,7 @@ environment = SubResource( 2 )
 
 [node name="Camera" type="Camera" parent="." index="0"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10, 20 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 10, 12 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -104,7 +104,7 @@ v_offset = 0.0
 doppler_tracking = 0
 projection = 0
 current = false
-fov = 70.0
+fov = 100.0
 size = 1.0
 near = 0.05
 far = -1.22275e+007
@@ -112,10 +112,10 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 5, 10, 50 )
+transform = Transform( 1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 5.89099, 23.8982, 41.835 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
-light_energy = 1.0
+light_energy = 0.3
 light_indirect_energy = 1.0
 light_negative = false
 light_specular = 0.5
@@ -138,7 +138,30 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light", "Transform" ]
 
-[node name="GridMap" parent="." index="2" instance=ExtResource( 2 )]
+[node name="SpotLight" type="SpotLight" parent="." index="2"]
+
+transform = Transform( 1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 3, 16, 20 )
+layers = 1
+light_color = Color( 1, 1, 1, 1 )
+light_energy = 1.0
+light_indirect_energy = 1.0
+light_negative = false
+light_specular = 0.5
+light_bake_mode = 1
+light_cull_mask = -1
+shadow_enabled = false
+shadow_color = Color( 0, 0, 0, 1 )
+shadow_bias = 0.15
+shadow_contact = 0.0
+shadow_reverse_cull_face = false
+editor_only = false
+spot_range = 5.0
+spot_attenuation = 1.0
+spot_angle = 45.0
+spot_angle_attenuation = 1.0
+_sections_unfolded = [ "Light", "Transform" ]
+
+[node name="GridMap" parent="." index="3" instance=ExtResource( 2 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 data = {

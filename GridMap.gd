@@ -15,6 +15,15 @@ const NB_MINOES = 4
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
 const HOLD_POSITION = Vector3(-5, 16, 0)
+const SCORES = [
+	[0, 4, 1],
+	[1, 8, 2],
+	[3, 12],
+	[5, 16],
+	[8]
+]
+const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
+const T_SPIN_NAMES = ["", "MINI T-SPIN", "T-SPIN"]
 
 export (int) var NB_LINES
 export (int) var NB_COLLUMNS
@@ -34,7 +43,10 @@ var exploding_lines = []
 var lines_to_clear = []
 var hard_dropping = false
 var random_bag = []
-var paused = false
+var playing = true
+var level = 0
+var goal = 0
+var score = 0
 
 func _ready():
 	randomize()
@@ -42,6 +54,15 @@ func _ready():
 		exploding_lines.append(ExplodingLine.instance())
 		add_child(exploding_lines[y])
 		exploding_lines[y].translation = Vector3(NB_COLLUMNS/2, y, 1)
+	new_level()
+	
+func new_level():
+	level += 1
+	goal += 5 * level
+	$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
+	if level > 15:
+		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
+	print("LEVEL ", level, " Goal ", goal)
 	new_piece()
 	
 func random_piece():
@@ -81,7 +102,7 @@ func _process(delta):
 			autoshift_action = ""
 	if Input.is_action_just_pressed("pause"):
 		pause()
-	if not paused and not hard_dropping:
+	if playing and not hard_dropping:
 		for action in movements:
 			if action != autoshift_action:
 				if Input.is_action_pressed(action):
@@ -100,12 +121,12 @@ func _process(delta):
 			hold()
 
 func _on_AutoShiftDelay_timeout():
-	if not paused and autoshift_action:
+	if playing and autoshift_action:
 		move(movements[autoshift_action])
 		$AutoShiftTimer.start()
 
 func _on_AutoShiftTimer_timeout():
-	if not paused and autoshift_action:
+	if playing and autoshift_action:
 		move(movements[autoshift_action])
 		
 func is_free_cell(position):
@@ -128,14 +149,27 @@ func possible_positions(initial_positions, movement):
 		return []
 		
 func move(movement):
-	if current_piece.move(self, movement):
+	if current_piece.move(movement):
+		update_ghost_piece()
 		$LockDelay.start()
 		return true
 	else:
 		return false
 		
 func rotate(direction):
-	current_piece.rotate(self, direction)
+	if current_piece.rotate(direction):
+		update_ghost_piece()
+		$LockDelay.start()
+		return true
+	else:
+		return false
+		
+func update_ghost_piece():
+	var positions = current_piece.positions()
+	for i in range(Tetromino.NB_MINOES):
+		$GhostPiece.minoes[i].translation = $GhostPiece.to_local(positions[i])
+	while $GhostPiece.move(movements["soft_drop"]):
+		pass
 
 func _on_DropTimer_timeout():
 	move(movements["soft_drop"])
@@ -151,10 +185,6 @@ func _on_LockDelay_timeout():
 		lock_piece()
 
 func lock_piece():
-	if current_piece.t_spin == Tetromino.T_SPIN:
-		print("T-SPIN")
-	elif current_piece.t_spin == Tetromino.MINI_T_SPIN:
-		print("MINI T-SPIN")
 	for mino in current_piece.minoes:
 		set_cell_item(current_piece.to_global(mino.translation).x, current_piece.to_global(mino.translation).y, 0, 0)
 	remove_child(current_piece)
@@ -174,8 +204,17 @@ func line_clear():
 			lines_to_clear.append(y)
 			exploding_lines[y].restart()
 	if lines_to_clear:
-		print(lines_to_clear.size(), " LINES CLEARED")
 		$ExplosionDelay.start()
+	update_score()
+	
+func update_score():
+	if lines_to_clear or current_piece.t_spin:
+		var s = SCORES[lines_to_clear.size()][current_piece.t_spin]
+		score += 100 * s
+		goal -= s
+		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_to_clear.size()], " Score ", score)
+	if goal <= 0:
+		new_level()
 	else:
 		new_piece()
 
@@ -184,7 +223,6 @@ func _on_ExplosionDelay_timeout():
 		for y in range(cleared_line, NB_LINES+2):
 			for x in range(NB_COLLUMNS):
 				set_cell_item(x, y, 0, get_cell_item(x, y+1, 0))
-	new_piece()
 
 func hold():
 	if not current_piece_held:
@@ -200,18 +238,19 @@ func hold():
 		current_piece_held = true
 		
 func pause():
-	paused = not paused
-	if paused:
-		print("PAUSE")
-		$DropTimer.stop()
-		$LockDelay.stop()
-	else:
-		print("RESUME")
+	playing = not playing
+	if playing:
 		$DropTimer.start()
 		$LockDelay.start()
+		print("RESUME")
+	else:
+		$DropTimer.stop()
+		$LockDelay.stop()
+		print("PAUSE")
 		
 func game_over():
-	print("GAME OVER")
+	playing = false
 	$DropTimer.stop()
 	$AutoShiftDelay.stop()
 	$AutoShiftTimer.stop()
+	print("GAME OVER")
