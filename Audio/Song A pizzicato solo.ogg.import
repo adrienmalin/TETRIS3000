@@ -11,5 +11,5 @@ dest_files=[ "res://.import/Song A pizzicato solo.ogg-bb0592fa96a1944827b2c37783
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

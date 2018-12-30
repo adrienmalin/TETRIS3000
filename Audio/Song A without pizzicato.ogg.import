@@ -11,5 +11,5 @@ dest_files=[ "res://.import/Song A without pizzicato.ogg-0762944017b6daf2dd37510
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0
