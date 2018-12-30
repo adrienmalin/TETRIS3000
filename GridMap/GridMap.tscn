@@ -1,0 +1,180 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Mino/MinoLibrary.tres" type="MeshLibrary" id=1]
+[ext_resource path="res://GridMap/GridMap.gd" type="Script" id=2]
+[ext_resource path="res://GridMap/GridBack.tscn" type="PackedScene" id=3]
+[ext_resource path="res://GridMap/BackMaterial.tres" type="Material" id=4]
+[ext_resource path="res://Tetrominos/GhostPiece.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Audio/Song A without pizzicato.ogg" type="AudioStream" id=6]
+[ext_resource path="res://Audio/Song A pizzicato solo.ogg" type="AudioStream" id=7]
+[ext_resource path="res://Audio/line_clear.wav" type="AudioStream" id=8]
+[ext_resource path="res://Audio/tetris.wav" type="AudioStream" id=9]
+
+[sub_resource type="CubeMesh" id=1]
+
+material = ExtResource( 4 )
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+size = Vector3( 1, 1, 1 )
+subdivide_width = 0
+subdivide_height = 0
+subdivide_depth = 0
+
+[node name="GridMap" type="GridMap" index="0"]
+
+theme = ExtResource( 1 )
+cell_size = Vector3( 1, 1, 1 )
+cell_octant_size = 8
+cell_center_x = false
+cell_center_y = false
+cell_center_z = false
+cell_scale = 1.0
+collision_layer = 1
+collision_mask = 1
+data = {
+"cells": PoolIntArray( 13, 0, 0, 65543, 0, 0 )
+}
+script = ExtResource( 2 )
+_sections_unfolded = [ "Cell", "Transform" ]
+__meta__ = {
+"_editor_clip_": 0,
+"_editor_floor_": Vector3( 0, 3, 0 )
+}
+
+[node name="DropTimer" type="Timer" parent="." index="0"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="LockDelay" type="Timer" parent="." index="1"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = true
+autostart = false
+
+[node name="AutoShiftDelay" type="Timer" parent="." index="2"]
+
+process_mode = 1
+wait_time = 0.17
+one_shot = true
+autostart = false
+
+[node name="AutoShiftTimer" type="Timer" parent="." index="3"]
+
+process_mode = 1
+wait_time = 0.02
+one_shot = false
+autostart = true
+
+[node name="ExplosionDelay" type="Timer" parent="." index="4"]
+
+process_mode = 1
+wait_time = 0.1
+one_shot = true
+autostart = false
+
+[node name="GridBack" parent="." index="5" instance=ExtResource( 3 )]
+
+transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 0.1, 4.5, 9.5, -1 )
+mesh = SubResource( 1 )
+
+[node name="HoldBack" parent="." index="6" instance=ExtResource( 3 )]
+
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, -5, 16, -1 )
+mesh = SubResource( 1 )
+
+[node name="NextBack" parent="." index="7" instance=ExtResource( 3 )]
+
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, 14, 16, -1 )
+mesh = SubResource( 1 )
+
+[node name="GhostPiece" parent="." index="8" instance=ExtResource( 5 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="Music" type="AudioStreamPlayer" parent="." index="9"]
+
+stream = ExtResource( 6 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "Music"
+_sections_unfolded = [ "Attenuation Filter", "Doppler", "Pause" ]
+
+[node name="Music2" type="AudioStreamPlayer3D" parent="." index="10"]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0 )
+stream = ExtResource( 7 )
+attenuation_model = 0
+unit_db = 0.0
+unit_size = 1.0
+max_db = 6.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 0.0
+out_of_range_mode = 0
+bus = "Music2"
+area_mask = 1
+emission_angle_enabled = false
+emission_angle_degrees = 45.0
+emission_angle_filter_attenuation_db = -12.0
+attenuation_filter_cutoff_hz = 5000.0
+attenuation_filter_db = -24.0
+doppler_tracking = 0
+_sections_unfolded = [ "Attenuation Filter", "Doppler" ]
+
+[node name="MusicDelay" type="Timer" parent="." index="11"]
+
+process_mode = 1
+wait_time = 0.2
+one_shot = true
+autostart = false
+
+[node name="LineCLearSFX" type="AudioStreamPlayer" parent="." index="12"]
+
+stream = ExtResource( 8 )
+volume_db = 0.0
+pitch_scale = 1.0
+autoplay = false
+mix_target = 0
+bus = "SFX"
+
+[node name="TetrisSFX" type="AudioStreamPlayer3D" parent="." index="13"]
+
+stream = ExtResource( 9 )
+attenuation_model = 0
+unit_db = 0.0
+unit_size = 1.0
+max_db = 3.0
+pitch_scale = 1.0
+autoplay = false
+max_distance = 0.0
+out_of_range_mode = 0
+bus = "SFX"
+area_mask = 1
+emission_angle_enabled = false
+emission_angle_degrees = 45.0
+emission_angle_filter_attenuation_db = -12.0
+attenuation_filter_cutoff_hz = 5000.0
+attenuation_filter_db = -24.0
+doppler_tracking = 0
+
+[connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
+
+[connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
+
+[connection signal="timeout" from="AutoShiftDelay" to="." method="_on_AutoShiftDelay_timeout"]
+
+[connection signal="timeout" from="AutoShiftTimer" to="." method="_on_AutoShiftTimer_timeout"]
+
+[connection signal="timeout" from="ExplosionDelay" to="." method="_on_ExplosionDelay_timeout"]
+
+[connection signal="finished" from="Music" to="." method="_on_Music_finished"]
+
+[connection signal="timeout" from="MusicDelay" to="." method="_on_MusicDelay_timeout"]
+
+

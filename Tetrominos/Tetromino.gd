@@ -96,11 +96,8 @@ func rotated_positions(direction):
 		translations.append(v)
 	return translations
 	
-func rotation_movement_liberty(direction):
-	return SUPER_ROTATION_SYSTEM[orientation][direction]
-	
 func apply_positions(positions):
-	for i in range(4):
+	for i in range(NB_MINOES):
 		minoes[i].translation = to_local(positions[i])
 
 func move(movement):
@@ -113,7 +110,7 @@ func move(movement):
 	
 func rotate(direction):
 	var rotated_positions = rotated_positions(direction)
-	var movements = rotation_movement_liberty(direction)
+	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
 	var test_position
 	for movement in movements:
 		test_position = get_parent().possible_positions(rotated_positions, movement)
@@ -124,3 +121,7 @@ func rotate(direction):
 			translate(movement)
 			return true
 	return false
+	
+func emit_trail(emit):
+	for mino in minoes:
+		mino.get_node("Trail").emitting = emit
