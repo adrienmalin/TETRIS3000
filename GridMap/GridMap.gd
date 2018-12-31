@@ -10,12 +10,21 @@ const TetroS = preload("res://Tetrominos/TetroS.tscn")
 const TetroT = preload("res://Tetrominos/TetroT.tscn")
 const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
 
+const NB_LINES = 20
+const NB_COLLUMNS = 10
+
 const EMPTY_CELL = -1
-const NB_MINOES = 4
+
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
 const HOLD_POSITION = Vector3(-5, 16, 0)
-const SOUND_POSITION = Vector3(5, 10, 6)
+
+const movements = {
+	"move_right": Vector3(1, 0, 0),
+	"move_left": Vector3(-1, 0, 0),
+	"soft_drop": Vector3(0, -1, 0)
+}
+
 const SCORES = [
 	[0, 4, 1],
 	[1, 8, 2],
@@ -24,25 +33,23 @@ const SCORES = [
 	[8]
 ]
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
-const T_SPIN_NAMES = ["", "MINI T-SPIN", "T-SPIN"]
-const NB_LINES = 20
-const NB_COLLUMNS = 10
+const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
+
+const MIDI_MOVE_CHANNELS = [7, 8, 9, 11]
+const MIDI_LINE_CLEAR_CHANNELS = [2, 6, 10]
 
 var next_piece = random_piece()
 var current_piece
 var held_piece
 var current_piece_held = false
-var locked = false
+
 var autoshift_action = ""
-var movements = {
-	"move_right": Vector3(1, 0, 0),
-	"move_left": Vector3(-1, 0, 0),
-	"soft_drop": Vector3(0, -1, 0)
-}
+
 var exploding_lines = []
 var lines_to_clear = []
 var random_bag = []
 var playing = true
+
 var level = 0
 var goal = 0
 var score = 0
@@ -84,7 +91,6 @@ func new_piece():
 	current_piece.emit_trail(true)
 	autoshift_action = ""
 	update_ghost_piece()
-	$Music2.translation = SOUND_POSITION
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
 	if move(movements["soft_drop"]):
@@ -113,21 +119,21 @@ func process_actions():
 		if action != autoshift_action:
 			if Input.is_action_pressed(action):
 				if move(movements[action]):
-					move_music()
+					move_midi()
 				autoshift_action = action
 				$AutoShiftTimer.stop()
 				$AutoShiftDelay.start()
 	if Input.is_action_just_pressed("hard_drop"):
-		move_music()
+		move_midi()
 		while move(movements["soft_drop"]):
 			pass
 		lock_piece()
 	if Input.is_action_just_pressed("rotate_clockwise"):
 		rotate(Tetromino.CLOCKWISE)
-		move_music()
+		move_midi()
 	if Input.is_action_just_pressed("rotate_counterclockwise"):
 		rotate(Tetromino.COUNTERCLOCKWISE)
-		move_music()
+		move_midi()
 	if Input.is_action_just_pressed("hold"):
 		hold()
 
@@ -154,7 +160,7 @@ func possible_positions(initial_positions, movement):
 		position = initial_positions[i] + movement
 		if is_free_cell(position):
 			test_positions.append(position)
-	if test_positions.size() == NB_MINOES:
+	if test_positions.size() == Tetromino.NB_MINOES:
 		return test_positions
 	else:
 		return []
@@ -164,7 +170,6 @@ func move(movement):
 		$LockDelay.start()
 		if movement.x:
 			update_ghost_piece()
-			$Music2.translate(movement)
 		return true
 	else:
 		return false
@@ -177,9 +182,11 @@ func rotate(direction):
 	else:
 		return false
 		
-func move_music():
-	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music2"), false)
-	$MusicDelay.start()
+func move_midi():
+	for channel_id in MIDI_MOVE_CHANNELS:
+		$MidiPlayer.channel_status[channel_id].pan = current_piece.translation.x / 10.0
+	mute_midi_channel(MIDI_MOVE_CHANNELS, false)
+	$MidiPlayer/MoveDelay.start()
 		
 func update_ghost_piece():
 	var new_positions = current_piece.positions()
@@ -225,10 +232,13 @@ func update_score():
 		score += 100 * s
 		goal -= s
 		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_to_clear.size()], " Score ", score)
+		mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, false)
+		$MidiPlayer.play_now()
 		if lines_to_clear.size() == Tetromino.NB_MINOES:
-			$TetrisSFX.play()
+			$MidiPlayer/LineLcearDelay.wait_time = 1.71
 		else:
-			$LineCLearSFX.play()
+			$MidiPlayer/LineLcearDelay.wait_time = 0.86
+		$MidiPlayer/LineLcearDelay.start()
 	if goal <= 0:
 		new_level()
 	else:
@@ -250,7 +260,6 @@ func hold():
 			current_piece.translation = START_POSITION
 			current_piece.emit_trail(true)
 			update_ghost_piece()
-			$Music2.translation = SOUND_POSITION
 		else:
 			held_piece = current_piece
 			new_piece()
@@ -262,15 +271,16 @@ func resume():
 	playing = true
 	$DropTimer.start()
 	$LockDelay.start()
-	start_musics()
+	$MidiPlayer.play()
+	mute_midi_channel(MIDI_MOVE_CHANNELS, true)
+	mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, true)
 	print("RESUME")
 
 func pause():
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
-	$Music.stop()
-	$Music2.stop()
+	$MidiPlayer.stop()
 	print("PAUSE")
 		
 func game_over():
@@ -284,13 +294,12 @@ func _notification(what):
     if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
         pause()
 
-func _on_MusicDelay_timeout():
-	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music2"), true)
+func mute_midi_channel(channels, muted):
+	for channel_id in channels:
+		$MidiPlayer.channel_mute[channel_id] = muted
 
-func _on_Music_finished():
-	start_musics()
+func _on_MoveDelay_timeout():
+	mute_midi_channel(MIDI_MOVE_CHANNELS, true)
 
-func start_musics():
-	$Music.play()
-	$Music2.play()
-	AudioServer.set_bus_mute(AudioServer.get_bus_index("Music2"), true)
+func _on_LineLcearDelay_timeout():
+	mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, true)
