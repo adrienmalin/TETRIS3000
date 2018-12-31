@@ -35,8 +35,7 @@ const SCORES = [
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
 const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
 
-const MIDI_MOVE_CHANNELS = [7, 8, 9, 11]
-const MIDI_LINE_CLEAR_CHANNELS = [2, 6, 10]
+const MIDI_MOVE_CHANNELS = [] #[7, 8, 9, 11, 12]
 
 var next_piece = random_piece()
 var current_piece
@@ -89,6 +88,7 @@ func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
 	current_piece.emit_trail(true)
+	update_ghost_piece()
 	autoshift_action = ""
 	update_ghost_piece()
 	next_piece = random_piece()
@@ -185,7 +185,7 @@ func rotate(direction):
 func move_midi():
 	for channel_id in MIDI_MOVE_CHANNELS:
 		$MidiPlayer.channel_status[channel_id].pan = current_piece.translation.x / 10.0
-	mute_midi_channel(MIDI_MOVE_CHANNELS, false)
+	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, false)
 	$MidiPlayer/MoveDelay.start()
 		
 func update_ghost_piece():
@@ -232,13 +232,18 @@ func update_score():
 		score += 100 * s
 		goal -= s
 		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_to_clear.size()], " Score ", score)
-		mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, false)
-		$MidiPlayer.play_now()
+		
 		if lines_to_clear.size() == Tetromino.NB_MINOES:
-			$MidiPlayer/LineLcearDelay.wait_time = 1.71
+			for channel in $MidiPlayer.line_clear_notes:
+				$MidiPlayer.channel_status[channel].vomume = 127
+			$MidiPlayer/LineCLearTimer.wait_time = 0.86
 		else:
-			$MidiPlayer/LineLcearDelay.wait_time = 0.86
-		$MidiPlayer/LineLcearDelay.start()
+			for channel in $MidiPlayer.line_clear_notes:
+				$MidiPlayer.channel_status[channel].vomume = 100
+			$MidiPlayer/LineCLearTimer.wait_time = 0.43
+		$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, false)
+		$MidiPlayer.play_line_clear()
+		$MidiPlayer/LineCLearTimer.start()
 	if goal <= 0:
 		new_level()
 	else:
@@ -271,9 +276,9 @@ func resume():
 	playing = true
 	$DropTimer.start()
 	$LockDelay.start()
-	$MidiPlayer.play()
-	mute_midi_channel(MIDI_MOVE_CHANNELS, true)
-	mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, true)
+	$MidiPlayer.resume()
+	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, true)
+	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)
 	print("RESUME")
 
 func pause():
@@ -293,13 +298,11 @@ func game_over():
 func _notification(what):
     if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
         pause()
-
-func mute_midi_channel(channels, muted):
-	for channel_id in channels:
-		$MidiPlayer.channel_mute[channel_id] = muted
+    if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+        resume()
 
 func _on_MoveDelay_timeout():
-	mute_midi_channel(MIDI_MOVE_CHANNELS, true)
+	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, true)
 
-func _on_LineLcearDelay_timeout():
-	mute_midi_channel(MIDI_LINE_CLEAR_CHANNELS, true)
+func _on_LineCLearTimer_timeout():
+	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)

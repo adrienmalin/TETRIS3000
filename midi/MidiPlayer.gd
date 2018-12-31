@@ -38,7 +38,9 @@ var audio_stream_players = []
 
 var _used_program_numbers = []
 
-var play_later_events = {2: {}, 6:{}, 10:{}}
+var line_clear_notes = {2: {}, 6: {}}
+var line_clear_notes_to_stop
+var paused_position = 0
 
 signal changed_tempo( tempo )
 signal appeared_lyric( lyric )
@@ -47,6 +49,7 @@ signal appeared_cue_point( cue_point )
 signal looped
 
 func _ready( ):
+	self._prepare_to_play( )
 	if self.playing:
 		self.play( )
 
@@ -184,7 +187,6 @@ func _init_channel( ):
 	@param	from_position
 """
 func play( from_position = 0 ):
-	self._prepare_to_play( )
 	self.playing = true
 	self.seek( from_position )
 
@@ -276,13 +278,13 @@ func _process_track( ):
 
 		match event.type:
 			SMF.MIDIEventType.note_off:
+				if event_chunk.channel_number in line_clear_notes:
+					line_clear_notes[event_chunk.channel_number].erase(event.note)
 				self._process_track_event_note_off( channel, event )
-				if event_chunk.channel_number in play_later_events:
-					play_later_events[event_chunk.channel_number].erase(event.note)
 			SMF.MIDIEventType.note_on:
+				if event_chunk.channel_number in line_clear_notes:
+					line_clear_notes[event_chunk.channel_number][event.note] = event
 				self._process_track_event_note_on( channel, event )
-				if event_chunk.channel_number in play_later_events:
-					play_later_events[event_chunk.channel_number][event.note] = event
 			SMF.MIDIEventType.program_change:
 				channel.program = event.number
 			SMF.MIDIEventType.control_change:
@@ -295,11 +297,6 @@ func _process_track( ):
 			_:
 				# 無視
 				pass
-				
-func play_now():
-	for channel in play_later_events:
-		for note in play_later_events[channel]:
-			_process_track_event_note_on( channel_status[channel], play_later_events[channel][note] ) 
 
 func _process_track_event_note_off( channel, event ):
 	var key_number = event.note + self.key_shift
@@ -409,3 +406,19 @@ func get_now_playing_polyphony( ):
 		if audio_stream_player.playing:
 			polyphony += 1
 	return polyphony
+
+
+
+func resume():
+	play(position)
+
+func play_line_clear():
+	line_clear_notes_to_stop = {2: {}, 6:{}}
+	for channel in line_clear_notes:
+		for note in line_clear_notes[channel]:
+			_process_track_event_note_on(channel_status[channel], line_clear_notes[channel][note])
+			line_clear_notes_to_stop[channel][note] = line_clear_notes[channel][note]
+
+func mute_midi_channels(channels, muted):
+	for channel_id in channels:
+		channel_mute[channel_id] = muted

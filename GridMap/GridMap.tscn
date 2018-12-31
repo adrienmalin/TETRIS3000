@@ -33,8 +33,8 @@ data = {
 script = ExtResource( 2 )
 _sections_unfolded = [ "Cell", "Transform" ]
 __meta__ = {
-"_editor_clip_": 0,
-"_editor_floor_": Vector3( 0, 3, 0 )
+"_editor_clip_": 1,
+"_editor_floor_": Vector3( 0, 1, 0 )
 }
 
 [node name="DropTimer" type="Timer" parent="." index="0"]
@@ -89,15 +89,17 @@ mesh = SubResource( 1 )
 
 [node name="GhostPiece" parent="." index="8" instance=ExtResource( 5 )]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0 )
-_sections_unfolded = [ "Transform" ]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 20, 0 )
+_sections_unfolded = [ "Pause", "Transform" ]
 
 [node name="MidiPlayer" parent="." index="9" instance=ExtResource( 6 )]
 
 file = "res://midi/Tetris - Song A.mid"
+channel_mute = [ false, true, false, false, false, false, false, true, true, true, true, false, false, false, false, false ]
 volume_db = -3
 loop = true
-soundfont = "res://midi/TimGM6mb.sf2"
+loop_start = 2
+soundfont = "res://midi/FluidR3 GM.sf2"
 
 [node name="MoveDelay" type="Timer" parent="MidiPlayer" index="1"]
 
@@ -106,11 +108,11 @@ wait_time = 0.1
 one_shot = true
 autostart = false
 
-[node name="LineLcearDelay" type="Timer" parent="MidiPlayer" index="2"]
+[node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="2"]
 
 process_mode = 1
-wait_time = 0.86
-one_shot = false
+wait_time = 1.41
+one_shot = true
 autostart = false
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
@@ -125,6 +127,6 @@ autostart = false
 
 [connection signal="timeout" from="MidiPlayer/MoveDelay" to="." method="_on_MoveDelay_timeout"]
 
-[connection signal="timeout" from="MidiPlayer/LineLcearDelay" to="." method="_on_LineLcearDelay_timeout"]
+[connection signal="timeout" from="MidiPlayer/LineCLearTimer" to="." method="_on_LineCLearTimer_timeout"]
 
 
