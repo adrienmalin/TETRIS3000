@@ -161,20 +161,20 @@ func lock():
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
-			$MidiPlayer/LineCLearTimer.wait_time = 0.86
+			$LineCLearTimer.wait_time = 0.86
 		else:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 100
-			$MidiPlayer/LineCLearTimer.wait_time = 0.43
+			$LineCLearTimer.wait_time = 0.43
 		$MidiPlayer.unmute_channels(LINE_CLEAR_MIDI_CHANNELS)
-		$MidiPlayer/LineCLearTimer.start()
+		$LineCLearTimer.start()
 	if goal <= 0:
 		new_level()
 	new_piece()
 
 func hold():
 	if not current_piece_held:
-		current_piece.emit_trail(false)
+		current_piece_held = true
 		if held_piece:
 			var tmp = held_piece
 			held_piece = current_piece
@@ -184,8 +184,8 @@ func hold():
 		else:
 			held_piece = current_piece
 			new_piece()
+		held_piece.emit_trail(false)
 		held_piece.translation = HOLD_POSITION
-		current_piece_held = true
 		
 func resume():
 	playing = true

@@ -123,5 +123,8 @@ func rotate(direction):
 	return false
 	
 func emit_trail(emit):
+	var trail
 	for mino in minoes:
-		mino.get_node("Trail").emitting = emit
+		trail = mino.get_node("Trail")
+		trail.emitting = emit
+		trail.restart()
