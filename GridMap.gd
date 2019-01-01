@@ -1,6 +1,6 @@
 extends GridMap
 
-const ExplodingLine = preload("res://ExplodingLine/ExplodingLine.tscn")
+const ExplodingLine = preload("res://ExplodingLine.tscn")
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
 const TetroI = preload("res://Tetrominos/TetroI.tscn")
 const TetroJ = preload("res://Tetrominos/TetroJ.tscn")
@@ -10,21 +10,11 @@ const TetroS = preload("res://Tetrominos/TetroS.tscn")
 const TetroT = preload("res://Tetrominos/TetroT.tscn")
 const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
 
-const NB_LINES = 20
-const NB_COLLUMNS = 10
-
 const EMPTY_CELL = -1
-
+const NB_MINOES = 4
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
 const HOLD_POSITION = Vector3(-5, 16, 0)
-
-const movements = {
-	"move_right": Vector3(1, 0, 0),
-	"move_left": Vector3(-1, 0, 0),
-	"soft_drop": Vector3(0, -1, 0)
-}
-
 const SCORES = [
 	[0, 4, 1],
 	[1, 8, 2],
@@ -33,21 +23,27 @@ const SCORES = [
 	[8]
 ]
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
-const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
+const T_SPIN_NAMES = ["", "MINI T-SPIN", "T-SPIN"]
 
-const MIDI_MOVE_CHANNELS = [] #[7, 8, 9, 11, 12]
+export (int) var NB_LINES
+export (int) var NB_COLLUMNS
 
 var next_piece = random_piece()
 var current_piece
 var held_piece
 var current_piece_held = false
-
+var locked = false
 var autoshift_action = ""
-
+var movements = {
+	"move_right": Vector3(1, 0, 0),
+	"move_left": Vector3(-1, 0, 0),
+	"soft_drop": Vector3(0, -1, 0)
+}
 var exploding_lines = []
+var lines_to_clear = []
+var hard_dropping = false
 var random_bag = []
 var playing = true
-
 var level = 0
 var goal = 0
 var score = 0
@@ -58,7 +54,6 @@ func _ready():
 		exploding_lines.append(ExplodingLine.instance())
 		add_child(exploding_lines[y])
 		exploding_lines[y].translation = Vector3(NB_COLLUMNS/2, y, 1)
-	resume()
 	new_level()
 	
 func new_level():
@@ -73,8 +68,13 @@ func new_level():
 func random_piece():
 	if not random_bag:
 		random_bag = [
-			TetroI, TetroJ, TetroL, TetroO,
-			TetroS, TetroT, TetroZ
+			TetroI,
+			TetroJ,
+			TetroL,
+			TetroO,
+			TetroS,
+			TetroT,
+			TetroZ
 		]
 	var choice = randi() % random_bag.size()
 	var piece = random_bag[choice].instance()
@@ -85,8 +85,6 @@ func random_piece():
 func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
-	current_piece.emit_trail(true)
-	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
 	if move(movements["soft_drop"]):
@@ -103,31 +101,24 @@ func _process(delta):
 			$AutoShiftTimer.stop()
 			autoshift_action = ""
 	if Input.is_action_just_pressed("pause"):
-		if playing:
-			pause()
-		else:
-			resume()
-	if playing:
-		process_actions()
-			
-func process_actions():
-	for action in movements:
-		if action != autoshift_action:
-			if Input.is_action_pressed(action):
-				move(movements[action])
-				autoshift_action = action
-				$AutoShiftTimer.stop()
-				$AutoShiftDelay.start()
-	if Input.is_action_just_pressed("hard_drop"):
-		while move(movements["soft_drop"]):
-			pass
-		lock_piece()
-	if Input.is_action_just_pressed("rotate_clockwise"):
-		rotate(Tetromino.CLOCKWISE)
-	if Input.is_action_just_pressed("rotate_counterclockwise"):
-		rotate(Tetromino.COUNTERCLOCKWISE)
-	if Input.is_action_just_pressed("hold"):
-		hold()
+		pause()
+	if playing and not hard_dropping:
+		for action in movements:
+			if action != autoshift_action:
+				if Input.is_action_pressed(action):
+					move(movements[action])
+					autoshift_action = action
+					$AutoShiftTimer.stop()
+					$AutoShiftDelay.start()
+		if Input.is_action_just_pressed("hard_drop"):
+			hard_dropping = true
+			$HardDropTimer.start()
+		if Input.is_action_just_pressed("rotate_clockwise"):
+			rotate(Tetromino.CLOCKWISE)
+		if Input.is_action_just_pressed("rotate_counterclockwise"):
+			rotate(Tetromino.COUNTERCLOCKWISE)
+		if Input.is_action_just_pressed("hold"):
+			hold()
 
 func _on_AutoShiftDelay_timeout():
 	if playing and autoshift_action:
@@ -152,13 +143,14 @@ func possible_positions(initial_positions, movement):
 		position = initial_positions[i] + movement
 		if is_free_cell(position):
 			test_positions.append(position)
-	if test_positions.size() == Tetromino.NB_MINOES:
+	if test_positions.size() == NB_MINOES:
 		return test_positions
 	else:
 		return []
 		
 func move(movement):
 	if current_piece.move(movement):
+		update_ghost_piece()
 		$LockDelay.start()
 		return true
 	else:
@@ -166,13 +158,27 @@ func move(movement):
 		
 func rotate(direction):
 	if current_piece.rotate(direction):
+		update_ghost_piece()
 		$LockDelay.start()
 		return true
 	else:
 		return false
+		
+func update_ghost_piece():
+	var positions = current_piece.positions()
+	for i in range(Tetromino.NB_MINOES):
+		$GhostPiece.minoes[i].translation = $GhostPiece.to_local(positions[i])
+	while $GhostPiece.move(movements["soft_drop"]):
+		pass
 
 func _on_DropTimer_timeout():
 	move(movements["soft_drop"])
+
+func _on_HardDropTimer_timeout():
+	if not move(movements["soft_drop"]):
+		$HardDropTimer.stop()
+		hard_dropping = false
+		lock_piece()
 
 func _on_LockDelay_timeout():
 	if not move(movements["soft_drop"]):
@@ -186,39 +192,37 @@ func lock_piece():
 	
 func line_clear():
 	var NB_MINOES
-	var lines_cleared = 0
+	lines_to_clear = []
 	for y in range(NB_LINES-1, -1, -1):
 		NB_MINOES = 0
 		for x in range(NB_COLLUMNS):
 			if get_cell_item(x, y, 0) == 0:
 				NB_MINOES += 1
 		if NB_MINOES == NB_COLLUMNS:
-			for y2 in range(y, NB_LINES+2):
-				for x in range(NB_COLLUMNS):
-					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))
-			lines_cleared += 1
+			for x in range(NB_COLLUMNS):
+				set_cell_item(x, y, 0, EMPTY_CELL)
+			lines_to_clear.append(y)
 			exploding_lines[y].restart()
-	if lines_cleared or current_piece.t_spin:
-		var s = SCORES[lines_cleared][current_piece.t_spin]
+	if lines_to_clear:
+		$ExplosionDelay.start()
+	update_score()
+	
+func update_score():
+	if lines_to_clear or current_piece.t_spin:
+		var s = SCORES[lines_to_clear.size()][current_piece.t_spin]
 		score += 100 * s
 		goal -= s
-		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_cleared], " Score ", score)
-		
-		if lines_cleared == Tetromino.NB_MINOES:
-			for channel in $MidiPlayer.line_clear_notes:
-				$MidiPlayer.channel_status[channel].vomume = 127
-			$MidiPlayer/LineCLearTimer.wait_time = 0.86
-		else:
-			for channel in $MidiPlayer.line_clear_notes:
-				$MidiPlayer.channel_status[channel].vomume = 100
-			$MidiPlayer/LineCLearTimer.wait_time = 0.43
-		$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, false)
-		$MidiPlayer.play_line_clear()
-		$MidiPlayer/LineCLearTimer.start()
+		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_to_clear.size()], " Score ", score)
 	if goal <= 0:
 		new_level()
 	else:
 		new_piece()
+
+func _on_ExplosionDelay_timeout():
+	for cleared_line in lines_to_clear:
+		for y in range(cleared_line, NB_LINES+2):
+			for x in range(NB_COLLUMNS):
+				set_cell_item(x, y, 0, get_cell_item(x, y+1, 0))
 
 func hold():
 	if not current_piece_held:
@@ -227,38 +231,26 @@ func hold():
 			held_piece = current_piece
 			current_piece = tmp
 			current_piece.translation = START_POSITION
-			current_piece.emit_trail(true)
 		else:
 			held_piece = current_piece
 			new_piece()
-		held_piece.emit_trail(false)
 		held_piece.translation = HOLD_POSITION
 		current_piece_held = true
 		
-func resume():
-	playing = true
-	$DropTimer.start()
-	$LockDelay.start()
-	$MidiPlayer.resume()
-	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)
-	print("RESUME")
-
 func pause():
-	playing = false
-	$DropTimer.stop()
-	$LockDelay.stop()
-	$MidiPlayer.stop()
-	print("PAUSE")
+	playing = not playing
+	if playing:
+		$DropTimer.start()
+		$LockDelay.start()
+		print("RESUME")
+	else:
+		$DropTimer.stop()
+		$LockDelay.stop()
+		print("PAUSE")
 		
 func game_over():
-	pause()
+	playing = false
+	$DropTimer.stop()
+	$AutoShiftDelay.stop()
+	$AutoShiftTimer.stop()
 	print("GAME OVER")
-	
-func _notification(what):
-    if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-        pause()
-    if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-        resume()
-
-func _on_LineCLearTimer_timeout():
-	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)

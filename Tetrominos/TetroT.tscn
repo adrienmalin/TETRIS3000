@@ -4,24 +4,22 @@
 [ext_resource path="res://Tetrominos/Mino/Mino.tscn" type="PackedScene" id=2]
 
 
-
-[node name="TetroT" type="Spatial"]
+[node name="TetroT" type="Spatial" index="0"]
 
 script = ExtResource( 1 )
-_sections_unfolded = [ "Transform" ]
 
-[node name="Mino" parent="." index="0" instance=ExtResource( 2 )]
+[node name="Mino0" parent="." index="0" instance=ExtResource( 2 )]
 
-[node name="Mino2" parent="." index="1" instance=ExtResource( 2 )]
+[node name="Mino1" parent="." index="1" instance=ExtResource( 2 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
 
-[node name="Mino3" parent="." index="2" instance=ExtResource( 2 )]
+[node name="Mino2" parent="." index="2" instance=ExtResource( 2 )]
+
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
+
+[node name="Mino3" parent="." index="3" instance=ExtResource( 2 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
-
-[node name="Mino4" parent="." index="3" instance=ExtResource( 2 )]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )
 
 

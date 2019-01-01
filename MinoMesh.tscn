@@ -1,19 +1,17 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://GridMap/BackMaterial.tres" type="Material" id=1]
+[ext_resource path="res://MinoMaterial.tres" type="Material" id=1]
 
 [sub_resource type="CubeMesh" id=1]
 
-material = ExtResource( 1 )
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
-size = Vector3( 11, 22, 0.1 )
+size = Vector3( 0.9, 0.9, 0.9 )
 subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="GridBack" type="MeshInstance"]
+[node name="Mino" type="MeshInstance"]
 
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 9.5, -1 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -25,7 +23,7 @@ lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
+material/0 = ExtResource( 1 )
+_sections_unfolded = [ "Transform", "material" ]
 
 

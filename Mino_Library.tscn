@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Tetrominos/Mino/MinoMesh.tscn" type="PackedScene" id=1]
+
+
+
+[node name="Mino_Library" type="Spatial" index="0"]
+
+[node name="Mino" parent="." index="0" instance=ExtResource( 1 )]
+
+

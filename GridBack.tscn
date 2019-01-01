@@ -1,8 +1,9 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://GridMap/BackMaterial.tres" type="Material" id=1]
+[ext_resource path="res://Tetrominos/Mino/BackMaterial.tres" type="Material" id=1]
 
-[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="CubeMesh" id=3]
 
 material = ExtResource( 1 )
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
@@ -23,7 +24,7 @@ lod_min_distance = 0.0
 lod_min_hysteresis = 0.0
 lod_max_distance = 0.0
 lod_max_hysteresis = 0.0
-mesh = SubResource( 1 )
+mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]

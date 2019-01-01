@@ -1,4 +1,4 @@
-extends "Tetromino.gd"
+extends "Tetrominos/Tetromino.gd"
 
 const CLOCKWISE = -1
 const COUNTERCLOCKWISE = 1
