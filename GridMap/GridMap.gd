@@ -45,7 +45,6 @@ var current_piece_held = false
 var autoshift_action = ""
 
 var exploding_lines = []
-var lines_to_clear = []
 var random_bag = []
 var playing = true
 
@@ -90,7 +89,6 @@ func new_piece():
 	current_piece.emit_trail(true)
 	update_ghost_piece()
 	autoshift_action = ""
-	update_ghost_piece()
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
 	if move(movements["soft_drop"]):
@@ -118,22 +116,18 @@ func process_actions():
 	for action in movements:
 		if action != autoshift_action:
 			if Input.is_action_pressed(action):
-				if move(movements[action]):
-					move_midi()
+				move(movements[action])
 				autoshift_action = action
 				$AutoShiftTimer.stop()
 				$AutoShiftDelay.start()
 	if Input.is_action_just_pressed("hard_drop"):
-		move_midi()
 		while move(movements["soft_drop"]):
 			pass
 		lock_piece()
 	if Input.is_action_just_pressed("rotate_clockwise"):
 		rotate(Tetromino.CLOCKWISE)
-		move_midi()
 	if Input.is_action_just_pressed("rotate_counterclockwise"):
 		rotate(Tetromino.COUNTERCLOCKWISE)
-		move_midi()
 	if Input.is_action_just_pressed("hold"):
 		hold()
 
@@ -182,12 +176,6 @@ func rotate(direction):
 	else:
 		return false
 		
-func move_midi():
-	for channel_id in MIDI_MOVE_CHANNELS:
-		$MidiPlayer.channel_status[channel_id].pan = current_piece.translation.x / 10.0
-	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, false)
-	$MidiPlayer/MoveDelay.start()
-		
 func update_ghost_piece():
 	var new_positions = current_piece.positions()
 	var positions
@@ -211,29 +199,26 @@ func lock_piece():
 	
 func line_clear():
 	var NB_MINOES
-	lines_to_clear = []
+	var lines_cleared = 0
 	for y in range(NB_LINES-1, -1, -1):
 		NB_MINOES = 0
 		for x in range(NB_COLLUMNS):
 			if get_cell_item(x, y, 0) == 0:
 				NB_MINOES += 1
 		if NB_MINOES == NB_COLLUMNS:
-			for x in range(NB_COLLUMNS):
-				set_cell_item(x, y, 0, EMPTY_CELL)
-			lines_to_clear.append(y)
+			for y2 in range(y, NB_LINES+2):
+				for x in range(NB_COLLUMNS):
+					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))
+			lines_cleared += 1
 			exploding_lines[y].restart()
-	if lines_to_clear:
-		$ExplosionDelay.start()
-	update_score()
-	
-func update_score():
-	if lines_to_clear or current_piece.t_spin:
-		var s = SCORES[lines_to_clear.size()][current_piece.t_spin]
+	update_ghost_piece()
+	if lines_cleared or current_piece.t_spin:
+		var s = SCORES[lines_cleared][current_piece.t_spin]
 		score += 100 * s
 		goal -= s
-		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_to_clear.size()], " Score ", score)
+		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_cleared], " Score ", score)
 		
-		if lines_to_clear.size() == Tetromino.NB_MINOES:
+		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in $MidiPlayer.line_clear_notes:
 				$MidiPlayer.channel_status[channel].vomume = 127
 			$MidiPlayer/LineCLearTimer.wait_time = 0.86
@@ -249,13 +234,6 @@ func update_score():
 	else:
 		new_piece()
 
-func _on_ExplosionDelay_timeout():
-	for cleared_line in lines_to_clear:
-		for y in range(cleared_line, NB_LINES+2):
-			for x in range(NB_COLLUMNS):
-				set_cell_item(x, y, 0, get_cell_item(x, y+1, 0))
-	update_ghost_piece()
-
 func hold():
 	if not current_piece_held:
 		if held_piece:
@@ -264,10 +242,10 @@ func hold():
 			current_piece = tmp
 			current_piece.translation = START_POSITION
 			current_piece.emit_trail(true)
-			update_ghost_piece()
 		else:
 			held_piece = current_piece
 			new_piece()
+		update_ghost_piece()
 		held_piece.translation = HOLD_POSITION
 		held_piece.emit_trail(false)
 		current_piece_held = true
@@ -277,7 +255,6 @@ func resume():
 	$DropTimer.start()
 	$LockDelay.start()
 	$MidiPlayer.resume()
-	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, true)
 	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)
 	print("RESUME")
 
@@ -289,10 +266,7 @@ func pause():
 	print("PAUSE")
 		
 func game_over():
-	playing = false
-	$DropTimer.stop()
-	$AutoShiftDelay.stop()
-	$AutoShiftTimer.stop()
+	pause()
 	print("GAME OVER")
 	
 func _notification(what):
@@ -300,9 +274,6 @@ func _notification(what):
         pause()
     if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
         resume()
-
-func _on_MoveDelay_timeout():
-	$MidiPlayer.mute_midi_channels(MIDI_MOVE_CHANNELS, true)
 
 func _on_LineCLearTimer_timeout():
 	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)

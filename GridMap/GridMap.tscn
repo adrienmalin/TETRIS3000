@@ -65,50 +65,35 @@ wait_time = 0.02
 one_shot = false
 autostart = true
 
-[node name="ExplosionDelay" type="Timer" parent="." index="4"]
-
-process_mode = 1
-wait_time = 0.1
-one_shot = true
-autostart = false
-
-[node name="GridBack" parent="." index="5" instance=ExtResource( 3 )]
+[node name="GridBack" parent="." index="4" instance=ExtResource( 3 )]
 
 transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 0.1, 4.5, 9.5, -1 )
 mesh = SubResource( 1 )
 
-[node name="HoldBack" parent="." index="6" instance=ExtResource( 3 )]
+[node name="HoldBack" parent="." index="5" instance=ExtResource( 3 )]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, -5, 16, -1 )
 mesh = SubResource( 1 )
 
-[node name="NextBack" parent="." index="7" instance=ExtResource( 3 )]
+[node name="NextBack" parent="." index="6" instance=ExtResource( 3 )]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, 14, 16, -1 )
 mesh = SubResource( 1 )
 
-[node name="GhostPiece" parent="." index="8" instance=ExtResource( 5 )]
+[node name="GhostPiece" parent="." index="7" instance=ExtResource( 5 )]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 20, 0 )
 _sections_unfolded = [ "Pause", "Transform" ]
 
-[node name="MidiPlayer" parent="." index="9" instance=ExtResource( 6 )]
+[node name="MidiPlayer" parent="." index="8" instance=ExtResource( 6 )]
 
 file = "res://midi/Tetris - Song A.mid"
-channel_mute = [ false, true, false, false, false, false, false, true, true, true, true, false, false, false, false, false ]
-volume_db = -3
+volume_db = -24
 loop = true
-loop_start = 2
+loop_start = 1.81
 soundfont = "res://midi/FluidR3 GM.sf2"
 
-[node name="MoveDelay" type="Timer" parent="MidiPlayer" index="1"]
-
-process_mode = 1
-wait_time = 0.1
-one_shot = true
-autostart = false
-
-[node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="2"]
+[node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
 
 process_mode = 1
 wait_time = 1.41
@@ -122,10 +107,6 @@ autostart = false
 [connection signal="timeout" from="AutoShiftDelay" to="." method="_on_AutoShiftDelay_timeout"]
 
 [connection signal="timeout" from="AutoShiftTimer" to="." method="_on_AutoShiftTimer_timeout"]
-
-[connection signal="timeout" from="ExplosionDelay" to="." method="_on_ExplosionDelay_timeout"]
-
-[connection signal="timeout" from="MidiPlayer/MoveDelay" to="." method="_on_MoveDelay_timeout"]
 
 [connection signal="timeout" from="MidiPlayer/LineCLearTimer" to="." method="_on_LineCLearTimer_timeout"]
 
