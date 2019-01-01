@@ -1,7 +1,7 @@
 extends GridMap
 
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
-const ExplodingLine = preload("res://ExplodingLine/ExplodingLine.tscn")
+const ExplodingLine = preload("res://ExplodingLine.tscn")
 
 const EMPTY_CELL = -1
 const MINO = 0

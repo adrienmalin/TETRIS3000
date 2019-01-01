@@ -1,8 +1,6 @@
 [gd_scene load_steps=10 format=2]
 
-[ext_resource path="res://ExplodingLine/Breakage1.tres" type="PrismMesh" id=1]
-[ext_resource path="res://ExplodingLine/Breakage2.tres" type="PrismMesh" id=2]
-[ext_resource path="res://Tetrominos/Mino/MinoMaterial.tres" type="Material" id=3]
+[ext_resource path="res://Tetrominos/Mino/MinoMaterial.tres" type="Material" id=1]
 
 [sub_resource type="Gradient" id=1]
 
@@ -65,9 +63,29 @@ anim_offset_random = 0.0
 anim_loop = false
 _sections_unfolded = [ "Color", "Emission Shape", "Gravity", "Scale", "Spread" ]
 
-[sub_resource type="CubeMesh" id=6]
+[sub_resource type="PrismMesh" id=6]
 
-material = ExtResource( 3 )
+material = ExtResource( 1 )
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+left_to_right = 2.98023e-008
+size = Vector3( 0.2, 0.2, 0.2 )
+subdivide_width = 2
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="PrismMesh" id=7]
+
+material = ExtResource( 1 )
+custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
+left_to_right = 0.5
+size = Vector3( 0.2, 0.2, 0.2 )
+subdivide_width = 2
+subdivide_height = 0
+subdivide_depth = 0
+
+[sub_resource type="CubeMesh" id=8]
+
+material = ExtResource( 1 )
 custom_aabb = AABB( 0, 0, 0, 0, 0, 0 )
 size = Vector3( 0.2, 0.2, 0.2 )
 subdivide_width = 0
@@ -100,9 +118,9 @@ local_coords = false
 draw_order = 0
 process_material = SubResource( 5 )
 draw_passes = 3
-draw_pass_1 = ExtResource( 1 )
-draw_pass_2 = ExtResource( 2 )
-draw_pass_3 = SubResource( 6 )
+draw_pass_1 = SubResource( 6 )
+draw_pass_2 = SubResource( 7 )
+draw_pass_3 = SubResource( 8 )
 _sections_unfolded = [ "Draw Passes", "Drawing", "Process Material", "Time", "Transform" ]
 
 
