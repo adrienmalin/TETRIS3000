@@ -74,11 +74,14 @@ const SUPER_ROTATION_SYSTEM = [
 ]
 
 var minoes
+var grid_map
 var orientation = 0
 var t_spin = NO_T_SPIN
 
 func _ready():
+	randomize()
 	minoes = [$Mino0, $Mino1, $Mino2, $Mino3]
+	grid_map = get_parent().get_node("GridMap")
 	
 func positions():
 	var p = []
@@ -101,8 +104,7 @@ func apply_positions(positions):
 		minoes[i].translation = to_local(positions[i])
 
 func move(movement):
-	var new_positions = get_parent().possible_positions(positions(), movement)
-	if new_positions:
+	if grid_map.possible_positions(positions(), movement):
 		translate(movement)
 		return true
 	else:
@@ -111,10 +113,8 @@ func move(movement):
 func rotate(direction):
 	var rotated_positions = rotated_positions(direction)
 	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
-	var test_position
 	for movement in movements:
-		test_position = get_parent().possible_positions(rotated_positions, movement)
-		if test_position:
+		if grid_map.possible_positions(rotated_positions, movement):
 			orientation -= direction
 			orientation %= NB_MINOES
 			apply_positions(rotated_positions)
