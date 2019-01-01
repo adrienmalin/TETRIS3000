@@ -350,12 +350,7 @@ blend_times = [  ]
 
 [node name="Stats" parent="." index="13" instance=ExtResource( 6 )]
 
-[node name="Clock" type="Timer" parent="." index="14"]
-
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
+visible = false
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 
@@ -366,7 +361,5 @@ autostart = false
 [connection signal="timeout" from="AutoShiftTimer" to="." method="_on_AutoShiftTimer_timeout"]
 
 [connection signal="timeout" from="LineCLearTimer" to="." method="_on_LineCLearTimer_timeout"]
-
-[connection signal="timeout" from="Clock" to="." method="_on_Clock_timeout"]
 
 

@@ -42,11 +42,6 @@ var autoshift_action = ""
 
 var playing = true
 
-var level
-var goal
-var score
-var time
-
 func random_piece():
 	if not random_bag:
 		random_bag = [
@@ -63,22 +58,15 @@ func _ready():
 	new_game()
 
 func new_game():
-	level = 0
-	goal = 0
-	score = 0
-	time = 0
+	$Stats.visible = true
+	$Stats.new_game()
 	resume()
 	new_level()
 	new_piece()
 	
 func new_level():
-	level += 1
-	goal += 5 * level
-	$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
-	if level > 15:
-		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
-	$Stats/HBC/VBC1/Level.text = str(level)
-	$Stats/HBC/VBC1/Goal.text = str(goal)
+	$Stats.new_level()
+	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
 	
 func new_piece():
 	current_piece = next_piece
@@ -162,11 +150,8 @@ func lock():
 	remove_child(current_piece)
 	var lines_cleared = $GridMap.clear_lines()
 	if lines_cleared or current_piece.t_spin:
-		var s = SCORES[lines_cleared][current_piece.t_spin]
-		score += 100 * s
-		goal -= s
-		print_temp(T_SPIN_NAMES[current_piece.t_spin] + ' ' + LINES_CLEARED_NAMES[lines_cleared] + "\nScore " + str(score))
-		$Stats/HBC/VBC1/Score.text = str(score)
+		$Stats.update_score(SCORES[lines_cleared][current_piece.t_spin])
+		print_temp(T_SPIN_NAMES[current_piece.t_spin] + ' ' + LINES_CLEARED_NAMES[lines_cleared])
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
@@ -177,7 +162,7 @@ func lock():
 			$LineCLearTimer.wait_time = 0.43
 		$MidiPlayer.unmute_channels(LINE_CLEAR_MIDI_CHANNELS)
 		$LineCLearTimer.start()
-	if goal <= 0:
+	if $Stats.goal <= 0:
 		new_level()
 	new_piece()
 
@@ -200,8 +185,8 @@ func resume():
 	playing = true
 	$DropTimer.start()
 	$LockDelay.start()
-	$Clock.start()
-	time = OS.get_system_time_secs() - time
+	$Stats.time = OS.get_system_time_secs() - $Stats.time
+	$Stats/Clock.start()
 	$MidiPlayer.resume()
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 	print_temp("RESUME")
@@ -210,8 +195,8 @@ func pause():
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
-	$Clock.stop()
-	time = OS.get_system_time_secs() - time
+	$Stats/Clock.stop()
+	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$MidiPlayer.stop()
 	print_temp("PAUSE")
 		
@@ -220,10 +205,10 @@ func game_over():
 	print_temp("GAME OVER")
 	
 func _notification(what):
-    if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-        pause()
-    if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-        resume()
+	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+		pause()
+    #if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
+    #    resume()
 
 func _on_LineCLearTimer_timeout():
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
@@ -231,10 +216,3 @@ func _on_LineCLearTimer_timeout():
 func print_temp(text):
 	#$HUD/HBC/TempText.text = text
 	print(text)
-
-func _on_Clock_timeout():
-	var time_elapsed = OS.get_system_time_secs() - time
-	var seconds = time_elapsed % 60
-	var minutes = int(time_elapsed/60) % 60
-	var hours = int(time_elapsed/3600)
-	$Stats/HBC/VBC1/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
