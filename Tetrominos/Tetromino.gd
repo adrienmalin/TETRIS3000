@@ -128,3 +128,4 @@ func emit_trail(emit):
 		trail = mino.get_node("Trail")
 		trail.emitting = emit
 		trail.restart()
+		mino.get_node("SpotLight").visible = emit

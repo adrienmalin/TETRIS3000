@@ -203,7 +203,7 @@ _sections_unfolded = [ "Draw Passes", "Drawing", "Geometry", "LOD", "Process Mat
 
 [node name="SpotLight" type="SpotLight" parent="." index="2"]
 
-transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, 0, 1 )
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, 0, 0.5 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 4.0

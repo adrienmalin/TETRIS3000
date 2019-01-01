@@ -42,10 +42,11 @@ var autoshift_action = ""
 
 var playing = true
 
-var level = 0
-var goal = 0
-var score = 0
-	
+var level
+var goal
+var score
+var time
+
 func random_piece():
 	if not random_bag:
 		random_bag = [
@@ -59,6 +60,13 @@ func random_piece():
 	return piece
 
 func _ready():
+	new_game()
+
+func new_game():
+	level = 0
+	goal = 0
+	score = 0
+	time = 0
 	resume()
 	new_level()
 	new_piece()
@@ -69,7 +77,8 @@ func new_level():
 	$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
 	if level > 15:
 		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
-	print("LEVEL ", level, " Goal ", goal)
+	$Stats/HBC/VBC1/Level.text = str(level)
+	$Stats/HBC/VBC1/Goal.text = str(goal)
 	
 func new_piece():
 	current_piece = next_piece
@@ -156,8 +165,8 @@ func lock():
 		var s = SCORES[lines_cleared][current_piece.t_spin]
 		score += 100 * s
 		goal -= s
-		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_cleared], " Score ", score)
-		
+		print_temp(T_SPIN_NAMES[current_piece.t_spin] + ' ' + LINES_CLEARED_NAMES[lines_cleared] + "\nScore " + str(score))
+		$Stats/HBC/VBC1/Score.text = str(score)
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
@@ -191,20 +200,24 @@ func resume():
 	playing = true
 	$DropTimer.start()
 	$LockDelay.start()
+	$Clock.start()
+	time = OS.get_system_time_secs() - time
 	$MidiPlayer.resume()
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
-	print("RESUME")
+	print_temp("RESUME")
 
 func pause():
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
+	$Clock.stop()
+	time = OS.get_system_time_secs() - time
 	$MidiPlayer.stop()
-	print("PAUSE")
+	print_temp("PAUSE")
 		
 func game_over():
 	pause()
-	print("GAME OVER")
+	print_temp("GAME OVER")
 	
 func _notification(what):
     if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
@@ -214,3 +227,14 @@ func _notification(what):
 
 func _on_LineCLearTimer_timeout():
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
+
+func print_temp(text):
+	#$HUD/HBC/TempText.text = text
+	print(text)
+
+func _on_Clock_timeout():
+	var time_elapsed = OS.get_system_time_secs() - time
+	var seconds = time_elapsed % 60
+	var minutes = int(time_elapsed/60) % 60
+	var hours = int(time_elapsed/3600)
+	$Stats/HBC/VBC1/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
