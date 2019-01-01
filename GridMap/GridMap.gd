@@ -222,6 +222,7 @@ func line_clear():
 
 func hold():
 	if not current_piece_held:
+		current_piece.emit_trail(false)
 		if held_piece:
 			var tmp = held_piece
 			held_piece = current_piece
@@ -231,7 +232,6 @@ func hold():
 		else:
 			held_piece = current_piece
 			new_piece()
-		held_piece.emit_trail(false)
 		held_piece.translation = HOLD_POSITION
 		current_piece_held = true
 		
