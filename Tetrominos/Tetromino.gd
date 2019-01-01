@@ -121,3 +121,7 @@ func rotate(direction):
 			translate(movement)
 			return true
 	return false
+	
+func emit_trail(emit):
+	for mino in minoes:
+		mino.get_node("Trail").emitting = emit

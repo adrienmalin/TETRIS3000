@@ -85,6 +85,7 @@ func random_piece():
 func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
+	current_piece.emit_trail(true)
 	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
@@ -220,11 +221,13 @@ func line_clear():
 
 func hold():
 	if not current_piece_held:
+		current_piece.emit_trail(false)
 		if held_piece:
 			var tmp = held_piece
 			held_piece = current_piece
 			current_piece = tmp
 			current_piece.translation = START_POSITION
+			current_piece.emit_trail(true)
 		else:
 			held_piece = current_piece
 			new_piece()

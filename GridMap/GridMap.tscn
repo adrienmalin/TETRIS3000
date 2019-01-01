@@ -15,7 +15,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="GridMap" type="GridMap" index="0"]
+[node name="GridMap" type="GridMap"]
 
 editor/display_folded = true
 theme = ExtResource( 1 )
