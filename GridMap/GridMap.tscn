@@ -1,11 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://Mino/MinoLibrary.tres" type="MeshLibrary" id=1]
+[ext_resource path="res://Tetrominos/Mino/MinoLibrary.tres" type="MeshLibrary" id=1]
 [ext_resource path="res://GridMap/GridMap.gd" type="Script" id=2]
 [ext_resource path="res://GridMap/GridBack.tscn" type="PackedScene" id=3]
 [ext_resource path="res://GridMap/BackMaterial.tres" type="Material" id=4]
-[ext_resource path="res://Tetrominos/GhostPiece.tscn" type="PackedScene" id=5]
-[ext_resource path="res://midi/MidiPlayer.tscn" type="PackedScene" id=6]
+[ext_resource path="res://midi/MidiPlayer.tscn" type="PackedScene" id=5]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -16,7 +15,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="GridMap" type="GridMap" index="0"]
+[node name="GridMap" type="GridMap"]
 
 theme = ExtResource( 1 )
 cell_size = Vector3( 1, 1, 1 )
@@ -28,13 +27,13 @@ cell_scale = 1.0
 collision_layer = 1
 collision_mask = 1
 data = {
-"cells": PoolIntArray( 13, 0, 0, 65543, 0, 0 )
+"cells": PoolIntArray(  )
 }
 script = ExtResource( 2 )
 _sections_unfolded = [ "Cell", "Transform" ]
 __meta__ = {
 "_editor_clip_": 1,
-"_editor_floor_": Vector3( 0, 1, 0 )
+"_editor_floor_": Vector3( 0, -1, 0 )
 }
 
 [node name="DropTimer" type="Timer" parent="." index="0"]
@@ -80,12 +79,7 @@ mesh = SubResource( 1 )
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, 14, 16, -1 )
 mesh = SubResource( 1 )
 
-[node name="GhostPiece" parent="." index="7" instance=ExtResource( 5 )]
-
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 20, 0 )
-_sections_unfolded = [ "Pause", "Transform" ]
-
-[node name="MidiPlayer" parent="." index="8" instance=ExtResource( 6 )]
+[node name="MidiPlayer" parent="." index="7" instance=ExtResource( 5 )]
 
 file = "res://midi/Tetris - Song A.mid"
 volume_db = -24

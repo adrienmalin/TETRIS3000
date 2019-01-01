@@ -1,6 +1,6 @@
 [gd_resource type="MeshLibrary" load_steps=4 format=2]
 
-[ext_resource path="res://Mino/MinoMesh.tres" type="CubeMesh" id=1]
+[ext_resource path="res://Tetrominos/Mino/MinoMesh.tres" type="CubeMesh" id=1]
 
 [sub_resource type="Image" id=1]
 

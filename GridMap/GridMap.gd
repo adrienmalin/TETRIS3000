@@ -54,7 +54,6 @@ var score = 0
 
 func _ready():
 	randomize()
-	print(NB_LINES)
 	for y in range(NB_LINES):
 		exploding_lines.append(ExplodingLine.instance())
 		add_child(exploding_lines[y])
@@ -87,7 +86,6 @@ func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
 	current_piece.emit_trail(true)
-	update_ghost_piece()
 	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
@@ -162,27 +160,16 @@ func possible_positions(initial_positions, movement):
 func move(movement):
 	if current_piece.move(movement):
 		$LockDelay.start()
-		if movement.x:
-			update_ghost_piece()
 		return true
 	else:
 		return false
 		
 func rotate(direction):
 	if current_piece.rotate(direction):
-		update_ghost_piece()
 		$LockDelay.start()
 		return true
 	else:
 		return false
-		
-func update_ghost_piece():
-	var new_positions = current_piece.positions()
-	var positions
-	while(new_positions):
-		positions = new_positions
-		new_positions = possible_positions(positions, movements["soft_drop"])
-	$GhostPiece.apply_positions(positions)
 
 func _on_DropTimer_timeout():
 	move(movements["soft_drop"])
@@ -211,7 +198,6 @@ func line_clear():
 					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))
 			lines_cleared += 1
 			exploding_lines[y].restart()
-	update_ghost_piece()
 	if lines_cleared or current_piece.t_spin:
 		var s = SCORES[lines_cleared][current_piece.t_spin]
 		score += 100 * s
@@ -245,9 +231,8 @@ func hold():
 		else:
 			held_piece = current_piece
 			new_piece()
-		update_ghost_piece()
-		held_piece.translation = HOLD_POSITION
 		held_piece.emit_trail(false)
+		held_piece.translation = HOLD_POSITION
 		current_piece_held = true
 		
 func resume():

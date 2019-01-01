@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://Mino/MinoMesh.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Mino/MinoMesh.tres" type="CubeMesh" id=2]
-[ext_resource path="res://Mino/TrailMaterial.tres" type="Material" id=3]
+[ext_resource path="res://Tetrominos/Mino/MinoMesh.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Tetrominos/Mino/MinoMesh.tres" type="CubeMesh" id=2]
+[ext_resource path="res://Tetrominos/Mino/TrailMaterial.tres" type="Material" id=3]
+[ext_resource path="res://Tetrominos/Mino/SpotLight.tscn" type="PackedScene" id=4]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -148,5 +149,10 @@ process_material = SubResource( 3 )
 draw_passes = 1
 draw_pass_1 = SubResource( 4 )
 _sections_unfolded = [ "Draw Passes", "Drawing", "Geometry", "LOD", "Process Material", "Time", "Transform" ]
+
+[node name="SpotLight" parent="." index="2" instance=ExtResource( 4 )]
+
+transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, 0, 1 )
+light_energy = 4.0
 
 
