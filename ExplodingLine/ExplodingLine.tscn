@@ -2,7 +2,7 @@
 
 [ext_resource path="res://ExplodingLine/Breakage1.tres" type="PrismMesh" id=1]
 [ext_resource path="res://ExplodingLine/Breakage2.tres" type="PrismMesh" id=2]
-[ext_resource path="res://MinoMaterial.tres" type="Material" id=3]
+[ext_resource path="res://Tetrominos/Mino/MinoMaterial.tres" type="Material" id=3]
 
 [sub_resource type="Gradient" id=1]
 
