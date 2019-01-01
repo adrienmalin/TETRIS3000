@@ -15,8 +15,9 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="GridMap" type="GridMap"]
+[node name="GridMap" type="GridMap" index="0"]
 
+editor/display_folded = true
 theme = ExtResource( 1 )
 cell_size = Vector3( 1, 1, 1 )
 cell_octant_size = 8
@@ -60,7 +61,7 @@ autostart = false
 [node name="AutoShiftTimer" type="Timer" parent="." index="3"]
 
 process_mode = 1
-wait_time = 0.02
+wait_time = 0.03
 one_shot = false
 autostart = true
 

@@ -35,7 +35,7 @@ const SCORES = [
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
 const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
 
-const MIDI_MOVE_CHANNELS = [] #[7, 8, 9, 11, 12]
+const LINE_CLEAR_MIDI_CHANNELS = [2, 6]
 
 var next_piece = random_piece()
 var current_piece
@@ -85,7 +85,6 @@ func random_piece():
 func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
-	current_piece.emit_trail(true)
 	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
@@ -205,15 +204,14 @@ func line_clear():
 		print(T_SPIN_NAMES[current_piece.t_spin], ' ', LINES_CLEARED_NAMES[lines_cleared], " Score ", score)
 		
 		if lines_cleared == Tetromino.NB_MINOES:
-			for channel in $MidiPlayer.line_clear_notes:
+			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
 			$MidiPlayer/LineCLearTimer.wait_time = 0.86
 		else:
-			for channel in $MidiPlayer.line_clear_notes:
+			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 100
 			$MidiPlayer/LineCLearTimer.wait_time = 0.43
-		$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, false)
-		$MidiPlayer.play_line_clear()
+		$MidiPlayer.unmute_channels(LINE_CLEAR_MIDI_CHANNELS)
 		$MidiPlayer/LineCLearTimer.start()
 	if goal <= 0:
 		new_level()
@@ -222,13 +220,11 @@ func line_clear():
 
 func hold():
 	if not current_piece_held:
-		current_piece.emit_trail(false)
 		if held_piece:
 			var tmp = held_piece
 			held_piece = current_piece
 			current_piece = tmp
 			current_piece.translation = START_POSITION
-			current_piece.emit_trail(true)
 		else:
 			held_piece = current_piece
 			new_piece()
@@ -240,7 +236,7 @@ func resume():
 	$DropTimer.start()
 	$LockDelay.start()
 	$MidiPlayer.resume()
-	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)
+	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 	print("RESUME")
 
 func pause():
@@ -261,4 +257,4 @@ func _notification(what):
         resume()
 
 func _on_LineCLearTimer_timeout():
-	$MidiPlayer.mute_midi_channels($MidiPlayer.line_clear_notes, true)
+	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
