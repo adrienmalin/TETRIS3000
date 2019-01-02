@@ -100,8 +100,8 @@ func _process(delta):
 					autoshift_action = ""
 			else:
 				if Input.is_action_pressed(action):
-					move(movements[action])
 					autoshift_action = action
+					process_autoshift_action()
 					$AutoShiftTimer.stop()
 					$AutoShiftDelay.start()
 		if Input.is_action_just_pressed("hard_drop"):
@@ -113,19 +113,26 @@ func _process(delta):
 		if Input.is_action_just_pressed("hold"):
 			hold()
 
-func hard_drop():
-	while move(movements["soft_drop"]):
-		pass
-	lock()
-
 func _on_AutoShiftDelay_timeout():
 	if playing and autoshift_action:
-		move(movements[autoshift_action])
+		process_autoshift_action()
 		$AutoShiftTimer.start()
 
 func _on_AutoShiftTimer_timeout():
 	if playing and autoshift_action:
-		move(movements[autoshift_action])
+		process_autoshift_action()
+
+func process_autoshift_action():
+	if move(movements[autoshift_action]):
+		if autoshift_action == "soft_drop":
+			$Stats.score += 1
+			$Stats/HBC/VBC1/Score.text = str($Stats.score)
+
+func hard_drop():
+	while move(movements["soft_drop"]):
+		$Stats.score += 2
+	$Stats/HBC/VBC1/Score.text = str($Stats.score)
+	lock()
 		
 func move(movement):
 	if current_piece.move(movement):
