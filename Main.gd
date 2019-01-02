@@ -9,6 +9,8 @@ const TetroS = preload("res://Tetrominos/TetroS.tscn")
 const TetroT = preload("res://Tetrominos/TetroT.tscn")
 const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
 
+const password = "TETRIS 3000"
+
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
 const HOLD_POSITION = Vector3(-5, 16, 0)
@@ -33,6 +35,27 @@ var playing = true
 signal piece_dropped(score)
 signal piece_locked(lines, t_spin)
 
+func _ready():
+	load_user_data()
+	new_game()
+	
+func load_user_data():
+	var save_game = File.new()
+	if not save_game.file_exists("user://data.save"):
+		$Stats.high_score = 0
+	else:
+		save_game.open_encrypted_with_pass("user://data.save", File.READ, password)
+		$Stats.high_score = int(save_game.get_line())
+		$Stats/HBC/VBC1/HighScore.text = str($Stats.high_score)
+		save_game.close()
+
+func new_game():
+	$Stats.visible = true
+	next_piece = random_piece()
+	new_piece()
+	$Stats.new_game()
+	resume()
+
 func random_piece():
 	if not random_bag:
 		random_bag = [
@@ -44,16 +67,6 @@ func random_piece():
 	random_bag.remove(choice)
 	add_child(piece)
 	return piece
-
-func _ready():
-	new_game()
-
-func new_game():
-	$Stats.visible = true
-	next_piece = random_piece()
-	new_piece()
-	$Stats.new_game()
-	resume()
 	
 func new_piece():
 	current_piece = next_piece
@@ -73,7 +86,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("pause"):
 		if playing:
 			pause()
-		else:
+		elif $controls_ui.enable_resume:
 			resume()
 	if playing:
 		for action in movements:
@@ -168,33 +181,33 @@ func resume():
 	$Stats/Clock.start()
 	$MidiPlayer.mute_channels($MidiPlayer.LINE_CLEAR_MIDI_CHANNELS)
 	$MidiPlayer.resume()
-	$GridMap.visible = true
-	next_piece.visible = true
-	current_piece.visible = true
-	if held_piece:
-		held_piece.visible = true
+	$controls_ui.visible = false
 
-func pause(text = "PAUSE"):
+func pause(show_controls_ui=true):
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
 	$Stats/Clock.stop()
-	if text == "PAUSE":
-		$Stats.time = OS.get_system_time_secs() - $Stats.time
-		$GridMap.visible = false
-		next_piece.visible = false
-		current_piece.visible = false
-		if held_piece:
-			held_piece.visible = false
+	if show_controls_ui:
+		$controls_ui.visible = true
 	$MidiPlayer.stop()
-	$FlashText.print(text)
 		
 func game_over():
-	pause("GAME OVER")
+	pause(false)
 	
 func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-		pause()
+	match what:
+		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
+			pause()
+		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+			save_user_data()
+
+
+func save_user_data():
+	var save_game = File.new()
+	save_game.open_encrypted_with_pass("user://data.save", File.WRITE, password)
+	save_game.store_line(str($Stats.high_score))
+	save_game.close()
 
 func _on_Stats_level_up():
 	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)

@@ -1,7 +1,5 @@
 extends MarginContainer
 
-const password = "TETRIS 3000"
-
 const SCORES = [
 	[0, 4, 1],
 	[1, 8, 2],
@@ -21,16 +19,6 @@ var combos
 
 signal flash_text(text)
 signal level_up
-
-func _ready():
-	var save_game = File.new()
-	if not save_game.file_exists("user://high_score.save"):
-		high_score = 0
-	else:
-		save_game.open_encrypted_with_pass("user://high_score.save", File.READ, password)
-		high_score = int(save_game.get_line())
-		$HBC/VBC1/HighScore.text = str(high_score)
-		save_game.close()
 	
 func new_game():
 	level = 0
@@ -54,15 +42,6 @@ func _on_Clock_timeout():
 	var minutes = int(time_elapsed/60) % 60
 	var hours = int(time_elapsed/3600)
 	$HBC/VBC1/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
-
-
-func _notification(what):
-	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-		var save_game = File.new()
-		save_game.open_encrypted_with_pass("user://high_score.save", File.WRITE, password)
-		save_game.store_line(str(high_score))
-		save_game.close()
-		get_tree().quit()
 
 func _on_Main_piece_dropped(ds):
 	score += ds

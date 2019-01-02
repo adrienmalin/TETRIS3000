@@ -1,6 +1,4 @@
-[gd_resource type="SpatialMaterial" load_steps=2 format=2]
-
-[ext_resource path="res://Tetrominos/Mino/glass.jpg" type="Texture" id=1]
+[gd_resource type="SpatialMaterial" format=2]
 
 [resource]
 
@@ -28,7 +26,6 @@ params_use_alpha_scissor = false
 albedo_color = Color( 0.601563, 0.775878, 1, 0.162157 )
 metallic = 1.0
 metallic_specular = 1.0
-metallic_texture = ExtResource( 1 )
 metallic_texture_channel = 4
 roughness = 0.46
 roughness_texture_channel = 0

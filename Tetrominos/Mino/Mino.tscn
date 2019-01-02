@@ -162,7 +162,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="Mino" type="Spatial"]
+[node name="Mino" type="Spatial" index="0"]
 
 transform = Transform( 0.997027, 0, 0, 0, 0.997027, 0, 0, 0, 0.997027, 0, 0, 0 )
 _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
