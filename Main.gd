@@ -19,18 +19,6 @@ const movements = {
 	"soft_drop": Vector3(0, -1, 0)
 }
 
-const SCORES = [
-	[0, 4, 1],
-	[1, 8, 2],
-	[3, 12],
-	[5, 16],
-	[8]
-]
-const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
-const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
-
-const LINE_CLEAR_MIDI_CHANNELS = [2, 6]
-
 var random_bag = []
 
 var next_piece = random_piece()
@@ -41,6 +29,9 @@ var current_piece_held = false
 var autoshift_action = ""
 
 var playing = true
+
+signal piece_dropped(score)
+signal piece_locked(lines, t_spin)
 
 func random_piece():
 	if not random_bag:
@@ -62,14 +53,7 @@ func new_game():
 	$Stats.new_game()
 	new_piece()
 	resume()
-	new_level()
-	
-func new_level():
 	$Stats.new_level()
-	$FlashText.print("Level\n%d"%$Stats.level)
-	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
-	if $Stats.level > 15:
-		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)
 	
 func new_piece():
 	current_piece = next_piece
@@ -125,15 +109,13 @@ func _on_AutoShiftTimer_timeout():
 func process_autoshift_action():
 	if move(movements[autoshift_action]):
 		if autoshift_action == "soft_drop":
-			$Stats.score += 1
-			$Stats/HBC/VBC1/Score.text = str($Stats.score)
+			emit_signal("piece_dropped", 1)
 
 func hard_drop():
 	var score = 0
 	while move(movements["soft_drop"]):
 		score += 2
-	$Stats.score += score
-	$Stats/HBC/VBC1/Score.text = str($Stats.score)
+	emit_signal("piece_dropped", score)
 	lock()
 		
 func move(movement):
@@ -158,49 +140,10 @@ func _on_LockDelay_timeout():
 		lock()
 		
 func lock():
-	var score
 	$GridMap.lock(current_piece)
 	remove_child(current_piece)
-	var lines_cleared = $GridMap.clear_lines()
-	if lines_cleared or current_piece.t_spin:
-		score = SCORES[lines_cleared][current_piece.t_spin]
-		$Stats.update_score(score)
-		if current_piece.t_spin:
-			$FlashText.print(T_SPIN_NAMES[current_piece.t_spin])
-		if lines_cleared:
-			$FlashText.print(LINES_CLEARED_NAMES[lines_cleared])
-		$FlashText.print(str(100*score))
-		
-		# Combos
-		if lines_cleared:
-			$Stats.combos += 1
-			if $Stats.combos > 0:
-				$Stats.score += (20 if lines_cleared==1 else 50) * $Stats.combos * $Stats.level
-				$Stats/HBC/VBC1/Score.text = str($Stats.score)
-				if $Stats.combos == 1:
-					$FlashText.print("COMBO")
-				else:
-					$FlashText.print("COMBO x%d"%$Stats.combos)
-					
-		# SFX
-		if lines_cleared == Tetromino.NB_MINOES:
-			for channel in LINE_CLEAR_MIDI_CHANNELS:
-				$MidiPlayer.channel_status[channel].vomume = 127
-			$LineCLearTimer.wait_time = 0.86
-		else:
-			for channel in LINE_CLEAR_MIDI_CHANNELS:
-				$MidiPlayer.channel_status[channel].vomume = 100
-			$LineCLearTimer.wait_time = 0.43
-		$MidiPlayer.unmute_channels(LINE_CLEAR_MIDI_CHANNELS)
-		$LineCLearTimer.start()
-	else:
-		$Stats.combos = -1
-	if $Stats.goal <= 0:
-		new_level()
+	emit_signal("piece_locked", $GridMap.clear_lines(), current_piece.t_spin)
 	new_piece()
-
-func _on_LineCLearTimer_timeout():
-	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 
 func hold():
 	if not current_piece_held:
@@ -223,8 +166,8 @@ func resume():
 	$LockDelay.start()
 	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$Stats/Clock.start()
+	$MidiPlayer.mute_channels($MidiPlayer.LINE_CLEAR_MIDI_CHANNELS)
 	$MidiPlayer.resume()
-	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 	$GridMap.visible = true
 	next_piece.visible = true
 	current_piece.visible = true
@@ -253,3 +196,8 @@ func game_over():
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 		pause()
+
+func _on_Stats_level_up():
+	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
+	if $Stats.level > 15:
+		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)

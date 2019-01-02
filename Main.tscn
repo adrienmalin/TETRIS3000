@@ -1,13 +1,14 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://starmap_g8k.jpg" type="Texture" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
 [ext_resource path="res://Tetrominos/Mino/MinoLibrary.tres" type="MeshLibrary" id=3]
 [ext_resource path="res://GridMap.gd" type="Script" id=4]
 [ext_resource path="res://midi/MidiPlayer.tscn" type="PackedScene" id=5]
-[ext_resource path="res://Stats.tscn" type="PackedScene" id=6]
-[ext_resource path="res://FlashText.gd" type="Script" id=7]
-[ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=8]
+[ext_resource path="res://MidiPlayer.gd" type="Script" id=6]
+[ext_resource path="res://Stats.tscn" type="PackedScene" id=7]
+[ext_resource path="res://FlashText.gd" type="Script" id=8]
+[ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=9]
 
 [sub_resource type="PanoramaSky" id=1]
 
@@ -171,7 +172,7 @@ subdivide_depth = 0
 size = 50
 use_mipmaps = true
 use_filter = false
-font_data = ExtResource( 8 )
+font_data = ExtResource( 9 )
 _sections_unfolded = [ "Font", "Settings" ]
 
 [sub_resource type="Animation" id=7]
@@ -369,26 +370,23 @@ wait_time = 0.03
 one_shot = false
 autostart = false
 
-[node name="LineCLearTimer" type="Timer" parent="." index="10"]
+[node name="MidiPlayer" parent="." index="10" instance=ExtResource( 5 )]
+
+script = ExtResource( 6 )
+loop_start = 1.81
+
+[node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
 
 process_mode = 1
 wait_time = 1.41
 one_shot = true
 autostart = false
 
-[node name="MidiPlayer" parent="." index="11" instance=ExtResource( 5 )]
-
-file = "res://midi/Tetris - Song A.mid"
-volume_db = -24
-loop = true
-loop_start = 1.71
-soundfont = "res://midi/TimGM6mb.sf2"
-
-[node name="Stats" parent="." index="12" instance=ExtResource( 6 )]
+[node name="Stats" parent="." index="11" instance=ExtResource( 7 )]
 
 visible = false
 
-[node name="FlashText" type="Control" parent="." index="13"]
+[node name="FlashText" type="Control" parent="." index="12"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -402,7 +400,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
-script = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="Label" type="Label" parent="FlashText" index="0"]
 
@@ -440,6 +438,12 @@ anims/Flash = SubResource( 7 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
+[connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
+
+[connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
+
+[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
+
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 
 [connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
@@ -448,7 +452,11 @@ _sections_unfolded = [ "Playback Options" ]
 
 [connection signal="timeout" from="AutoShiftTimer" to="." method="_on_AutoShiftTimer_timeout"]
 
-[connection signal="timeout" from="LineCLearTimer" to="." method="_on_LineCLearTimer_timeout"]
+[connection signal="timeout" from="MidiPlayer/LineCLearTimer" to="MidiPlayer" method="_on_LineCLearTimer_timeout"]
+
+[connection signal="flash_text" from="Stats" to="FlashText" method="_on_Stats_flash_text"]
+
+[connection signal="level_up" from="Stats" to="." method="_on_Stats_level_up"]
 
 [connection signal="animation_finished" from="FlashText/AnimationPlayer" to="FlashText" method="_on_AnimationPlayer_animation_finished"]
 
