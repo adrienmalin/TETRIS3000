@@ -1,0 +1,13 @@
+extends Control
+
+var texts = PoolStringArray()
+
+func print(text):
+	texts.append(text)
+	if texts.size() > 2:
+		texts.remove(0)
+	$Label.text = texts.join("\n")
+	$AnimationPlayer.play("Flash")
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	texts.resize(0)

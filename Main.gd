@@ -66,7 +66,7 @@ func new_game():
 	
 func new_level():
 	$Stats.new_level()
-	flash_print("Level\n%d"%$Stats.level)
+	$FlashText.print("Level\n%d"%$Stats.level)
 	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
 	if $Stats.level > 15:
 		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)
@@ -158,17 +158,31 @@ func _on_LockDelay_timeout():
 		lock()
 		
 func lock():
+	var score
 	$GridMap.lock(current_piece)
 	remove_child(current_piece)
 	var lines_cleared = $GridMap.clear_lines()
 	if lines_cleared or current_piece.t_spin:
-		var new_score = SCORES[lines_cleared][current_piece.t_spin]
-		$Stats.update_score(new_score)
+		score = SCORES[lines_cleared][current_piece.t_spin]
+		$Stats.update_score(score)
 		if current_piece.t_spin:
-			flash_print(T_SPIN_NAMES[current_piece.t_spin])
+			$FlashText.print(T_SPIN_NAMES[current_piece.t_spin])
 		if lines_cleared:
-			flash_print(LINES_CLEARED_NAMES[lines_cleared])
-		flash_print(str(100*new_score))
+			$FlashText.print(LINES_CLEARED_NAMES[lines_cleared])
+		$FlashText.print(str(100*score))
+		
+		# Combos
+		if lines_cleared:
+			$Stats.combos += 1
+			if $Stats.combos > 0:
+				$Stats.score += (20 if lines_cleared==1 else 50) * $Stats.combos * $Stats.level
+				$Stats/HBC/VBC1/Score.text = str($Stats.score)
+				if $Stats.combos == 1:
+					$FlashText.print("COMBO")
+				else:
+					$FlashText.print("COMBO x%d"%$Stats.combos)
+					
+		# SFX
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
@@ -179,9 +193,14 @@ func lock():
 			$LineCLearTimer.wait_time = 0.43
 		$MidiPlayer.unmute_channels(LINE_CLEAR_MIDI_CHANNELS)
 		$LineCLearTimer.start()
+	else:
+		$Stats.combos = -1
 	if $Stats.goal <= 0:
 		new_level()
 	new_piece()
+
+func _on_LineCLearTimer_timeout():
+	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 
 func hold():
 	if not current_piece_held:
@@ -211,7 +230,7 @@ func resume():
 	current_piece.visible = true
 	if held_piece:
 		held_piece.visible = true
-	flash_print("GO!")
+	$FlashText.print("GO!")
 
 func pause(text = "PAUSE"):
 	playing = false
@@ -226,7 +245,7 @@ func pause(text = "PAUSE"):
 		if held_piece:
 			held_piece.visible = false
 	$MidiPlayer.stop()
-	flash_print(text)
+	$FlashText.print(text)
 		
 func game_over():
 	pause("GAME OVER")
@@ -234,14 +253,3 @@ func game_over():
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 		pause()
-
-func _on_LineCLearTimer_timeout():
-	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
-
-func flash_print(text):
-	$FlashText/Label.text += text + "\n"
-	if not $FlashText/AnimationPlayer.is_playing():
-		$FlashText/AnimationPlayer.play("Flash")
-
-func _on_AnimationPlayer_animation_finished(anim_name):
-	$FlashText/Label.text = ""

@@ -7,6 +7,7 @@ var goal
 var score
 var high_score
 var time
+var combos
 
 func _ready():
 	var save_game = File.new()
@@ -23,6 +24,7 @@ func new_game():
 	goal = 0
 	score = 0
 	time = 0
+	combos = -1
 	
 func new_level():
 	level += 1

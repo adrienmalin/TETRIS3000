@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://starmap_g8k.jpg" type="Texture" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -6,7 +6,8 @@
 [ext_resource path="res://GridMap.gd" type="Script" id=4]
 [ext_resource path="res://midi/MidiPlayer.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=6]
-[ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=7]
+[ext_resource path="res://FlashText.gd" type="Script" id=7]
+[ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=8]
 
 [sub_resource type="PanoramaSky" id=1]
 
@@ -170,7 +171,7 @@ subdivide_depth = 0
 size = 50
 use_mipmaps = true
 use_filter = false
-font_data = ExtResource( 7 )
+font_data = ExtResource( 8 )
 _sections_unfolded = [ "Font", "Settings" ]
 
 [sub_resource type="Animation" id=7]
@@ -401,6 +402,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
+script = ExtResource( 7 )
 
 [node name="Label" type="Label" parent="FlashText" index="0"]
 
@@ -447,8 +449,6 @@ _sections_unfolded = [ "Playback Options" ]
 [connection signal="timeout" from="AutoShiftTimer" to="." method="_on_AutoShiftTimer_timeout"]
 
 [connection signal="timeout" from="LineCLearTimer" to="." method="_on_LineCLearTimer_timeout"]
-
-[connection signal="animation_finished" from="FlashText/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
 
 [connection signal="animation_finished" from="FlashText/AnimationPlayer" to="FlashText" method="_on_AnimationPlayer_animation_finished"]
 
