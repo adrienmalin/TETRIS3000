@@ -50,10 +50,11 @@ func _on_Main_piece_dropped(ds):
 func _on_Main_piece_locked(lines, t_spin):
 	var ds
 	if lines or t_spin:
-		if t_spin:
-			emit_signal("flash_text", T_SPIN_NAMES[t_spin])
-		if lines:
-			emit_signal("flash_text", LINES_CLEARED_NAMES[lines])
+		var text = T_SPIN_NAMES[t_spin]
+		if text:
+			text += " "
+		text += LINES_CLEARED_NAMES[lines]
+		emit_signal("flash_text", text)
 		ds = SCORES[lines][t_spin]
 		goal -= ds
 		$HBC/VBC1/Goal.text = str(goal)

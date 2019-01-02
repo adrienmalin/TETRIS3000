@@ -187,6 +187,7 @@ func pause(show_controls_ui=true):
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
+	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$Stats/Clock.stop()
 	if show_controls_ui:
 		$controls_ui.visible = true
