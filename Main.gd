@@ -8,6 +8,7 @@ const TetroO = preload("res://Tetrominos/TetroO.tscn")
 const TetroS = preload("res://Tetrominos/TetroS.tscn")
 const TetroT = preload("res://Tetrominos/TetroT.tscn")
 const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
+const FlashText = preload("res://FlashText.tscn")
 
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
@@ -26,8 +27,13 @@ const SCORES = [
 	[5, 16],
 	[8]
 ]
-const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
-const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
+const SCORE_NAMES = [
+	["", "T-SPIN", "MINI T-SPIN"],
+	["SINGLE", "T-SPIN SINGLE", "MINI T-SPIN SINGLE"],
+	["DOUBLE", "T-SPIN DOUBLE"],
+	["TRIPLE", "T-SPIN TRIPLE"],
+	["TETRIS"],
+]
 
 const LINE_CLEAR_MIDI_CHANNELS = [2, 6]
 
@@ -66,6 +72,7 @@ func new_game():
 	
 func new_level():
 	$Stats.new_level()
+	flash_print("\n\nLevel\n%d"%$Stats.level)
 	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
 	
 func new_piece():
@@ -150,8 +157,9 @@ func lock():
 	remove_child(current_piece)
 	var lines_cleared = $GridMap.clear_lines()
 	if lines_cleared or current_piece.t_spin:
-		$Stats.update_score(SCORES[lines_cleared][current_piece.t_spin])
-		print_temp(T_SPIN_NAMES[current_piece.t_spin] + ' ' + LINES_CLEARED_NAMES[lines_cleared])
+		var new_score = SCORES[lines_cleared][current_piece.t_spin]
+		$Stats.update_score(new_score)
+		flash_print(SCORE_NAMES[lines_cleared][current_piece.t_spin] + "\n%d\n\n"%(100*new_score))
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
@@ -189,7 +197,6 @@ func resume():
 	$Stats/Clock.start()
 	$MidiPlayer.resume()
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
-	print_temp("RESUME")
 
 func pause():
 	playing = false
@@ -198,11 +205,11 @@ func pause():
 	$Stats/Clock.stop()
 	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$MidiPlayer.stop()
-	print_temp("PAUSE")
+	flash_print("PAUSE")
 		
 func game_over():
 	pause()
-	print_temp("GAME OVER")
+	flash_print("GAME OVER")
 	
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
@@ -213,6 +220,8 @@ func _notification(what):
 func _on_LineCLearTimer_timeout():
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
 
-func print_temp(text):
-	#$HUD/HBC/TempText.text = text
-	print(text)
+func flash_print(text):
+	var flash_text = FlashText.instance()
+	add_child(flash_text)
+	flash_text.get_node("Label").text = text
+	flash_text.get_node("AnimationPlayer").play("Flash")

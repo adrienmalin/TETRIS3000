@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="TETRIS 3000"
-run/main_scene="res://WorldEnvironment.tscn"
+run/main_scene="res://Main.tscn"
 config/icon="res://icon.png"
 
 [display]
