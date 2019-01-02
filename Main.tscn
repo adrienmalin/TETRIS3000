@@ -216,7 +216,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 110 ), Vector2( 0, -50 ), Vector2( 0, -60 ), Vector2( 0, -100 ) ]
 }
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = SubResource( 2 )
 script = ExtResource( 2 )
@@ -420,8 +420,6 @@ size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 6 )
 custom_colors/font_color = Color( 0.445404, 0.710476, 0.820313, 0 )
-text = "TETRIS
-3000"
 align = 1
 valign = 1
 percent_visible = 1.0

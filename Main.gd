@@ -26,13 +26,8 @@ const SCORES = [
 	[5, 16],
 	[8]
 ]
-const SCORE_NAMES = [
-	["", "T-SPIN", "MINI T-SPIN"],
-	["SINGLE", "T-SPIN SINGLE", "MINI T-SPIN SINGLE"],
-	["DOUBLE", "T-SPIN DOUBLE"],
-	["TRIPLE", "T-SPIN TRIPLE"],
-	["TETRIS"],
-]
+const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
+const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
 
 const LINE_CLEAR_MIDI_CHANNELS = [2, 6]
 
@@ -160,7 +155,11 @@ func lock():
 	if lines_cleared or current_piece.t_spin:
 		var new_score = SCORES[lines_cleared][current_piece.t_spin]
 		$Stats.update_score(new_score)
-		flash_print(SCORE_NAMES[lines_cleared][current_piece.t_spin] + "\n%d"%(100*new_score))
+		if current_piece.t_spin:
+			flash_print(T_SPIN_NAMES[current_piece.t_spin])
+		if lines_cleared:
+			flash_print(LINES_CLEARED_NAMES[lines_cleared])
+		flash_print(str(100*new_score))
 		if lines_cleared == Tetromino.NB_MINOES:
 			for channel in LINE_CLEAR_MIDI_CHANNELS:
 				$MidiPlayer.channel_status[channel].vomume = 127
