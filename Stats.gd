@@ -27,8 +27,6 @@ func new_game():
 func new_level():
 	level += 1
 	goal += 5 * level
-	if level > 15:
-		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
 	$HBC/VBC1/Level.text = str(level)
 	$HBC/VBC1/Goal.text = str(goal)
 	
