@@ -373,7 +373,9 @@ autostart = false
 [node name="MidiPlayer" parent="." index="10" instance=ExtResource( 5 )]
 
 script = ExtResource( 6 )
+file = "res://midi/Tetris - Song A.mid"
 loop_start = 1.81
+soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
 

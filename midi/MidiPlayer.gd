@@ -421,4 +421,4 @@ func unmute_channels(channels):
 	for channel_id in channels:
 		channel_mute[channel_id] = false
 		for note in muted_events[channel_id]:
-			_process_track_event_note_on(channel_status[channel_id], muted_events[channel_id][note]))
+			_process_track_event_note_on(channel_status[channel_id], muted_events[channel_id][note])

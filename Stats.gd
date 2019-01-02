@@ -38,13 +38,14 @@ func new_game():
 	score = 0
 	time = 0
 	combos = -1
+	new_level()
 	
 func new_level():
 	level += 1
 	goal += 5 * level
 	$HBC/VBC1/Level.text = str(level)
 	$HBC/VBC1/Goal.text = str(goal)
-	emit_signal("flash_text", "Level\n%d"%$level)
+	emit_signal("flash_text", "Level\n%d"%level)
 	emit_signal("level_up")
 
 func _on_Clock_timeout():
@@ -63,17 +64,18 @@ func _notification(what):
 		save_game.close()
 		get_tree().quit()
 
-func _on_Main_piece_dropped(score):
-	score += lines
+func _on_Main_piece_dropped(ds):
+	score += ds
 	$HBC/VBC1/Score.text = str(score)
 
 func _on_Main_piece_locked(lines, t_spin):
+	var ds
 	if lines or t_spin:
 		if t_spin:
-			$FlashText.print(T_SPIN_NAMES[current_piece.t_spin])
+			emit_signal("flash_text", T_SPIN_NAMES[t_spin])
 		if lines:
-			$FlashText.print(LINES_CLEARED_NAMES[lines_cleared])
-		var ds = SCORES[lines_cleared][current_piece.t_spin]
+			emit_signal("flash_text", LINES_CLEARED_NAMES[lines])
+		ds = SCORES[lines][t_spin]
 		goal -= ds
 		$HBC/VBC1/Goal.text = str(goal)
 		ds *= 100
@@ -87,13 +89,15 @@ func _on_Main_piece_locked(lines, t_spin):
 	if lines:
 		combos += 1
 		if combos > 0:
-			score += (20 if lines==1 else 50) * combos * level
-			$HBC/VBC1/Score.text = str(score)
-			if $Stats.combos == 1:
+			if combos == 1:
 				emit_signal("flash_text", "COMBO")
 			else:
-				emit_signal("flash_text", "COMBO x%d"%$Stats.combos)
+				emit_signal("flash_text", "COMBO x%d"%combos)
+			ds = (20 if lines==1 else 50) * combos * level
+			emit_signal("flash_text", str(ds))
+			score += ds
+			$HBC/VBC1/Score.text = str(score)
 	else:
-		$Stats.combos = -1
-	if $Stats.goal <= 0:
+		combos = -1
+	if goal <= 0:
 		new_level()

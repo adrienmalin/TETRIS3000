@@ -4,7 +4,7 @@ var texts = PoolStringArray()
 
 func print(text):
 	texts.append(text)
-	if texts.size() > 5:
+	if texts.size() > 4:
 		texts.remove(0)
 	$Label.text = texts.join("\n")
 	$AnimationPlayer.play("Flash")

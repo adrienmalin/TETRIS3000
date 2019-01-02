@@ -16,4 +16,4 @@ func _on_Main_piece_locked(lines, t_spin):
 		$LineCLearTimer.start()
 
 func _on_LineCLearTimer_timeout():
-	mute_channels(LINE_CLEAR_MIDI_CHANNELS
+	mute_channels(LINE_CLEAR_MIDI_CHANNELS)

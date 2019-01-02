@@ -21,7 +21,7 @@ const movements = {
 
 var random_bag = []
 
-var next_piece = random_piece()
+var next_piece
 var current_piece
 var held_piece
 var current_piece_held = false
@@ -50,10 +50,10 @@ func _ready():
 
 func new_game():
 	$Stats.visible = true
-	$Stats.new_game()
+	next_piece = random_piece()
 	new_piece()
+	$Stats.new_game()
 	resume()
-	$Stats.new_level()
 	
 func new_piece():
 	current_piece = next_piece
@@ -173,7 +173,6 @@ func resume():
 	current_piece.visible = true
 	if held_piece:
 		held_piece.visible = true
-	$FlashText.print("GO!")
 
 func pause(text = "PAUSE"):
 	playing = false
