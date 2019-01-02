@@ -60,9 +60,9 @@ func _ready():
 func new_game():
 	$Stats.visible = true
 	$Stats.new_game()
+	new_piece()
 	resume()
 	new_level()
-	new_piece()
 	
 func new_level():
 	$Stats.new_level()
@@ -129,8 +129,10 @@ func process_autoshift_action():
 			$Stats/HBC/VBC1/Score.text = str($Stats.score)
 
 func hard_drop():
+	var score = 0
 	while move(movements["soft_drop"]):
-		$Stats.score += 2
+		score += 2
+	$Stats.score += score
 	$Stats/HBC/VBC1/Score.text = str($Stats.score)
 	lock()
 		
@@ -204,25 +206,34 @@ func resume():
 	$Stats/Clock.start()
 	$MidiPlayer.resume()
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)
+	$GridMap.visible = true
+	next_piece.visible = true
+	current_piece.visible = true
+	if held_piece:
+		held_piece.visible = true
+	flash_print("GO!")
 
-func pause():
+func pause(text = "PAUSE"):
 	playing = false
 	$DropTimer.stop()
 	$LockDelay.stop()
 	$Stats/Clock.stop()
-	$Stats.time = OS.get_system_time_secs() - $Stats.time
+	if text == "PAUSE":
+		$Stats.time = OS.get_system_time_secs() - $Stats.time
+		$GridMap.visible = false
+		next_piece.visible = false
+		current_piece.visible = false
+		if held_piece:
+			held_piece.visible = false
 	$MidiPlayer.stop()
-	flash_print("PAUSE")
+	flash_print(text)
 		
 func game_over():
-	pause()
-	flash_print("GAME OVER")
+	pause("GAME OVER")
 	
 func _notification(what):
 	if what == MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 		pause()
-    #if what == MainLoop.NOTIFICATION_WM_FOCUS_IN:
-    #    resume()
 
 func _on_LineCLearTimer_timeout():
 	$MidiPlayer.mute_channels(LINE_CLEAR_MIDI_CHANNELS)

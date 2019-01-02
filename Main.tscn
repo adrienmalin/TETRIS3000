@@ -216,7 +216,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 110 ), Vector2( 0, -50 ), Vector2( 0, -60 ), Vector2( 0, -100 ) ]
 }
 
-[node name="Main" type="WorldEnvironment"]
+[node name="Main" type="WorldEnvironment" index="0"]
 
 environment = SubResource( 2 )
 script = ExtResource( 2 )
@@ -381,7 +381,7 @@ file = "res://midi/Tetris - Song A.mid"
 volume_db = -24
 loop = true
 loop_start = 1.71
-soundfont = "res://midi/FluidR3 GM.sf2"
+soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="Stats" parent="." index="12" instance=ExtResource( 6 )]
 

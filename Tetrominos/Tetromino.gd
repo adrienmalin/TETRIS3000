@@ -113,14 +113,14 @@ func move(movement):
 func rotate(direction):
 	var rotated_positions = rotated_positions(direction)
 	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
-	for movement in movements:
-		if grid_map.possible_positions(rotated_positions, movement):
+	for i in range(movements.size()):
+		if grid_map.possible_positions(rotated_positions, movements[i]):
 			orientation -= direction
 			orientation %= NB_MINOES
 			apply_positions(rotated_positions)
-			translate(movement)
-			return true
-	return false
+			translate(movements[i])
+			return i+1
+	return 0
 	
 func emit_trail(emit):
 	var trail

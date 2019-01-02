@@ -8,13 +8,8 @@ const T_SLOT = [
 ]
 
 func rotate(direction):
-	if .rotate(direction):
-		detect_t_spin()
-		return true
-	return false
-	
-func detect_t_spin():
-	if t_spin != T_SPIN:
+	var rotation_point = .rotate(direction)
+	if rotation_point and t_spin != T_SPIN:
 		var center = to_global(minoes[0].translation)
 		var a = not grid_map.is_free_cell(center + T_SLOT[orientation])
 		var b = not grid_map.is_free_cell(center + T_SLOT[(1+orientation)%4])
@@ -23,4 +18,8 @@ func detect_t_spin():
 		if a and b and (c or d):
 			t_spin = T_SPIN
 		elif c and d and (a or b):
-			t_spin = MINI_T_SPIN
+			if rotation_point == 5:
+				t_spin = T_SPIN
+			else:
+				t_spin = MINI_T_SPIN
+	return rotation_point
