@@ -20,11 +20,13 @@ var combos
 signal flash_text(text)
 signal level_up
 	
-func new_game():
-	level = 0
+func new_game(start_level):
+	level = start_level - 1
 	goal = 0
 	score = 0
+	$VBC/Score.text = str(score)
 	time = 0
+	$VBC/Time.text = "0:00:00"
 	combos = -1
 	new_level()
 	
@@ -37,6 +39,9 @@ func new_level():
 	emit_signal("level_up")
 
 func _on_Clock_timeout():
+	show_time()
+	
+func show_time():
 	var time_elapsed = OS.get_system_time_secs() - time
 	var seconds = time_elapsed % 60
 	var minutes = int(time_elapsed/60) % 60

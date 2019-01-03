@@ -30,14 +30,13 @@ var current_piece_held = false
 
 var autoshift_action = ""
 
-var playing = true
+var playing = false
 
 signal piece_dropped(score)
 signal piece_locked(lines, t_spin)
 
 func _ready():
 	load_user_data()
-	new_game()
 	
 func load_user_data():
 	var save_game = File.new()
@@ -49,26 +48,21 @@ func load_user_data():
 		$Stats/VBC/HighScore.text = str($Stats.high_score)
 		save_game.close()
 
-func new_game():
-	$Stats.visible = true
+func _on_Start_start(level):
+	$GridMap.clear()
+	if held_piece:
+		remove_child(held_piece)
+		held_piece = null
 	next_piece = random_piece()
 	new_piece()
-	$Stats.new_game()
+	$MidiPlayer.position = 0
+	$Start.visible = false
+	$Stats.new_game(level)
 	resume()
-
-func random_piece():
-	if not random_bag:
-		random_bag = [
-			TetroI, TetroJ, TetroL, TetroO,
-			TetroS, TetroT, TetroZ
-		]
-	var choice = randi() % random_bag.size()
-	var piece = random_bag[choice].instance()
-	random_bag.remove(choice)
-	add_child(piece)
-	return piece
 	
 func new_piece():
+	if current_piece:
+		remove_child(current_piece)
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
 	current_piece.emit_trail(true)
@@ -82,10 +76,28 @@ func new_piece():
 	else:
 		game_over()
 
+func random_piece():
+	if not random_bag:
+		random_bag = [
+			TetroI, TetroJ, TetroL, TetroO,
+			TetroS, TetroT, TetroZ
+		]
+	var choice = randi() % random_bag.size()
+	var piece = random_bag[choice].instance()
+	random_bag.remove(choice)
+	add_child(piece)
+	return piece
+
+func _on_Stats_level_up():
+	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
+	if $Stats.level > 15:
+		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)
+
 func _process(delta):
 	if Input.is_action_just_pressed("pause"):
 		if playing:
 			pause()
+			$controls_ui.visible = true
 		elif $controls_ui.enable_resume:
 			resume()
 	if playing:
@@ -104,9 +116,11 @@ func _process(delta):
 		if Input.is_action_just_pressed("hard_drop"):
 			hard_drop()
 		if Input.is_action_just_pressed("rotate_clockwise"):
-			rotate(Tetromino.CLOCKWISE)
+			if rotate(Tetromino.CLOCKWISE):
+				$MidiPlayer.move()
 		if Input.is_action_just_pressed("rotate_counterclockwise"):
-			rotate(Tetromino.COUNTERCLOCKWISE)
+			if rotate(Tetromino.COUNTERCLOCKWISE):
+				$MidiPlayer.move()
 		if Input.is_action_just_pressed("hold"):
 			hold()
 
@@ -121,10 +135,12 @@ func _on_AutoShiftTimer_timeout():
 
 func process_autoshift_action():
 	if move(movements[autoshift_action]):
+		$MidiPlayer.move()
 		if autoshift_action == "soft_drop":
 			emit_signal("piece_dropped", 1)
 
 func hard_drop():
+	$MidiPlayer.move()
 	var score = 0
 	while move(movements["soft_drop"]):
 		score += 2
@@ -154,24 +170,22 @@ func _on_LockDelay_timeout():
 		
 func lock():
 	$GridMap.lock(current_piece)
-	remove_child(current_piece)
 	emit_signal("piece_locked", $GridMap.clear_lines(), current_piece.t_spin)
 	new_piece()
 
 func hold():
 	if not current_piece_held:
 		current_piece_held = true
-		if held_piece:
-			var tmp = held_piece
-			held_piece = current_piece
-			current_piece = tmp
+		var swap = current_piece
+		current_piece = held_piece
+		held_piece = swap
+		held_piece.emit_trail(false)
+		held_piece.translation = HOLD_POSITION
+		if current_piece:
 			current_piece.translation = START_POSITION
 			current_piece.emit_trail(true)
 		else:
-			held_piece = current_piece
 			new_piece()
-		held_piece.emit_trail(false)
-		held_piece.translation = HOLD_POSITION
 		
 func resume():
 	playing = true
@@ -179,38 +193,52 @@ func resume():
 	$LockDelay.start()
 	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$Stats/Clock.start()
-	$MidiPlayer.mute_channels($MidiPlayer.LINE_CLEAR_MIDI_CHANNELS)
 	$MidiPlayer.resume()
 	$controls_ui.visible = false
+	$Stats.visible = true
+	$GridMap.visible = true
+	$Backs.visible = true
+	current_piece.visible = true
+	if held_piece:
+		held_piece.visible = true
+	next_piece.visible = true
 
-func pause(show_controls_ui=true):
+func pause(hide=true):
 	playing = false
+	$Stats.time = OS.get_system_time_secs() - $Stats.time
+	if hide:
+		$Stats.visible = false
+		$GridMap.visible = false
+		$Backs.visible = false
+		current_piece.visible = false
+		if held_piece:
+			held_piece.visible = false
+		next_piece.visible = false
+	$MidiPlayer.stop()
 	$DropTimer.stop()
 	$LockDelay.stop()
-	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$Stats/Clock.stop()
-	if show_controls_ui:
-		$controls_ui.visible = true
-	$MidiPlayer.stop()
-		
+
 func game_over():
+	$FlashText.print("GAME\nOVER")
 	pause(false)
+	$ReplayButton.visible = true
+
+func _on_ReplayButton_pressed():
+	pause()
+	$ReplayButton.visible = false
+	$Start.visible = true
 	
 func _notification(what):
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
-			pause()
+			if playing:
+				pause()
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			save_user_data()
-
 
 func save_user_data():
 	var save_game = File.new()
 	save_game.open_encrypted_with_pass("user://data.save", File.WRITE, password)
 	save_game.store_line(str($Stats.high_score))
 	save_game.close()
-
-func _on_Stats_level_up():
-	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
-	if $Stats.level > 15:
-		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)

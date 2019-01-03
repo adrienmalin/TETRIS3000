@@ -1,16 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://controls.gd" type="Script" id=1]
-[ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=2]
+[ext_resource path="res://fonts/TitleFont.tres" type="DynamicFont" id=2]
 [ext_resource path="res://fonts/Gamer.ttf" type="DynamicFontData" id=3]
-
-[sub_resource type="DynamicFont" id=1]
-
-size = 30
-use_mipmaps = false
-use_filter = false
-font_data = ExtResource( 2 )
-_sections_unfolded = [ "Font", "Settings" ]
+[ext_resource path="res://fonts/ButtonFont.tres" type="DynamicFont" id=4]
 
 [sub_resource type="DynamicFont" id=2]
 
@@ -19,15 +12,6 @@ use_mipmaps = true
 use_filter = false
 extra_spacing_top = -4
 extra_spacing_bottom = -4
-font_data = ExtResource( 3 )
-_sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
-
-[sub_resource type="DynamicFont" id=3]
-
-size = 20
-use_mipmaps = false
-use_filter = false
-extra_spacing_top = -4
 font_data = ExtResource( 3 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
@@ -52,25 +36,7 @@ __meta__ = {
 "__editor_plugin_screen__": "2D"
 }
 
-[node name="ColorRect" type="ColorRect" parent="." index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = -2990.0
-margin_top = -1560.0
-margin_right = 2720.0
-margin_bottom = 1060.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-color = Color( 0.0816994, 0.0912621, 0.115234, 1 )
-
-[node name="pause" type="Label" parent="." index="1"]
+[node name="pause" type="Label" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -86,15 +52,16 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 1 )
+custom_fonts/font = ExtResource( 2 )
+custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color_shadow = Color( 1, 1, 1, 0.0968627 )
 text = "PAUSE"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_colors", "custom_fonts" ]
 
-[node name="bindings" type="Control" parent="." index="2"]
+[node name="bindings" type="Control" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -143,6 +110,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "move
 left"
 valign = 1
@@ -167,7 +135,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -210,6 +178,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "move
 right"
 valign = 1
@@ -234,7 +203,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -274,6 +243,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "rotate
 clockwise"
 valign = 1
@@ -297,13 +267,14 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
 group = null
 flat = false
 align = 1
+_sections_unfolded = [ "custom_fonts" ]
 
 [node name="rotate_counterclockwise" type="Control" parent="bindings" index="3"]
 
@@ -339,6 +310,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "rotate
 counter
 clockwise"
@@ -364,7 +336,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -405,6 +377,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "soft
 drop"
 valign = 1
@@ -428,7 +401,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -470,6 +443,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "hard
 drop"
 valign = 1
@@ -494,7 +468,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -534,6 +508,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "hold"
 valign = 1
 percent_visible = 1.0
@@ -556,7 +531,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null
@@ -598,6 +573,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 0
 custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.752941, 0.921569, 0.988235, 1 )
 text = "pause
 resume"
 valign = 1
@@ -623,7 +599,7 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 2
 size_flags_vertical = 2
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = ExtResource( 4 )
 toggle_mode = false
 enabled_focus_mode = 2
 shortcut = null

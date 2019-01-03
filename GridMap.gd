@@ -17,6 +17,10 @@ func _ready():
 		add_child(exploding_lines[y])
 		exploding_lines[y].translation = Vector3(NB_COLLUMNS/2, y, 1)
 
+func clear():
+	for position in get_used_cells():
+		set_cell_item(position.x, position.y, position.z, EMPTY_CELL)
+
 func is_free_cell(position):
 	return (
 		0 <= position.x and position.x < NB_COLLUMNS

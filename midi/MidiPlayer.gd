@@ -1,7 +1,5 @@
 extends Node
 
-const Tetromino = preload("res://Tetrominos/Tetromino.gd")
-
 const max_track = 16
 const max_channel = 16
 const max_note_number = 128
@@ -407,18 +405,3 @@ func get_now_playing_polyphony( ):
 		if audio_stream_player.playing:
 			polyphony += 1
 	return polyphony
-
-
-
-func resume():
-	play(position)
-	
-func mute_channels(channels):
-	for channel_id in channels:
-		channel_mute[channel_id] = true
-		
-func unmute_channels(channels):
-	for channel_id in channels:
-		channel_mute[channel_id] = false
-		for note in muted_events[channel_id]:
-			_process_track_event_note_on(channel_status[channel_id], muted_events[channel_id][note])
