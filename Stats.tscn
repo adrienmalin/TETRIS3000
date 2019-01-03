@@ -5,7 +5,7 @@
 
 [sub_resource type="DynamicFont" id=1]
 
-size = 20
+size = 22
 use_mipmaps = false
 use_filter = false
 font_data = ExtResource( 2 )
@@ -13,21 +13,22 @@ _sections_unfolded = [ "Font", "Settings" ]
 
 [sub_resource type="DynamicFont" id=2]
 
-size = 18
+size = 20
 use_mipmaps = false
 use_filter = false
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="Stats" type="MarginContainer"]
+[node name="Stats" type="MarginContainer" index="0"]
 
-anchor_left = 0.0
-anchor_top = 0.5
-anchor_right = 0.0
-anchor_bottom = 0.5
-margin_left = 20.0
-margin_right = 134.0
-margin_bottom = 51.5
+anchor_left = 0.4
+anchor_top = 0.6
+anchor_right = 0.6
+anchor_bottom = 0.6
+margin_left = -170.0
+margin_top = -70.0
+margin_right = -160.0
+margin_bottom = 140.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -37,32 +38,22 @@ size_flags_vertical = 0
 script = ExtResource( 1 )
 _sections_unfolded = [ "Anchor", "Margin", "Size Flags" ]
 
-[node name="HBC" type="HBoxContainer" parent="." index="0"]
+[node name="Clock" type="Timer" parent="." index="0"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="VBC" type="VBoxContainer" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_left = 16.0
-margin_right = 133.0
-margin_bottom = 77.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-alignment = 0
-_sections_unfolded = [ "Anchor", "Margin", "Size Flags", "Theme" ]
-
-[node name="VBC0" type="VBoxContainer" parent="HBC" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 68.0
-margin_bottom = 77.0
+margin_right = 94.0
+margin_bottom = 172.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -73,14 +64,14 @@ custom_constants/separation = 0
 alignment = 0
 _sections_unfolded = [ "Anchor", "Margin", "Size Flags", "custom_constants" ]
 
-[node name="Label" type="Label" parent="HBC/VBC0" index="0"]
+[node name="Label" type="Label" parent="VBC" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 68.0
-margin_bottom = 17.0
+margin_right = 78.0
+margin_bottom = 18.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -88,129 +79,22 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "Score:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_fonts" ]
 
-[node name="Label2" type="Label" parent="HBC/VBC0" index="1"]
+[node name="Score" type="Label" parent="VBC" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 17.0
-margin_right = 68.0
-margin_bottom = 32.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
-text = "High score:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-_sections_unfolded = [ "custom_fonts" ]
-
-[node name="Label3" type="Label" parent="HBC/VBC0" index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 32.0
-margin_right = 68.0
-margin_bottom = 47.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
-text = "Time"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="Label4" type="Label" parent="HBC/VBC0" index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 47.0
-margin_right = 68.0
-margin_bottom = 62.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
-text = "Level:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="Label5" type="Label" parent="HBC/VBC0" index="4"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 62.0
-margin_right = 68.0
-margin_bottom = 77.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 2
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
-text = "Goal:"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
-
-[node name="VBC1" type="VBoxContainer" parent="HBC" index="1"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 76.0
-margin_right = 117.0
-margin_bottom = 77.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 0
-size_flags_vertical = 0
-custom_constants/separation = 0
-alignment = 0
-_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Size Flags", "Visibility", "custom_constants" ]
-
-[node name="Score" type="Label" parent="HBC/VBC1" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 41.0
-margin_bottom = 17.0
+margin_top = 18.0
+margin_right = 78.0
+margin_bottom = 36.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -218,22 +102,23 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_fonts" ]
 
-[node name="HighScore" type="Label" parent="HBC/VBC1" index="1"]
+[node name="Label2" type="Label" parent="VBC" index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 17.0
-margin_right = 41.0
-margin_bottom = 32.0
+margin_top = 36.0
+margin_right = 78.0
+margin_bottom = 53.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -241,21 +126,45 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
+text = "High score:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+_sections_unfolded = [ "Anchor", "custom_fonts" ]
+
+[node name="HighScore" type="Label" parent="VBC" index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 53.0
+margin_right = 78.0
+margin_bottom = 70.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Time" type="Label" parent="HBC/VBC1" index="2"]
+[node name="Label3" type="Label" parent="VBC" index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 32.0
-margin_right = 41.0
-margin_bottom = 47.0
+margin_top = 70.0
+margin_right = 78.0
+margin_bottom = 87.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -263,21 +172,44 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
+text = "Time"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Time" type="Label" parent="VBC" index="5"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 87.0
+margin_right = 78.0
+margin_bottom = 104.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0:00:00"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Level" type="Label" parent="HBC/VBC1" index="3"]
+[node name="Label4" type="Label" parent="VBC" index="6"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 47.0
-margin_right = 41.0
-margin_bottom = 62.0
+margin_top = 104.0
+margin_right = 78.0
+margin_bottom = 121.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -285,21 +217,21 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
-text = "0"
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
+text = "Level:"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 
-[node name="Goal" type="Label" parent="HBC/VBC1" index="4"]
+[node name="Level" type="Label" parent="VBC" index="7"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 62.0
-margin_right = 41.0
-margin_bottom = 77.0
+margin_top = 121.0
+margin_right = 78.0
+margin_bottom = 138.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -307,19 +239,58 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = SubResource( 2 )
-custom_colors/font_color = Color( 0.443137, 0.709804, 0.819608, 0.533333 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
+align = 2
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Label5" type="Label" parent="VBC" index="8"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 138.0
+margin_right = 78.0
+margin_bottom = 155.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
+text = "Goal:"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Goal" type="Label" parent="VBC" index="9"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 155.0
+margin_right = 78.0
+margin_bottom = 172.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 2
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 4
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
+text = "0"
+align = 2
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1
 _sections_unfolded = [ "custom_fonts" ]
-
-[node name="Clock" type="Timer" parent="." index="1"]
-
-process_mode = 1
-wait_time = 1.0
-one_shot = false
-autostart = false
 
 [connection signal="timeout" from="Clock" to="." method="_on_Clock_timeout"]
 

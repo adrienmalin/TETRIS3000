@@ -31,8 +31,8 @@ func new_game():
 func new_level():
 	level += 1
 	goal += 5 * level
-	$HBC/VBC1/Level.text = str(level)
-	$HBC/VBC1/Goal.text = str(goal)
+	$VBC/Level.text = str(level)
+	$VBC/Goal.text = str(goal)
 	emit_signal("flash_text", "Level\n%d"%level)
 	emit_signal("level_up")
 
@@ -41,11 +41,11 @@ func _on_Clock_timeout():
 	var seconds = time_elapsed % 60
 	var minutes = int(time_elapsed/60) % 60
 	var hours = int(time_elapsed/3600)
-	$HBC/VBC1/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
+	$VBC/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
 
 func _on_Main_piece_dropped(ds):
 	score += ds
-	$HBC/VBC1/Score.text = str(score)
+	$VBC/Score.text = str(score)
 
 func _on_Main_piece_locked(lines, t_spin):
 	var ds
@@ -57,14 +57,14 @@ func _on_Main_piece_locked(lines, t_spin):
 		emit_signal("flash_text", text)
 		ds = SCORES[lines][t_spin]
 		goal -= ds
-		$HBC/VBC1/Goal.text = str(goal)
+		$VBC/Goal.text = str(goal)
 		ds *= 100
 		emit_signal("flash_text", str(ds))
 		score += ds
-		$HBC/VBC1/Score.text = str(score)
+		$VBC/Score.text = str(score)
 		if score > high_score:
 			high_score = score
-			$HBC/VBC1/HighScore.text = str(high_score)
+			$VBC/HighScore.text = str(high_score)
 	# Combos
 	if lines:
 		combos += 1
@@ -76,7 +76,7 @@ func _on_Main_piece_locked(lines, t_spin):
 			ds = (20 if lines==1 else 50) * combos * level
 			emit_signal("flash_text", str(ds))
 			score += ds
-			$HBC/VBC1/Score.text = str(score)
+			$VBC/Score.text = str(score)
 	else:
 		combos = -1
 	if goal <= 0:

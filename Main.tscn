@@ -219,7 +219,7 @@ tracks/2/keys = {
 "values": [ Vector2( 0, 110 ), Vector2( 0, -50 ), Vector2( 0, -60 ), Vector2( 0, -100 ) ]
 }
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = SubResource( 2 )
 script = ExtResource( 2 )

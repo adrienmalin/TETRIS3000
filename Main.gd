@@ -46,7 +46,7 @@ func load_user_data():
 	else:
 		save_game.open_encrypted_with_pass("user://data.save", File.READ, password)
 		$Stats.high_score = int(save_game.get_line())
-		$Stats/HBC/VBC1/HighScore.text = str($Stats.high_score)
+		$Stats/VBC/HighScore.text = str($Stats.high_score)
 		save_game.close()
 
 func new_game():
