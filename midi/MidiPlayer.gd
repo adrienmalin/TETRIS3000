@@ -38,9 +38,6 @@ var audio_stream_players = []
 
 var _used_program_numbers = []
 
-var muted_events = []
-var paused_position = 0
-
 signal changed_tempo( tempo )
 signal appeared_lyric( lyric )
 signal appeared_marker( marker )
@@ -180,7 +177,6 @@ func _init_channel( ):
 			"drum_track": drum_track,
 			"pan": 0.5,
 		})
-		self.muted_events.append({})
 
 """
 	再生
@@ -278,11 +274,8 @@ func _process_track( ):
 
 		match event.type:
 			SMF.MIDIEventType.note_off:
-				muted_events[event_chunk.channel_number].erase(event.note)
 				self._process_track_event_note_off( channel, event )
 			SMF.MIDIEventType.note_on:
-				if self.channel_mute[event_chunk.channel_number]:
-					muted_events[event_chunk.channel_number][event.note] = event
 				self._process_track_event_note_on( channel, event )
 			SMF.MIDIEventType.program_change:
 				channel.program = event.number
