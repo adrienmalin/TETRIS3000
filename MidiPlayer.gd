@@ -3,7 +3,7 @@ extends "midi/MidiPlayer.gd"
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
 
 const LINE_CLEAR_CHANNELS = [2, 6]
-const MOVE_CHANNELS = [8]
+const MOVE_CHANNELS = []
 
 var muted_events = []
 
