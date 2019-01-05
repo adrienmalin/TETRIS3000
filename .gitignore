@@ -6,4 +6,6 @@ export_presets.cfg
 
 # Mono-specific ignores
 .mono/
+
 midi/FluidR3 GM.sf2
+release/

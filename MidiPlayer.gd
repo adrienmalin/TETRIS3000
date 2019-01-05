@@ -7,7 +7,6 @@ const MOVE_CHANNELS = [3]
 
 func _ready():
 	mute_channels(MOVE_CHANNELS+LINE_CLEAR_CHANNELS)
-	resume()
 
 func resume():
 	play(position)

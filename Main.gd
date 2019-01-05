@@ -236,6 +236,7 @@ func _notification(what):
 				pause()
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			save_user_data()
+			get_tree().quit()
 
 func save_user_data():
 	var save_game = File.new()

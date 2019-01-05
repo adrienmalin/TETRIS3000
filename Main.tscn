@@ -25,7 +25,7 @@ background_mode = 2
 background_sky = SubResource( 1 )
 background_sky_custom_fov = 0.0
 background_color = Color( 0, 0, 0, 1 )
-background_energy = 2.0
+background_energy = 3.0
 background_canvas_max_layer = 0
 ambient_light_color = Color( 0.469971, 0.542197, 0.6875, 1 )
 ambient_light_energy = 0.0
@@ -122,7 +122,7 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.601563, 0.775878, 1, 0.0338039 )
+albedo_color = Color( 0.601563, 0.775878, 1, 0.00784314 )
 metallic = 0.0
 metallic_specular = 0.0
 metallic_texture_channel = 0
@@ -254,10 +254,10 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.999391, -0.0348995, 0, 0.0348995, 0.999391, 0, 0, 50 )
+transform = Transform( 0.376951, 0.677372, -0.631724, -0.295744, 0.734355, 0.610949, 0.877749, -0.0434695, 0.477145, -20, 30, 0 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
-light_energy = 0.5
+light_energy = 3.0
 light_indirect_energy = 1.0
 light_negative = false
 light_specular = 0.5
@@ -282,7 +282,6 @@ _sections_unfolded = [ "Light", "Transform" ]
 
 [node name="GridMap" type="GridMap" parent="." index="2"]
 
-visible = false
 theme = ExtResource( 3 )
 cell_size = Vector3( 1, 1, 1 )
 cell_octant_size = 8
@@ -311,7 +310,7 @@ visible = false
 
 [node name="GridBack" type="MeshInstance" parent="Backs" index="0"]
 
-transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 0.1, 4.5, 9.5, -1 )
+transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -328,7 +327,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="HoldBack" type="MeshInstance" parent="Backs" index="1"]
 
-transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, -5, 16, -1 )
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, -5, 16, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -345,7 +344,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="NextBack" type="MeshInstance" parent="Backs" index="2"]
 
-transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 0.1, 14, 16, -1 )
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, 14, 16, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -498,9 +497,9 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
 
-[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
-
 [connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
+
+[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 
