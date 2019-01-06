@@ -17,7 +17,7 @@ _sections_unfolded = [ "Extra Spacing", "Font", "Font/fallback", "Settings" ]
 
 default_font = SubResource( 1 )
 
-[node name="Start" type="Control"]
+[node name="Start" type="Control" index="0"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -68,9 +68,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -78.0
+margin_left = -83.0
 margin_top = -20.0
-margin_right = 118.0
+margin_right = 113.0
 margin_bottom = 17.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -97,9 +97,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -80.0
+margin_left = -85.0
 margin_top = 29.0
-margin_right = 90.0
+margin_right = 85.0
 margin_bottom = 69.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false

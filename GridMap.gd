@@ -45,14 +45,15 @@ func lock(piece):
 		set_cell_item(position.x, position.y, 0, MINO)
 
 func clear_lines():
-	var nb_minoes
+	var line_cleared
 	var lines_cleared = 0
 	for y in range(NB_LINES-1, -1, -1):
-		nb_minoes = 0
+		line_cleared = true
 		for x in range(NB_COLLUMNS):
-			if get_cell_item(x, y, 0) == MINO:
-				nb_minoes += 1
-		if nb_minoes == NB_COLLUMNS:
+			if not get_cell_item(x, y, 0) == MINO:
+				line_cleared = false
+				break
+		if line_cleared:
 			for y2 in range(y, NB_LINES+2):
 				for x in range(NB_COLLUMNS):
 					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))

@@ -18,7 +18,7 @@ const HOLD_POSITION = Vector3(-5, 16, 0)
 const movements = {
 	"move_right": Vector3(1, 0, 0),
 	"move_left": Vector3(-1, 0, 0),
-	"soft_drop": Vector3(0, -1, 0)
+	"drop": Vector3(0, -1, 0)
 }
 
 var random_bag = []
@@ -26,7 +26,7 @@ var random_bag = []
 var next_piece
 var current_piece
 var held_piece
-var current_piece_held = false
+var current_piece_held
 
 var autoshift_action = ""
 
@@ -53,6 +53,7 @@ func _on_Start_start(level):
 	if held_piece:
 		remove_child(held_piece)
 		held_piece = null
+	current_piece_held = false
 	next_piece = random_piece()
 	new_piece()
 	$MidiPlayer.position = 0
@@ -69,11 +70,12 @@ func new_piece():
 	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
-	if move(movements["soft_drop"]):
+	if move(movements["drop"]):
 		$DropTimer.start()
 		$LockDelay.start()
 		current_piece_held = false
 	else:
+		current_piece.translate(movements["drop"])
 		game_over()
 
 func random_piece():
@@ -100,6 +102,8 @@ func _process(delta):
 			$controls_ui.visible = true
 		elif $controls_ui.enable_resume:
 			resume()
+	if Input.is_action_just_pressed("toggle_fullscreen"):
+		OS.window_fullscreen = !OS.window_fullscreen
 	if playing:
 		for action in movements:
 			if action == autoshift_action:
@@ -136,13 +140,13 @@ func _on_AutoShiftTimer_timeout():
 func process_autoshift_action():
 	if move(movements[autoshift_action]):
 		$MidiPlayer.move()
-		if autoshift_action == "soft_drop":
+		if autoshift_action == "drop":
 			emit_signal("piece_dropped", 1)
 
 func hard_drop():
 	$MidiPlayer.move()
 	var score = 0
-	while move(movements["soft_drop"]):
+	while move(movements["drop"]):
 		score += 2
 	emit_signal("piece_dropped", score)
 	lock()
@@ -162,10 +166,10 @@ func rotate(direction):
 		return false
 
 func _on_DropTimer_timeout():
-	move(movements["soft_drop"])
+	move(movements["drop"])
 
 func _on_LockDelay_timeout():
-	if not move(movements["soft_drop"]):
+	if not move(movements["drop"]):
 		lock()
 		
 func lock():

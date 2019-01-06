@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://starmap_g8k.jpg" type="Texture" id=1]
+[ext_resource path="res://starmap_g4k_print.jpg" type="Texture" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
 [ext_resource path="res://Tetrominos/Mino/MinoLibrary.tres" type="MeshLibrary" id=3]
 [ext_resource path="res://GridMap.gd" type="Script" id=4]
@@ -15,7 +15,7 @@
 
 [sub_resource type="PanoramaSky" id=1]
 
-radiance_size = 4
+radiance_size = 0
 panorama = ExtResource( 1 )
 
 [sub_resource type="Environment" id=2]
@@ -24,12 +24,12 @@ resource_local_to_scene = true
 background_mode = 2
 background_sky = SubResource( 1 )
 background_sky_custom_fov = 0.0
-background_color = Color( 0, 0, 0, 1 )
-background_energy = 3.0
+background_color = Color( 0.409546, 0.764489, 0.859375, 1 )
+background_energy = 1.0
 background_canvas_max_layer = 0
-ambient_light_color = Color( 0.469971, 0.542197, 0.6875, 1 )
-ambient_light_energy = 0.0
-ambient_light_sky_contribution = 1.0
+ambient_light_color = Color( 0.794922, 0.978371, 1, 1 )
+ambient_light_energy = 16.0
+ambient_light_sky_contribution = 0.92
 fog_enabled = false
 fog_color = Color( 0.5, 0.6, 0.7, 1 )
 fog_sun_color = Color( 1, 0.9, 0.7, 1 )
@@ -43,13 +43,13 @@ fog_height_enabled = false
 fog_height_min = 0.0
 fog_height_max = 100.0
 fog_height_curve = 1.0
-tonemap_mode = 0
+tonemap_mode = 3
 tonemap_exposure = 1.0
 tonemap_white = 1.0
 auto_exposure_enabled = false
 auto_exposure_scale = 0.4
 auto_exposure_min_luma = 0.05
-auto_exposure_max_luma = 8.0
+auto_exposure_max_luma = 0.26
 auto_exposure_speed = 0.5
 ss_reflections_enabled = false
 ss_reflections_max_steps = 64
@@ -86,7 +86,7 @@ glow_levels/4 = false
 glow_levels/5 = true
 glow_levels/6 = false
 glow_levels/7 = false
-glow_intensity = 2.26
+glow_intensity = 6.17
 glow_strength = 1.0
 glow_bloom = 0.0
 glow_blend_mode = 2
@@ -94,10 +94,10 @@ glow_hdr_threshold = 1.0
 glow_hdr_scale = 2.0
 glow_bicubic_upscale = false
 adjustment_enabled = false
-adjustment_brightness = 0.35
+adjustment_brightness = 0.27
 adjustment_contrast = 1.0
 adjustment_saturation = 0.34
-_sections_unfolded = [ "Adjustments", "Ambient Light", "Background", "Fog", "Resource" ]
+_sections_unfolded = [ "Adjustments", "Ambient Light", "Background", "Resource" ]
 
 [sub_resource type="SpatialMaterial" id=3]
 
@@ -230,7 +230,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 11 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = SubResource( 2 )
 script = ExtResource( 2 )
@@ -245,7 +245,7 @@ h_offset = 0.0
 v_offset = 0.0
 doppler_tracking = 0
 projection = 0
-current = false
+current = true
 fov = 100.0
 size = 1.0
 near = 0.05
@@ -254,7 +254,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
 
-transform = Transform( 0.376951, 0.677372, -0.631724, -0.295744, 0.734355, 0.610949, 0.877749, -0.0434695, 0.477145, -20, 30, 0 )
+transform = Transform( 0.332668, 0.771982, -0.541642, 0.579657, 0.285656, 0.763151, 0.743861, -0.567843, -0.352456, 2.01163, 29.4451, 0 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 3.0
@@ -305,7 +305,6 @@ NB_COLLUMNS = 10
 
 [node name="Backs" type="Spatial" parent="." index="3"]
 
-editor/display_folded = true
 visible = false
 
 [node name="GridBack" type="MeshInstance" parent="Backs" index="0"]
@@ -420,6 +419,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 7 )
+_sections_unfolded = [ "Material", "Size Flags", "Theme" ]
 
 [node name="Label" type="Label" parent="FlashText" index="0"]
 
@@ -497,9 +497,9 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
 
-[connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
-
 [connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
+
+[connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 

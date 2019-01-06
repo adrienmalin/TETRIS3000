@@ -123,7 +123,7 @@ params_point_size = 1.0
 params_billboard_mode = 0
 params_grow = false
 params_use_alpha_scissor = false
-albedo_color = Color( 0.601563, 0.775878, 1, 0.0196078 )
+albedo_color = Color( 0.601563, 0.775878, 1, 0.0045098 )
 metallic = 0.68
 metallic_specular = 1.0
 metallic_texture_channel = 0
@@ -162,7 +162,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="Mino" type="Spatial"]
+[node name="Mino" type="Spatial" index="0"]
 
 transform = Transform( 0.997027, 0, 0, 0, 0.997027, 0, 0, 0, 0.997027, 0, 0, 0 )
 _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
