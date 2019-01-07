@@ -14,6 +14,7 @@ const password = "TETRIS 3000"
 const NEXT_POSITION = Vector3(13, 16, 0)
 const START_POSITION = Vector3(5, 20, 0)
 const HOLD_POSITION = Vector3(-5, 16, 0)
+const THERE = Vector3(0, 0, 0)
 
 const movements = {
 	"move_right": Vector3(1, 0, 0),
@@ -70,12 +71,11 @@ func new_piece():
 	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
-	if move(movements["soft_drop"]):
+	if move(THERE):
 		$DropTimer.start()
 		$LockDelay.start()
 		current_piece_held = false
 	else:
-		current_piece.translate(movements["soft_drop"])
 		game_over()
 
 func random_piece():
