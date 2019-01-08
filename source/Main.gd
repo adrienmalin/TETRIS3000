@@ -105,18 +105,24 @@ func _unhandled_input(event):
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 	if playing:
-		for action in movements:
-			if action == autoshift_action:
-				if event.is_action_released(action):
-					$AutoShiftDelay.stop()
-					$AutoShiftTimer.stop()
-					autoshift_action = ""
-			else:
-				if event.is_action_pressed(action):
+		if event.is_action_released(autoshift_action):
+			$AutoShiftDelay.stop()
+			$AutoShiftTimer.stop()
+			autoshift_action = ""
+			for action in movements:
+				if Input.is_action_pressed(action):
 					autoshift_action = action
-					process_autoshift_action()
-					$AutoShiftTimer.stop()
+					process_autoshift()
 					$AutoShiftDelay.start()
+					break
+		for action in movements:
+			if action != autoshift_action:
+				if event.is_action_pressed(action):
+					$AutoShiftTimer.stop()
+					autoshift_action = action
+					process_autoshift()
+					$AutoShiftDelay.start()
+					break
 		if event.is_action_pressed("hard_drop"):
 			hard_drop()
 		if event.is_action_pressed("rotate_clockwise"):
@@ -128,17 +134,16 @@ func _unhandled_input(event):
 
 func _on_AutoShiftDelay_timeout():
 	if playing and autoshift_action:
-		process_autoshift_action()
+		process_autoshift()
 		$AutoShiftTimer.start()
 
 func _on_AutoShiftTimer_timeout():
 	if playing and autoshift_action:
-		process_autoshift_action()
+		process_autoshift()
 
-func process_autoshift_action():
-	if move(movements[autoshift_action]):
-		if autoshift_action == "soft_drop":
-			emit_signal("piece_dropped", 1)
+func process_autoshift():
+	if move(movements[autoshift_action]) and autoshift_action == "soft_drop":
+		emit_signal("piece_dropped", 1)
 
 func hard_drop():
 	var score = 0
