@@ -10,8 +10,8 @@
 [ext_resource path="res://fonts/525-ROUN.TTF" type="DynamicFontData" id=8]
 [ext_resource path="res://Stats.tscn" type="PackedScene" id=9]
 [ext_resource path="res://controls.tscn" type="PackedScene" id=10]
-[ext_resource path="res://fonts/Gamer.ttf" type="DynamicFontData" id=11]
-[ext_resource path="res://Start.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Start.tscn" type="PackedScene" id=11]
+[ext_resource path="res://fonts/Gamer.ttf" type="DynamicFontData" id=12]
 
 [sub_resource type="PanoramaSky" id=1]
 
@@ -226,7 +226,7 @@ size = 20
 use_mipmaps = false
 use_filter = false
 extra_spacing_bottom = 5
-font_data = ExtResource( 11 )
+font_data = ExtResource( 12 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
 [node name="Main" type="WorldEnvironment" index="0"]
@@ -496,17 +496,19 @@ visible = false
 
 visible = false
 
-[node name="ReplayButton" type="Button" parent="." index="13"]
+[node name="Start" parent="." index="13" instance=ExtResource( 11 )]
+
+[node name="ReplayButton" type="Button" parent="." index="14"]
 
 visible = false
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -100.0
-margin_top = -60.0
-margin_right = -27.0
-margin_bottom = -26.0
+margin_left = -335.0
+margin_top = -55.0
+margin_right = -165.0
+margin_bottom = -15.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 focus_mode = 2
@@ -524,8 +526,6 @@ text = "REPLAY"
 flat = false
 align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
-
-[node name="Start" parent="." index="14" instance=ExtResource( 12 )]
 
 [connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
 
@@ -549,8 +549,8 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="level_up" from="Stats" to="." method="_on_Stats_level_up"]
 
-[connection signal="pressed" from="ReplayButton" to="." method="_on_ReplayButton_pressed"]
-
 [connection signal="start" from="Start" to="." method="_on_Start_start"]
+
+[connection signal="pressed" from="ReplayButton" to="." method="_on_ReplayButton_pressed"]
 
 
