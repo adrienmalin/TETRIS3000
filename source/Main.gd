@@ -169,9 +169,11 @@ func _on_LockDelay_timeout():
 		lock()
 		
 func lock():
-	$GridMap.lock(current_piece)
-	emit_signal("piece_locked", $GridMap.clear_lines(), current_piece.t_spin)
-	new_piece()
+	if $GridMap.lock(current_piece):
+		emit_signal("piece_locked", $GridMap.clear_lines(), current_piece.t_spin)
+		new_piece()
+	else:
+		game_over()
 
 func hold():
 	if not current_piece_held:
@@ -220,8 +222,9 @@ func pause(hide=true):
 	$Stats/Clock.stop()
 
 func game_over():
-	$FlashText.print("GAME\nOVER")
 	pause(false)
+	current_piece.emit_trail(false)
+	$FlashText.print("GAME\nOVER")
 	$ReplayButton.visible = true
 
 func _on_ReplayButton_pressed():

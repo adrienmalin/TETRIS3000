@@ -42,7 +42,10 @@ func possible_positions(initial_positions, movement):
 		
 func lock(piece):
 	for position in piece.positions():
+		if position.y >= NB_LINES:
+			return false
 		set_cell_item(position.x, position.y, 0, MINO)
+	return true
 
 func clear_lines():
 	var line_cleared
