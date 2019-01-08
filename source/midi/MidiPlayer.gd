@@ -197,7 +197,7 @@ func seek( to_position ):
 	var length = len(self.track_status.events)
 	while pointer < length:
 		var event_chunk = self.track_status.events[pointer]
-		if self.position < event_chunk.time:
+		if self.position <= event_chunk.time:
 			break
 		pointer += 1
 	self.track_status.event_pointer = pointer
