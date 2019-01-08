@@ -34,10 +34,10 @@ emission_box_extents = Vector3( 8, 0.5, 0.5 )
 flag_align_y = false
 flag_rotate_y = true
 flag_disable_z = false
-spread = 30.0
+spread = 20.0
 flatness = 0.0
-gravity = Vector3( 0, -30, 0 )
-initial_velocity = 10.0
+gravity = Vector3( 0, -20, 0 )
+initial_velocity = 20.0
 initial_velocity_random = 0.8
 angular_velocity = 97.14
 angular_velocity_random = 1.0
@@ -61,7 +61,7 @@ anim_speed_random = 0.0
 anim_offset = 0.0
 anim_offset_random = 0.0
 anim_loop = false
-_sections_unfolded = [ "Angular Velocity", "Color", "Emission Shape", "Gravity", "Scale", "Spread" ]
+_sections_unfolded = [ "Angular Velocity", "Color", "Emission Shape", "Gravity", "Initial Velocity", "Scale", "Spread" ]
 
 [sub_resource type="PrismMesh" id=6]
 
@@ -92,7 +92,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="ExplodingLine" type="Particles"]
+[node name="ExplodingLine" type="Particles" index="0"]
 
 layers = 1
 material_override = null
