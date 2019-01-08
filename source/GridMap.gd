@@ -41,11 +41,12 @@ func possible_positions(initial_positions, movement):
 		return []
 		
 func lock(piece):
+	var minoes_over_grid = 0
 	for position in piece.positions():
 		if position.y >= NB_LINES:
-			return false
+			minoes_over_grid += 1
 		set_cell_item(position.x, position.y, 0, MINO)
-	return true
+	return minoes_over_grid < Tetromino.NB_MINOES
 
 func clear_lines():
 	var line_cleared
