@@ -7,6 +7,7 @@ const LINE_CLEAR_CHANNELS = [2, 6]
 var muted_events = []
 
 func _ready():
+	._ready()
 	mute_channels(LINE_CLEAR_CHANNELS)
 
 func _init_channel( ):
