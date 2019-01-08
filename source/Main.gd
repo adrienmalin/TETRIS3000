@@ -105,7 +105,7 @@ func _unhandled_input(event):
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 	if playing:
-		if event.is_action_released(autoshift_action):
+		if autoshift_action and event.is_action_released(autoshift_action):
 			$AutoShiftDelay.stop()
 			$AutoShiftTimer.stop()
 			autoshift_action = ""
