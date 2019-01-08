@@ -58,5 +58,6 @@ func clear_lines():
 				for x in range(NB_COLLUMNS):
 					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))
 			lines_cleared += 1
+			exploding_lines[y].emitting = true
 			exploding_lines[y].restart()
 	return lines_cleared
