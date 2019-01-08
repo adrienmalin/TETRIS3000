@@ -95,35 +95,35 @@ func _on_Stats_level_up():
 	if $Stats.level > 15:
 		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)
 
-func _process(delta):
-	if Input.is_action_just_pressed("pause"):
+func _unhandled_input(event):
+	if event.is_action_pressed("pause"):
 		if playing:
 			pause()
 			$controls_ui.visible = true
 		elif $controls_ui.enable_resume:
 			resume()
-	if Input.is_action_just_pressed("toggle_fullscreen"):
+	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = !OS.window_fullscreen
 	if playing:
 		for action in movements:
 			if action == autoshift_action:
-				if not Input.is_action_pressed(action):
+				if event.is_action_released(action):
 					$AutoShiftDelay.stop()
 					$AutoShiftTimer.stop()
 					autoshift_action = ""
 			else:
-				if Input.is_action_pressed(action):
+				if event.is_action_pressed(action):
 					autoshift_action = action
 					process_autoshift_action()
 					$AutoShiftTimer.stop()
 					$AutoShiftDelay.start()
-		if Input.is_action_just_pressed("hard_drop"):
+		if event.is_action_pressed("hard_drop"):
 			hard_drop()
-		if Input.is_action_just_pressed("rotate_clockwise"):
+		if event.is_action_pressed("rotate_clockwise"):
 			rotate(Tetromino.CLOCKWISE)
-		if Input.is_action_just_pressed("rotate_counterclockwise"):
+		if event.is_action_pressed("rotate_counterclockwise"):
 			rotate(Tetromino.COUNTERCLOCKWISE)
-		if Input.is_action_just_pressed("hold"):
+		if event.is_action_pressed("hold"):
 			hold()
 
 func _on_AutoShiftDelay_timeout():
