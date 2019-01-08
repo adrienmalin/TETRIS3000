@@ -424,7 +424,6 @@ script = ExtResource( 6 )
 file = "res://midi/Tetris - Song A.mid"
 volume_db = -12
 loop = true
-loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
