@@ -406,14 +406,14 @@ autostart = false
 [node name="AutoShiftDelay" type="Timer" parent="." index="7"]
 
 process_mode = 1
-wait_time = 0.17
+wait_time = 0.2
 one_shot = true
 autostart = false
 
 [node name="AutoShiftTimer" type="Timer" parent="." index="8"]
 
 process_mode = 1
-wait_time = 0.03
+wait_time = 0.04
 one_shot = false
 autostart = false
 
@@ -424,6 +424,7 @@ script = ExtResource( 6 )
 file = "res://midi/Tetris - Song A.mid"
 volume_db = -12
 loop = true
+loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
@@ -528,9 +529,9 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
 
-[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
-
 [connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
+
+[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 
