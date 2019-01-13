@@ -55,6 +55,7 @@ func _on_Start_start(level):
 		remove_child(held_piece)
 		held_piece = null
 	current_piece_held = false
+	autoshift_action = ""
 	next_piece = random_piece()
 	new_piece()
 	$MidiPlayer.position = 0
@@ -68,7 +69,6 @@ func new_piece():
 	current_piece = next_piece
 	current_piece.translation = START_POSITION
 	current_piece.emit_trail(true)
-	autoshift_action = ""
 	next_piece = random_piece()
 	next_piece.translation = NEXT_POSITION
 	if move(THERE):
@@ -126,9 +126,11 @@ func _unhandled_input(event):
 		if event.is_action_pressed("hard_drop"):
 			hard_drop()
 		if event.is_action_pressed("rotate_clockwise"):
-			rotate(Tetromino.CLOCKWISE)
+			if rotate(Tetromino.CLOCKWISE):
+				$MidiPlayer.move()
 		if event.is_action_pressed("rotate_counterclockwise"):
-			rotate(Tetromino.COUNTERCLOCKWISE)
+			if rotate(Tetromino.COUNTERCLOCKWISE):
+				$MidiPlayer.move()
 		if event.is_action_pressed("hold"):
 			hold()
 
@@ -142,8 +144,10 @@ func _on_AutoShiftTimer_timeout():
 		process_autoshift()
 
 func process_autoshift():
-	if move(movements[autoshift_action]) and autoshift_action == "soft_drop":
-		emit_signal("piece_dropped", 1)
+	if move(movements[autoshift_action]):
+		$MidiPlayer.move()
+		if autoshift_action == "soft_drop":
+			emit_signal("piece_dropped", 1)
 
 func hard_drop():
 	var score = 0
