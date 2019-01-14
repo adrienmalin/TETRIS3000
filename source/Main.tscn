@@ -1,7 +1,7 @@
 [gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://Main.gd" type="Script" id=1]
-[ext_resource path="res://pexels-photo-1341279.jpeg" type="Texture" id=2]
+[ext_resource path="res://aperture-vintage-472251-unsplash.jpg" type="Texture" id=2]
 [ext_resource path="res://Tetrominos/Mino/MinoLibrary.tres" type="MeshLibrary" id=3]
 [ext_resource path="res://GridMap.gd" type="Script" id=4]
 [ext_resource path="res://midi/MidiPlayer.tscn" type="PackedScene" id=5]
@@ -250,12 +250,12 @@ centered = true
 offset = Vector2( 0, 0 )
 flip_h = false
 flip_v = false
-modulate = Color( 0.478431, 0.478431, 0.478431, 1 )
-opacity = 0.0
+modulate = Color( 0.334808, 0.343253, 0.359375, 0 )
+opacity = 1.0
 pixel_size = 0.01
 axis = 2
 transparent = false
-shaded = false
+shaded = true
 double_sided = false
 alpha_cut = 0
 texture = ExtResource( 2 )
@@ -422,9 +422,8 @@ autostart = false
 editor/display_folded = true
 script = ExtResource( 6 )
 file = "res://midi/Tetris - Song A.mid"
-volume_db = -12
+volume_db = -24
 loop = true
-loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
@@ -491,6 +490,14 @@ _sections_unfolded = [ "Playback Options" ]
 [node name="Stats" parent="." index="11" instance=ExtResource( 9 )]
 
 visible = false
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+margin_left = 20.0
+margin_top = -260.0
+margin_right = 130.0
+margin_bottom = -50.0
 
 [node name="controls_ui" parent="." index="12" instance=ExtResource( 10 )]
 
