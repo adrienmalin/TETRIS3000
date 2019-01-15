@@ -11,9 +11,6 @@ const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
 
 const password = "TETRIS 3000"
 
-const NEXT_POSITION = Vector3(13, 16, 0)
-const START_POSITION = Vector3(5, 20, 0)
-const HOLD_POSITION = Vector3(-5, 16, 0)
 const THERE = Vector3(0, 0, 0)
 
 const movements = {
@@ -67,10 +64,10 @@ func new_piece():
 	if current_piece:
 		remove_child(current_piece)
 	current_piece = next_piece
-	current_piece.translation = START_POSITION
+	current_piece.translation = $GridMap/Matrix/Position3D.translation
 	current_piece.emit_trail(true)
 	next_piece = random_piece()
-	next_piece.translation = NEXT_POSITION
+	next_piece.translation = $GridMap/Next/Position3D.translation
 	if move(THERE):
 		$DropTimer.start()
 		$LockDelay.start()
@@ -191,9 +188,9 @@ func hold():
 		current_piece = held_piece
 		held_piece = swap
 		held_piece.emit_trail(false)
-		held_piece.translation = HOLD_POSITION
+		held_piece.translation = $GridMap/Hold/Position3D.translation
 		if current_piece:
-			current_piece.translation = START_POSITION
+			current_piece.translation = $GridMap/Matrix/Position3D.translation
 			current_piece.emit_trail(true)
 		else:
 			new_piece()
@@ -208,7 +205,6 @@ func resume():
 	$controls_ui.visible = false
 	$Stats.visible = true
 	$GridMap.visible = true
-	$Backs.visible = true
 	current_piece.visible = true
 	if held_piece:
 		held_piece.visible = true
@@ -220,7 +216,6 @@ func pause(hide=true):
 	if hide:
 		$Stats.visible = false
 		$GridMap.visible = false
-		$Backs.visible = false
 		current_piece.visible = false
 		if held_piece:
 			held_piece.visible = false
