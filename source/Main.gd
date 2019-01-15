@@ -36,8 +36,10 @@ func new_game(level):
 	if held_piece:
 		remove_child(held_piece)
 		held_piece = null
-	autoshift_action = ""
+	if next_piece:
+		remove_child(next_piece)
 	next_piece = random_piece()
+	autoshift_action = ""
 	$MidiPlayer.position = 0
 	$Stats.new_game(level)
 	new_piece()
@@ -133,11 +135,9 @@ func hard_drop():
 	lock()
 
 func _on_DropTimer_timeout():
-	current_piece.move(movements["soft_drop"])
-
-func _on_LockDelay_timeout():
 	if not current_piece.move(movements["soft_drop"]):
-		lock()
+		if $LockDelay.is_stopped():
+			lock()
 		
 func lock():
 	if $Matrix/GridMap.lock(current_piece):

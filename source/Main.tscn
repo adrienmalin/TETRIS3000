@@ -426,7 +426,7 @@ autostart = false
 [node name="AutoShiftTimer" type="Timer" parent="." index="9"]
 
 process_mode = 1
-wait_time = 0.03
+wait_time = 0.02
 one_shot = false
 autostart = false
 
@@ -549,8 +549,6 @@ align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
-
-[connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
 
 [connection signal="timeout" from="AutoShiftDelay" to="." method="_on_AutoShiftDelay_timeout"]
 

@@ -77,7 +77,7 @@ func piece_locked(lines, t_spin):
 		ds = SCORES[lines][t_spin]
 		goal -= ds
 		$VBC/Goal.text = str(goal)
-		ds *= 100
+		ds *= 100 * level
 		emit_signal("flash_text", str(ds))
 		score += ds
 		$VBC/Score.text = str(score)
