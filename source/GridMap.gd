@@ -36,6 +36,8 @@ func possible_positions(initial_translations, movement):
 		position = initial_translations[i] + movement
 		if is_free_cell(position):
 			test_translations.append(position)
+		else:
+			break
 	if test_translations.size() == Tetromino.NB_MINOES:
 		return test_translations
 	else:
