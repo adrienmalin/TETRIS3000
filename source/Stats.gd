@@ -48,15 +48,15 @@ func show_time():
 	var hours = int(time_elapsed/3600)
 	$VBC/Time.text = str(hours) + ":%02d"%minutes + ":%02d"%seconds
 
-func _on_Main_piece_dropped(ds):
+func piece_dropped(ds):
 	score += ds
 	$VBC/Score.text = str(score)
 
-func _on_Main_piece_locked(lines, t_spin):
+func piece_locked(lines, t_spin):
 	var ds
 	if lines or t_spin:
 		var text = T_SPIN_NAMES[t_spin]
-		if text:
+		if lines and t_spin:
 			text += " "
 		text += LINES_CLEARED_NAMES[lines]
 		emit_signal("flash_text", text)
@@ -67,9 +67,9 @@ func _on_Main_piece_locked(lines, t_spin):
 		emit_signal("flash_text", str(ds))
 		score += ds
 		$VBC/Score.text = str(score)
-		if score > high_score:
-			high_score = score
-			$VBC/HighScore.text = str(high_score)
+	if score > high_score:
+		high_score = score
+		$VBC/HighScore.text = str(high_score)
 	# Combos
 	if lines:
 		combos += 1

@@ -3,7 +3,7 @@
 [ext_resource path="res://Stats.gd" type="Script" id=1]
 [ext_resource path="res://fonts/Gamer.ttf" type="DynamicFontData" id=2]
 
-[sub_resource type="DynamicFont" id=2]
+[sub_resource type="DynamicFont" id=1]
 
 size = 20
 use_mipmaps = false
@@ -11,7 +11,7 @@ use_filter = false
 font_data = ExtResource( 2 )
 _sections_unfolded = [ "Font", "Settings" ]
 
-[node name="Stats" type="MarginContainer" index="0"]
+[node name="Stats" type="MarginContainer"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -70,7 +70,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "Score:"
 percent_visible = 1.0
@@ -93,7 +93,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
 align = 2
@@ -117,7 +117,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "High score:"
 percent_visible = 1.0
@@ -140,7 +140,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
 align = 2
@@ -164,7 +164,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "Time"
 percent_visible = 1.0
@@ -186,7 +186,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0:00:00"
 align = 2
@@ -209,7 +209,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "Level:"
 percent_visible = 1.0
@@ -231,7 +231,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
 align = 2
@@ -254,7 +254,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "Goal:"
 percent_visible = 1.0
@@ -276,7 +276,7 @@ mouse_filter = 2
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
-custom_fonts/font = SubResource( 2 )
+custom_fonts/font = SubResource( 1 )
 custom_colors/font_color = Color( 0.756214, 0.921978, 0.990234, 1 )
 text = "0"
 align = 2

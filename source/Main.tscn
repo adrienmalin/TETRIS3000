@@ -335,7 +335,7 @@ __meta__ = {
 
 [node name="Matrix" type="MeshInstance" parent="GridMap" index="0"]
 
-transform = Transform( 8.5, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
+transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -423,7 +423,7 @@ autostart = false
 [node name="AutoShiftTimer" type="Timer" parent="." index="7"]
 
 process_mode = 1
-wait_time = 0.04
+wait_time = 0.03
 one_shot = false
 autostart = false
 
@@ -545,12 +545,6 @@ flat = false
 align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
-[connection signal="piece_dropped" from="." to="Stats" method="_on_Main_piece_dropped"]
-
-[connection signal="piece_locked" from="." to="Stats" method="_on_Main_piece_locked"]
-
-[connection signal="piece_locked" from="." to="MidiPlayer" method="_on_Main_piece_locked"]
-
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
 
 [connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
@@ -567,7 +561,7 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="level_up" from="Stats" to="." method="_on_Stats_level_up"]
 
-[connection signal="start" from="Start" to="." method="_on_Start_start"]
+[connection signal="start" from="Start" to="." method="new_game"]
 
 [connection signal="pressed" from="ReplayButton" to="." method="_on_ReplayButton_pressed"]
 

@@ -19,31 +19,31 @@ func _ready():
 		exploding_lines[y].translation = Vector3(nb_collumns/2, y, 1)
 
 func clear():
-	for position in get_used_cells():
-		set_cell_item(position.x, position.y, position.z, EMPTY_CELL)
+	for used_cell in get_used_cells():
+		set_cell_item(used_cell.x, used_cell.y, used_cell.z, EMPTY_CELL)
 
-func is_free_cell(position):
+func is_free_cell(cell):
 	return (
-		0 <= position.x and position.x < nb_collumns
-		and position.y >= 0
-		and get_cell_item(position.x, position.y, 0) == GridMap.INVALID_CELL_ITEM
+		0 <= cell.x and cell.x < nb_collumns
+		and cell.y >= 0
+		and get_cell_item(cell.x, cell.y, cell.z) == INVALID_CELL_ITEM
 	)
 	
-func possible_positions(initial_positions, movement):
+func possible_positions(initial_translations, movement):
 	var position
-	var test_positions = []
+	var test_translations = []
 	for i in range(4):
-		position = initial_positions[i] + movement
+		position = initial_translations[i] + movement
 		if is_free_cell(position):
-			test_positions.append(position)
-	if test_positions.size() == Tetromino.NB_MINOES:
-		return test_positions
+			test_translations.append(position)
+	if test_translations.size() == Tetromino.NB_MINOES:
+		return test_translations
 	else:
 		return []
 		
 func lock(piece):
 	var minoes_over_grid = 0
-	for position in piece.positions():
+	for position in piece.get_translations():
 		if position.y >= nb_lines:
 			minoes_over_grid += 1
 		set_cell_item(position.x, position.y, 0, MINO)
