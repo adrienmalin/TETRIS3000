@@ -1,4 +1,4 @@
 extends "Tetromino.gd"
 
 func rotate(direction):
-	pass
+	return 0

@@ -1,7 +1,5 @@
 extends "Tetromino.gd"
 
-const CLOCKWISE = -1
-const COUNTERCLOCKWISE = 1
 const SUPER_ROTATION_SYSTEM = [
     {
         COUNTERCLOCKWISE: [

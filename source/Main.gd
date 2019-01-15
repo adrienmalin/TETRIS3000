@@ -29,6 +29,7 @@ var autoshift_action = ""
 var playing = false
 
 func new_game(level):
+	$Start.visible = false
 	$Matrix/GridMap.clear()
 	if current_piece:
 		remove_child(current_piece)
@@ -38,7 +39,6 @@ func new_game(level):
 	autoshift_action = ""
 	next_piece = random_piece()
 	$MidiPlayer.position = 0
-	$Start.visible = false
 	$Stats.new_game(level)
 	new_piece()
 	resume()
@@ -51,7 +51,6 @@ func new_piece():
 	next_piece.translation = $Next/Position3D.translation
 	if current_piece.move(THERE):
 		$DropTimer.start()
-		$LockDelay.start()
 		current_piece_held = false
 	else:
 		game_over()
