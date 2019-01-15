@@ -559,7 +559,7 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="flash_text" from="Stats" to="FlashText" method="print"]
 
-[connection signal="level_up" from="Stats" to="." method="_on_Stats_level_up"]
+[connection signal="level_up" from="Stats" to="." method="new_level"]
 
 [connection signal="start" from="Start" to="." method="new_game"]
 

@@ -83,7 +83,7 @@ func random_piece():
 	add_child(piece)
 	return piece
 
-func _on_Stats_level_up(level):
+func new_level(level):
 	if level <= 15:
 		$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
 	else:
@@ -127,12 +127,12 @@ func _unhandled_input(event):
 			hold()
 
 func _on_AutoShiftDelay_timeout():
-	if playing and autoshift_action:
+	if autoshift_action:
 		process_autoshift()
 		$AutoShiftTimer.start()
 
 func _on_AutoShiftTimer_timeout():
-	if playing and autoshift_action:
+	if autoshift_action:
 		process_autoshift()
 
 func process_autoshift():
@@ -207,6 +207,12 @@ func resume():
 
 func pause(gui=null):
 	playing = false
+	$MidiPlayer.stop()
+	$DropTimer.stop()
+	$LockDelay.stop()
+	$AutoShiftDelay.stop()
+	$AutoShiftTimer.stop()
+	$Stats/Clock.stop()
 	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	if gui:
 		gui.visible = true
@@ -216,10 +222,6 @@ func pause(gui=null):
 		if held_piece:
 			held_piece.visible = false
 		next_piece.visible = false
-	$MidiPlayer.stop()
-	$DropTimer.stop()
-	$LockDelay.stop()
-	$Stats/Clock.stop()
 
 func game_over():
 	pause()

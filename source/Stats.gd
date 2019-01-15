@@ -36,7 +36,7 @@ func new_level():
 	$VBC/Level.text = str(level)
 	$VBC/Goal.text = str(goal)
 	emit_signal("flash_text", "Level\n%d"%level)
-	emit_signal("level_up")
+	emit_signal("level_up", level)
 
 func _on_Clock_timeout():
 	show_time()
