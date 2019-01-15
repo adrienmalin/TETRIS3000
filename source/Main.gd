@@ -83,10 +83,12 @@ func random_piece():
 	add_child(piece)
 	return piece
 
-func _on_Stats_level_up():
-	$DropTimer.wait_time = pow(0.8 - (($Stats.level - 1) * 0.007), $Stats.level - 1)
-	if $Stats.level > 15:
-		$LockDelay.wait_time = 0.5 * pow(0.9, $Stats.level-15)
+func _on_Stats_level_up(level):
+	if level <= 15:
+		$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
+	else:
+		$DropTimer.wait_time = 0.01
+		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
 
 func _unhandled_input(event):
 	if event.is_action_pressed("pause"):
@@ -95,7 +97,7 @@ func _unhandled_input(event):
 		elif $controls_ui.enable_resume:
 			resume()
 	if event.is_action_pressed("toggle_fullscreen"):
-		OS.window_fullscreen = !OS.window_fullscreen
+		OS.window_fullscreen = not OS.window_fullscreen
 	if playing:
 		if autoshift_action and event.is_action_released(autoshift_action):
 			$AutoShiftDelay.stop()
@@ -134,17 +136,15 @@ func _on_AutoShiftTimer_timeout():
 		process_autoshift()
 
 func process_autoshift():
-	if move(movements[autoshift_action]):
-		$MidiPlayer.move()
-		if autoshift_action == "soft_drop":
-			$Stats.piece_dropped(1)
+	var moved = move(movements[autoshift_action])
+	if moved and (autoshift_action == "soft_drop"):
+		$Stats.piece_dropped(1)
 
 func hard_drop():
 	var score = 0
 	while move(movements["soft_drop"]):
 		score += 2
 	$Stats.piece_dropped(score)
-	$MidiPlayer.move()
 	$LockDelay.stop()
 	lock()
 	
@@ -157,7 +157,6 @@ func move(movement):
 func rotate(direction):
 	if current_piece.rotate(direction):
 		$LockDelay.start()
-		$MidiPlayer.move()
 
 func _on_DropTimer_timeout():
 	move(movements["soft_drop"])
@@ -236,7 +235,7 @@ func _notification(what):
 	match what:
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			if playing:
-				pause($controls_ui.visible)
+				pause($controls_ui)
 		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
 			save_user_data()
 			get_tree().quit()

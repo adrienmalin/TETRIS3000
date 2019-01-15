@@ -3,13 +3,12 @@ extends "midi/MidiPlayer.gd"
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
 
 const LINE_CLEAR_CHANNELS = [2, 6]
-const MOVE_CHANNELS = []
 
 var muted_events = []
 
 func _ready():
 	._ready()
-	mute_channels(LINE_CLEAR_CHANNELS+MOVE_CHANNELS)
+	mute_channels(LINE_CLEAR_CHANNELS)
 
 func _init_channel( ):
 	._init_channel()
@@ -52,7 +51,3 @@ func piece_locked(lines):
 
 func _on_LineCLearTimer_timeout():
 	mute_channels(LINE_CLEAR_CHANNELS)
-	
-func move():
-	unmute_channels(MOVE_CHANNELS)
-	mute_channels(MOVE_CHANNELS)

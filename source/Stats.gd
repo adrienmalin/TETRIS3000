@@ -18,7 +18,7 @@ var time
 var combos
 
 signal flash_text(text)
-signal level_up
+signal level_up(level)
 	
 func new_game(start_level):
 	level = start_level - 1
