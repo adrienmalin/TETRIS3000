@@ -234,7 +234,7 @@ _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 environment = SubResource( 2 )
 script = ExtResource( 1 )
 
-[node name="Sprite3D" type="Sprite3D" parent="." index="0"]
+[node name="Background" type="Sprite3D" parent="." index="0"]
 
 transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 5, 10, -32 )
 layers = 1
@@ -311,9 +311,27 @@ directional_shadow_depth_range = 0
 directional_shadow_max_distance = 200.0
 _sections_unfolded = [ "Light", "Transform" ]
 
-[node name="GridMap" type="GridMap" parent="." index="3"]
+[node name="Matrix" type="MeshInstance" parent="." index="3"]
 
+transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
 visible = false
+layers = 1
+material_override = null
+cast_shadow = 1
+extra_cull_margin = 0.0
+use_in_baked_light = false
+lod_min_distance = 0.0
+lod_min_hysteresis = 0.0
+lod_max_distance = 0.0
+lod_max_hysteresis = 0.0
+mesh = SubResource( 4 )
+skeleton = NodePath("..")
+material/0 = null
+_sections_unfolded = [ "Transform" ]
+
+[node name="GridMap" type="GridMap" parent="Matrix" index="0"]
+
+transform = Transform( 0.1, 0, 0, 0, 0.05, 0, 0, 0, 1, -0.45, -0.475, 0 )
 theme = ExtResource( 3 )
 cell_size = Vector3( 1, 1, 1 )
 cell_octant_size = 8
@@ -333,31 +351,15 @@ __meta__ = {
 "_editor_floor_": Vector3( 0, -1, 0 )
 }
 
-[node name="Matrix" type="MeshInstance" parent="GridMap" index="0"]
-
-transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 4 )
-skeleton = NodePath("..")
-material/0 = null
-_sections_unfolded = [ "Transform" ]
-
-[node name="Position3D" type="Position3D" parent="GridMap/Matrix" index="0"]
+[node name="Position3D" type="Position3D" parent="Matrix" index="1"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 20, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Hold" type="MeshInstance" parent="GridMap" index="1"]
+[node name="Hold" type="MeshInstance" parent="." index="4"]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, -5, 16, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -372,14 +374,15 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
 
-[node name="Position3D" type="Position3D" parent="GridMap/Hold" index="0"]
+[node name="Position3D" type="Position3D" parent="Hold" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 16, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="Next" type="MeshInstance" parent="GridMap" index="2"]
+[node name="Next" type="MeshInstance" parent="." index="5"]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, 14, 16, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -394,40 +397,40 @@ skeleton = NodePath("..")
 material/0 = null
 _sections_unfolded = [ "Transform" ]
 
-[node name="Position3D" type="Position3D" parent="GridMap/Next" index="0"]
+[node name="Position3D" type="Position3D" parent="Next" index="0"]
 
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13, 16, 0 )
 _sections_unfolded = [ "Transform" ]
 
-[node name="DropTimer" type="Timer" parent="." index="4"]
+[node name="DropTimer" type="Timer" parent="." index="6"]
 
 process_mode = 1
 wait_time = 1.0
 one_shot = false
 autostart = false
 
-[node name="LockDelay" type="Timer" parent="." index="5"]
+[node name="LockDelay" type="Timer" parent="." index="7"]
 
 process_mode = 1
 wait_time = 0.5
 one_shot = true
 autostart = false
 
-[node name="AutoShiftDelay" type="Timer" parent="." index="6"]
+[node name="AutoShiftDelay" type="Timer" parent="." index="8"]
 
 process_mode = 1
 wait_time = 0.2
 one_shot = true
 autostart = false
 
-[node name="AutoShiftTimer" type="Timer" parent="." index="7"]
+[node name="AutoShiftTimer" type="Timer" parent="." index="9"]
 
 process_mode = 1
 wait_time = 0.03
 one_shot = false
 autostart = false
 
-[node name="MidiPlayer" parent="." index="8" instance=ExtResource( 5 )]
+[node name="MidiPlayer" parent="." index="10" instance=ExtResource( 5 )]
 
 editor/display_folded = true
 script = ExtResource( 6 )
@@ -444,7 +447,7 @@ wait_time = 1.41
 one_shot = true
 autostart = false
 
-[node name="FlashText" type="Control" parent="." index="9"]
+[node name="FlashText" type="Control" parent="." index="11"]
 
 anchor_left = 0.5
 anchor_top = 0.5
@@ -498,7 +501,7 @@ anims/Flash = SubResource( 7 )
 blend_times = [  ]
 _sections_unfolded = [ "Playback Options" ]
 
-[node name="Stats" parent="." index="10" instance=ExtResource( 9 )]
+[node name="Stats" parent="." index="12" instance=ExtResource( 9 )]
 
 visible = false
 anchor_left = 0.0
@@ -510,13 +513,13 @@ margin_top = -260.0
 margin_right = 130.0
 margin_bottom = -50.0
 
-[node name="controls_ui" parent="." index="11" instance=ExtResource( 10 )]
+[node name="controls_ui" parent="." index="13" instance=ExtResource( 10 )]
 
 visible = false
 
-[node name="Start" parent="." index="12" instance=ExtResource( 11 )]
+[node name="Start" parent="." index="14" instance=ExtResource( 11 )]
 
-[node name="ReplayButton" type="Button" parent="." index="13"]
+[node name="ReplayButton" type="Button" parent="." index="15"]
 
 visible = false
 anchor_left = 1.0

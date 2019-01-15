@@ -75,6 +75,7 @@ const SUPER_ROTATION_SYSTEM = [
 
 var minoes = []
 var grid_map
+var lock_delay
 var orientation = 0
 var t_spin = NO_T_SPIN
 
@@ -82,7 +83,8 @@ func _ready():
 	randomize()
 	for i in range(NB_MINOES):
 		minoes.append(get_node("Mino"+str(i)))
-	grid_map = get_parent().get_node("GridMap")
+	grid_map = get_node("../Matrix/GridMap")
+	lock_delay = get_node("../LockDelay")
 	
 func set_translations(translations):
 	for i in range(NB_MINOES):
@@ -97,6 +99,7 @@ func get_translations():
 func move(movement):
 	if grid_map.possible_positions(get_translations(), movement):
 		translate(movement)
+		lock_delay.start()
 		return true
 	return false
 	
@@ -116,6 +119,7 @@ func rotate(direction):
 			orientation %= NB_MINOES
 			set_translations(rotated_translations)
 			translate(movements[i])
+			lock_delay.start()
 			return i+1
 	return 0
 	

@@ -11,8 +11,8 @@ var nb_collumns
 var nb_lines
 
 func _ready():
-	nb_collumns = int($Matrix.scale.x)
-	nb_lines = int($Matrix.scale.y)
+	nb_collumns = int(get_parent().scale.x)
+	nb_lines = int(get_parent().scale.y)
 	for y in range(nb_lines):
 		exploding_lines.append(ExplodingLine.instance())
 		add_child(exploding_lines[y])

@@ -9,6 +9,7 @@ const SCORES = [
 ]
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
 const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
+const password = "TETRIS 3000"
 
 var level
 var goal
@@ -19,6 +20,19 @@ var combos
 
 signal flash_text(text)
 signal level_up(level)
+
+func _ready():
+	load_user_data()
+	
+func load_user_data():
+	var save_game = File.new()
+	if not save_game.file_exists("user://data.save"):
+		high_score = 0
+	else:
+		save_game.open_encrypted_with_pass("user://data.save", File.READ, password)
+		high_score = int(save_game.get_line())
+		$VBC/HighScore.text = str(high_score)
+		save_game.close()
 	
 func new_game(start_level):
 	level = start_level - 1
@@ -86,3 +100,14 @@ func piece_locked(lines, t_spin):
 		combos = -1
 	if goal <= 0:
 		new_level()
+	
+func _notification(what):
+	match what:
+		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+			save_user_data()
+
+func save_user_data():
+	var save_game = File.new()
+	save_game.open_encrypted_with_pass("user://data.save", File.WRITE, password)
+	save_game.store_line(str(high_score))
+	save_game.close()

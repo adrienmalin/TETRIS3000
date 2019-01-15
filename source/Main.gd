@@ -9,8 +9,6 @@ const TetroS = preload("res://Tetrominos/TetroS.tscn")
 const TetroT = preload("res://Tetrominos/TetroT.tscn")
 const TetroZ = preload("res://Tetrominos/TetroZ.tscn")
 
-const password = "TETRIS 3000"
-
 const THERE = Vector3(0, 0, 0)
 
 const movements = {
@@ -30,21 +28,8 @@ var autoshift_action = ""
 
 var playing = false
 
-func _ready():
-	load_user_data()
-	
-func load_user_data():
-	var save_game = File.new()
-	if not save_game.file_exists("user://data.save"):
-		$Stats.high_score = 0
-	else:
-		save_game.open_encrypted_with_pass("user://data.save", File.READ, password)
-		$Stats.high_score = int(save_game.get_line())
-		$Stats/VBC/HighScore.text = str($Stats.high_score)
-		save_game.close()
-
 func new_game(level):
-	$GridMap.clear()
+	$Matrix/GridMap.clear()
 	if current_piece:
 		remove_child(current_piece)
 	if held_piece:
@@ -60,11 +45,11 @@ func new_game(level):
 	
 func new_piece():
 	current_piece = next_piece
-	current_piece.translation = $GridMap/Matrix/Position3D.translation
+	current_piece.translation = $Matrix/Position3D.translation
 	current_piece.emit_trail(true)
 	next_piece = random_piece()
-	next_piece.translation = $GridMap/Next/Position3D.translation
-	if move(THERE):
+	next_piece.translation = $Next/Position3D.translation
+	if current_piece.move(THERE):
 		$DropTimer.start()
 		$LockDelay.start()
 		current_piece_held = false
@@ -120,9 +105,9 @@ func _unhandled_input(event):
 		if event.is_action_pressed("hard_drop"):
 			hard_drop()
 		if event.is_action_pressed("rotate_clockwise"):
-			rotate(Tetromino.CLOCKWISE)
+			current_piece.rotate(Tetromino.CLOCKWISE)
 		if event.is_action_pressed("rotate_counterclockwise"):
-			rotate(Tetromino.COUNTERCLOCKWISE)
+			current_piece.rotate(Tetromino.COUNTERCLOCKWISE)
 		if event.is_action_pressed("hold"):
 			hold()
 
@@ -136,38 +121,28 @@ func _on_AutoShiftTimer_timeout():
 		process_autoshift()
 
 func process_autoshift():
-	var moved = move(movements[autoshift_action])
+	var moved = current_piece.move(movements[autoshift_action])
 	if moved and (autoshift_action == "soft_drop"):
 		$Stats.piece_dropped(1)
 
 func hard_drop():
 	var score = 0
-	while move(movements["soft_drop"]):
+	while current_piece.move(movements["soft_drop"]):
 		score += 2
 	$Stats.piece_dropped(score)
 	$LockDelay.stop()
 	lock()
-	
-func move(movement):
-	var moved = current_piece.move(movement)
-	if moved:
-		$LockDelay.start()
-	return moved
-		
-func rotate(direction):
-	if current_piece.rotate(direction):
-		$LockDelay.start()
 
 func _on_DropTimer_timeout():
-	move(movements["soft_drop"])
+	current_piece.move(movements["soft_drop"])
 
 func _on_LockDelay_timeout():
-	if not move(movements["soft_drop"]):
+	if not current_piece.move(movements["soft_drop"]):
 		lock()
 		
 func lock():
-	if $GridMap.lock(current_piece):
-		var lines_cleared = $GridMap.clear_lines()
+	if $Matrix/GridMap.lock(current_piece):
+		var lines_cleared = $Matrix/GridMap.clear_lines()
 		$Stats.piece_locked(lines_cleared, current_piece.t_spin)
 		if lines_cleared or current_piece.t_spin:
 			$MidiPlayer.piece_locked(lines_cleared)
@@ -183,9 +158,9 @@ func hold():
 		current_piece = held_piece
 		held_piece = swap
 		held_piece.emit_trail(false)
-		held_piece.translation = $GridMap/Hold/Position3D.translation
+		held_piece.translation = $Hold/Position3D.translation
 		if current_piece:
-			current_piece.translation = $GridMap/Matrix/Position3D.translation
+			current_piece.translation = $Matrix/Position3D.translation
 			current_piece.emit_trail(true)
 		else:
 			new_piece()
@@ -199,7 +174,9 @@ func resume():
 	$MidiPlayer.resume()
 	$controls_ui.visible = false
 	$Stats.visible = true
-	$GridMap.visible = true
+	$Matrix.visible = true
+	$Hold.visible = true
+	$Next.visible = true
 	current_piece.visible = true
 	if held_piece:
 		held_piece.visible = true
@@ -217,7 +194,9 @@ func pause(gui=null):
 	if gui:
 		gui.visible = true
 		$Stats.visible = false
-		$GridMap.visible = false
+		$Matrix.visible = false
+		$Hold.visible = false
+		$Next.visible = false
 		current_piece.visible = false
 		if held_piece:
 			held_piece.visible = false
@@ -238,12 +217,3 @@ func _notification(what):
 		MainLoop.NOTIFICATION_WM_FOCUS_OUT:
 			if playing:
 				pause($controls_ui)
-		MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
-			save_user_data()
-			get_tree().quit()
-
-func save_user_data():
-	var save_game = File.new()
-	save_game.open_encrypted_with_pass("user://data.save", File.WRITE, password)
-	save_game.store_line(str($Stats.high_score))
-	save_game.close()
