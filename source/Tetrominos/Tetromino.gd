@@ -75,6 +75,7 @@ var grid_map
 var lock_delay
 var orientation = 0
 var rotation_point_5_used = false
+var rotated_last = false
 
 func _ready():
 	for i in range(NB_MINOES):
@@ -96,18 +97,19 @@ func move(movement):
 	if grid_map.possible_positions(get_translations(), movement):
 		translate(movement)
 		lock_delay.start()
+		rotated_last = false
 		return true
 	return false
 	
 func rotate(direction):
-	var t = get_translations()
-	var rotated_translations = [t[0]]
+	var translations = get_translations()
+	var rotated_translations = [translations[0]]
+	var center = translations[0]
 	for i in range(1, NB_MINOES):
-		var v = t[i]
-		v -= t[0]
-		v = Vector3(-1*direction*v.y, direction*v.x, 0)
-		v += t[0]
-		rotated_translations.append(v)
+		var rt = translations[i] - center
+		rt = Vector3(-1*direction*rt.y, direction*rt.x, 0)
+		rt += center
+		rotated_translations.append(rt)
 	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
 	for i in range(movements.size()):
 		if grid_map.possible_positions(rotated_translations, movements[i]):
@@ -117,6 +119,7 @@ func rotate(direction):
 			lock_delay.start()
 			if i == 4:
 				rotation_point_5_used = true
+			rotated_last = true
 			return true
 	return false
 	

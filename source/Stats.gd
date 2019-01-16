@@ -75,10 +75,9 @@ func piece_locked(lines, t_spin):
 			flash_text.print(LINES_CLEARED_NAMES[lines])
 		elif t_spin:
 			flash_text.print(t_spin)
-		ds = SCORES[lines][t_spin]
-		goal -= ds
+		goal -= SCORES[lines][""]
 		$VBC/Goal.text = str(goal)
-		ds *= 100 * level
+		ds = 100 * level * SCORES[lines][t_spin]
 		flash_text.print(str(ds))
 		score += ds
 		$VBC/Score.text = str(score)
