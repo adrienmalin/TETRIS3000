@@ -101,24 +101,24 @@ func move(movement):
 	return false
 	
 func rotate(direction):
-	var rotations = SUPER_ROTATION_SYSTEM[orientation][direction]
-	if rotations:
-		var translations = get_translations()
-		var rotated_translations = [translations[0]]
-		for i in range(1, NB_MINOES):
-			var rotated_translation = translations[i] - translations[0]
-			rotated_translation = Vector3(-1*direction*rotated_translation.y, direction*rotated_translation.x, 0)
-			rotated_translation += translations[0]
-			rotated_translations.append(rotated_translation)
-		for i in range(rotations.size()):
-			if grid_map.possible_positions(rotated_translations, rotations[i]):
-				orientation = (orientation - direction) % NB_MINOES
-				set_translations(rotated_translations)
-				translate(rotations[i])
-				lock_delay.start()
-				if i == 4:
-					rotation_point_5_used = true
-				return true
+	var t = get_translations()
+	var rotated_translations = [t[0]]
+	for i in range(1, NB_MINOES):
+		var v = t[i]
+		v -= t[0]
+		v = Vector3(-1*direction*v.y, direction*v.x, 0)
+		v += t[0]
+		rotated_translations.append(v)
+	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
+	for i in range(movements.size()):
+		if grid_map.possible_positions(rotated_translations, movements[i]):
+			orientation = (orientation - direction) % NB_MINOES
+			set_translations(rotated_translations)
+			translate(movements[i])
+			lock_delay.start()
+			if i == 4:
+				rotation_point_5_used = true
+			return true
 	return false
 	
 func t_spin():
