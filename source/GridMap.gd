@@ -52,10 +52,9 @@ func lock(piece):
 	return minoes_over_grid < Tetromino.NB_MINOES
 
 func clear_lines():
-	var line_cleared
 	var lines_cleared = 0
 	for y in range(nb_lines-1, -1, -1):
-		line_cleared = true
+		var line_cleared = true
 		for x in range(nb_collumns):
 			if not get_cell_item(x, y, 0) == MINO:
 				line_cleared = false
@@ -63,7 +62,8 @@ func clear_lines():
 		if line_cleared:
 			for y2 in range(y, nb_lines+2):
 				for x in range(nb_collumns):
-					set_cell_item(x, y2, 0, get_cell_item(x, y2+1, 0))
+					var above_cell = get_cell_item(x, y2+1, 0)
+					set_cell_item(x, y2, 0, above_cell)
 			lines_cleared += 1
 			exploding_lines[y].emitting = true
 			exploding_lines[y].restart()
