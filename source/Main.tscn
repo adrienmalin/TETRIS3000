@@ -229,7 +229,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 12 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment"]
+[node name="Main" type="WorldEnvironment" index="0"]
 
 environment = SubResource( 2 )
 script = ExtResource( 1 )
@@ -332,6 +332,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="GridMap" type="GridMap" parent="Matrix" index="0"]
 
 transform = Transform( 0.1, 0, 0, 0, 0.05, 0, 0, 0, 1, -0.45, -0.475, 0 )
+visible = false
 theme = ExtResource( 3 )
 cell_size = Vector3( 1, 1, 1 )
 cell_octant_size = 8
@@ -348,7 +349,7 @@ script = ExtResource( 4 )
 _sections_unfolded = [ "Cell", "Transform" ]
 __meta__ = {
 "_editor_clip_": 1,
-"_editor_floor_": Vector3( 0, -1, 0 )
+"_editor_floor_": Vector3( 0, -2, 0 )
 }
 
 [node name="Position3D" type="Position3D" parent="Matrix" index="1"]
