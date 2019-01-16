@@ -77,7 +77,6 @@ var orientation = 0
 var rotation_point_5_used = false
 
 func _ready():
-	randomize()
 	for i in range(NB_MINOES):
 		minoes.append(get_node("Mino"+str(i)))
 	grid_map = get_node("../Matrix/GridMap")

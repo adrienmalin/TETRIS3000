@@ -27,6 +27,9 @@ var autoshift_action
 
 var playing = false
 
+func _ready():
+	randomize()
+
 func new_game(level):
 	$Start.visible = false
 	next_piece = random_piece()
