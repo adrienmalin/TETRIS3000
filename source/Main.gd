@@ -23,21 +23,13 @@ var next_piece
 var current_piece
 var held_piece
 var current_piece_held
-
-var autoshift_action = ""
+var autoshift_action
 
 var playing = false
 
 func new_game(level):
 	$Start.visible = false
 	$Matrix/GridMap.clear()
-	if current_piece:
-		remove_child(current_piece)
-	if held_piece:
-		remove_child(held_piece)
-		held_piece = null
-	if next_piece:
-		remove_child(next_piece)
 	next_piece = random_piece()
 	autoshift_action = ""
 	$MidiPlayer.position = 0
@@ -174,6 +166,7 @@ func resume():
 	$controls_ui.visible = false
 	$Stats.visible = true
 	$Matrix.visible = true
+	$Matrix/GridMap.visible = true
 	$Hold.visible = true
 	$Next.visible = true
 	current_piece.visible = true
@@ -194,6 +187,7 @@ func pause(gui=null):
 		gui.visible = true
 		$Stats.visible = false
 		$Matrix.visible = false
+		$Matrix/GridMap.visible = false
 		$Hold.visible = false
 		$Next.visible = false
 		current_piece.visible = false
@@ -208,8 +202,13 @@ func game_over():
 	$ReplayButton.visible = true
 
 func _on_ReplayButton_pressed():
-	pause($Start)
 	$ReplayButton.visible = false
+	pause($Start)
+	remove_child(next_piece)
+	remove_child(current_piece)
+	if held_piece:
+		remove_child(held_piece)
+		held_piece = null
 	
 func _notification(what):
 	match what:
