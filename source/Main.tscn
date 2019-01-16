@@ -229,7 +229,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 12 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = SubResource( 2 )
 script = ExtResource( 1 )
@@ -285,7 +285,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="2"]
 
-transform = Transform( -0.241094, 0.489231, -0.838169, 0.896995, 0.442041, 0, 0.370504, -0.751834, -0.545411, 5, 30, 0 )
+transform = Transform( 0.332668, 0.771982, -0.541642, 0.579657, 0.285656, 0.763151, 0.743861, -0.567843, -0.352456, 5, 30, 0 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 3.0
@@ -426,7 +426,7 @@ autostart = false
 [node name="AutoShiftTimer" type="Timer" parent="." index="9"]
 
 process_mode = 1
-wait_time = 0.02
+wait_time = 0.03
 one_shot = false
 autostart = false
 
@@ -549,6 +549,8 @@ align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
+
+[connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
 
 [connection signal="timeout" from="AutoShiftDelay" to="." method="_on_AutoShiftDelay_timeout"]
 
