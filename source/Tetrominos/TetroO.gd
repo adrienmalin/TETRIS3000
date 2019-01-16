@@ -1,5 +1,5 @@
 extends "Tetromino.gd"
 
-func rotate(direction):
-	return false
-	
+const CLOCKWISE = -1
+const COUNTERCLOCKWISE = 1
+const SUPER_ROTATION_SYSTEM = [{CLOCKWISE: [], COUNTERCLOCKWISE: []}]
