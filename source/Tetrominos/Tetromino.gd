@@ -3,9 +3,6 @@ extends Spatial
 const NB_MINOES = 4
 const CLOCKWISE = -1
 const COUNTERCLOCKWISE = 1
-const NO_T_SPIN = 0
-const T_SPIN = 1
-const MINI_T_SPIN = 2
 const SUPER_ROTATION_SYSTEM = [
     {
         COUNTERCLOCKWISE: [
@@ -77,7 +74,7 @@ var minoes = []
 var grid_map
 var lock_delay
 var orientation = 0
-var t_spin = NO_T_SPIN
+var t_spin = ""
 
 func _ready():
 	randomize()

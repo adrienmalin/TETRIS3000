@@ -1,14 +1,13 @@
 extends MarginContainer
 
 const SCORES = [
-	[0, 4, 1],
-	[1, 8, 2],
-	[3, 12],
-	[5, 16],
-	[8]
+	{"": 0, "MINI T-SPIN": 1, "T-SPIN": 4},
+	{"": 1, "MINI T-SPIN": 2, "T-SPIN": 8},
+	{"": 3, "T-SPIN": 12},
+	{"": 5, "T-SPIN": 16},
+	{"": 8}
 ]
 const LINES_CLEARED_NAMES = ["", "SINGLE", "DOUBLE", "TRIPLE", "TETRIS"]
-const T_SPIN_NAMES = ["", "T-SPIN", "MINI T-SPIN"]
 const password = "TETRIS 3000"
 
 var level
@@ -17,12 +16,13 @@ var score
 var high_score
 var time
 var combos
+var flash_text
 
-signal flash_text(text)
 signal level_up(level)
 
 func _ready():
 	load_user_data()
+	flash_text = get_node("../FlashText")
 	
 func load_user_data():
 	var save_game = File.new()
@@ -49,7 +49,7 @@ func new_level():
 	goal += 5 * level
 	$VBC/Level.text = str(level)
 	$VBC/Goal.text = str(goal)
-	emit_signal("flash_text", "Level\n%d"%level)
+	flash_text.print("Level\n%d"%level)
 	emit_signal("level_up", level)
 
 func _on_Clock_timeout():
@@ -69,16 +69,16 @@ func piece_dropped(ds):
 func piece_locked(lines, t_spin):
 	var ds
 	if lines or t_spin:
-		var text = T_SPIN_NAMES[t_spin]
+		var text = t_spin
 		if lines and t_spin:
 			text += " "
 		text += LINES_CLEARED_NAMES[lines]
-		emit_signal("flash_text", text)
+		flash_text.print(text)
 		ds = SCORES[lines][t_spin]
 		goal -= ds
 		$VBC/Goal.text = str(goal)
 		ds *= 100 * level
-		emit_signal("flash_text", str(ds))
+		flash_text.print(str(ds))
 		score += ds
 		$VBC/Score.text = str(score)
 	if score > high_score:
@@ -89,9 +89,9 @@ func piece_locked(lines, t_spin):
 		combos += 1
 		if combos > 0:
 			if combos == 1:
-				emit_signal("flash_text", "COMBO")
+				flash_text.print("COMBO")
 			else:
-				emit_signal("flash_text", "COMBO x%d"%combos)
+				flash_text.print("COMBO x%d"%combos)
 			ds = (20 if lines==1 else 50) * combos * level
 			emit_signal("flash_text", str(ds))
 			score += ds
