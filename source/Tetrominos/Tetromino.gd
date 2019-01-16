@@ -117,9 +117,9 @@ func rotate(direction):
 			set_translations(rotated_translations)
 			translate(movements[i])
 			lock_delay.start()
+			rotated_last = true
 			if i == 4:
 				rotation_point_5_used = true
-			rotated_last = true
 			return true
 	return false
 	
