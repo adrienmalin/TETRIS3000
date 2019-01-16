@@ -69,11 +69,12 @@ func piece_dropped(ds):
 func piece_locked(lines, t_spin):
 	var ds
 	if lines or t_spin:
-		var text = t_spin
 		if lines and t_spin:
-			text += " "
-		text += LINES_CLEARED_NAMES[lines]
-		flash_text.print(text)
+			flash_text.print(t_spin + " " + LINES_CLEARED_NAMES[lines])
+		elif lines:
+			flash_text.print(LINES_CLEARED_NAMES[lines])
+		elif t_spin:
+			flash_text.print(t_spin)
 		ds = SCORES[lines][t_spin]
 		goal -= ds
 		$VBC/Goal.text = str(goal)

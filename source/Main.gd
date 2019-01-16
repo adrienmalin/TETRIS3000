@@ -132,9 +132,10 @@ func _on_DropTimer_timeout():
 		
 func lock():
 	if $Matrix/GridMap.lock(current_piece):
+		var t_spin = current_piece.t_spin()
 		var lines_cleared = $Matrix/GridMap.clear_lines()
-		$Stats.piece_locked(lines_cleared, current_piece.t_spin)
-		if lines_cleared or current_piece.t_spin:
+		$Stats.piece_locked(lines_cleared, t_spin)
+		if lines_cleared or t_spin:
 			$MidiPlayer.piece_locked(lines_cleared)
 		remove_child(current_piece)
 		new_piece()

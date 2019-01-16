@@ -74,7 +74,7 @@ var minoes = []
 var grid_map
 var lock_delay
 var orientation = 0
-var t_spin = ""
+var rotation_point_5_used = false
 
 func _ready():
 	randomize()
@@ -112,13 +112,17 @@ func rotate(direction):
 	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
 	for i in range(movements.size()):
 		if grid_map.possible_positions(rotated_translations, movements[i]):
-			orientation -= direction
-			orientation %= NB_MINOES
+			orientation = (orientation - direction) % NB_MINOES
 			set_translations(rotated_translations)
 			translate(movements[i])
 			lock_delay.start()
-			return i+1
-	return 0
+			if i == 4:
+				rotation_point_5_used = true
+			return true
+	return false
+	
+func t_spin():
+	return ""
 	
 func emit_trail(visible):
 	var trail
