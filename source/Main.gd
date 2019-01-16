@@ -29,9 +29,9 @@ var playing = false
 
 func new_game(level):
 	$Start.visible = false
-	$Matrix/GridMap.clear()
 	next_piece = random_piece()
 	autoshift_action = ""
+	$LockDelay.wait_time = 0.5
 	$MidiPlayer.position = 0
 	$Stats.new_game(level)
 	new_piece()
@@ -203,12 +203,13 @@ func game_over():
 
 func _on_ReplayButton_pressed():
 	$ReplayButton.visible = false
-	pause($Start)
 	remove_child(next_piece)
 	remove_child(current_piece)
 	if held_piece:
 		remove_child(held_piece)
 		held_piece = null
+	$Matrix/GridMap.clear()
+	pause($Start)
 	
 func _notification(what):
 	match what:
