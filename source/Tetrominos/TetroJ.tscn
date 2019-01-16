@@ -3,7 +3,7 @@
 [ext_resource path="res://Tetrominos/Tetromino.gd" type="Script" id=1]
 [ext_resource path="res://Tetrominos/Mino/Mino.tscn" type="PackedScene" id=2]
 
-[node name="TetroJ" type="Spatial" index="0"]
+[node name="TetroJ" type="Spatial"]
 
 script = ExtResource( 1 )
 

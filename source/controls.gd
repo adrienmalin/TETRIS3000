@@ -98,8 +98,9 @@ func _input(event):
 		InputMap.action_add_event(action, event)
 		save_to_config("input", action, scancode)
 		enable_resume = true
-
-
+		
+		hint_text()
+	
 func _ready():
 	# Load config if existing, if not it will be generated with default values
 	load_config()
@@ -111,6 +112,13 @@ func _ready():
 		var button = get_node("bindings").get_node(action).get_node("Button")
 		button.text = OS.get_scancode_string(input_event.scancode)
 		button.connect("pressed", self, "wait_for_input", [action])
+		
+	hint_text()
+
+func hint_text():
+	var input_event = InputMap.get_action_list("pause")[0]
+	var scancode = OS.get_scancode_string(input_event.scancode)
+	$hint.text = "Press "+ scancode + " to resume\nor click on a button to change key assignment"
 	
 	# Do not start processing input until a button is pressed
 	set_process_input(false)
