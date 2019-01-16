@@ -118,7 +118,7 @@ func _ready():
 func hint_text():
 	var input_event = InputMap.get_action_list("pause")[0]
 	var scancode = OS.get_scancode_string(input_event.scancode)
-	$hint.text = "Press "+ scancode + " to resume\nor click on a button to change key assignment"
+	$hint.text = "Press ["+ scancode + "] to resume\nor click on a button to change key assignment"
 	
 	# Do not start processing input until a button is pressed
 	set_process_input(false)

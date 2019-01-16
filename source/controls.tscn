@@ -464,7 +464,7 @@ anchor_bottom = 0.0
 margin_left = -220.0
 margin_top = -135.0
 margin_right = 280.0
-margin_bottom = -103.0
+margin_bottom = -84.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -472,7 +472,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 4
 custom_fonts/font = ExtResource( 3 )
-text = "Press the pause/resume key to resume
+text = "Press [pause key] to resume
 or click on a button to change key assignment"
 align = 1
 valign = 1
