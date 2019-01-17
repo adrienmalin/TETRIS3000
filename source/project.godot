@@ -17,8 +17,8 @@ config/icon="res://icons/48.png"
 
 [display]
 
-window/size/width=500
-window/size/height=500
+window/size/width=640
+window/size/height=480
 window/vsync/use_vsync=false
 window/stretch/aspect="expand"
 
