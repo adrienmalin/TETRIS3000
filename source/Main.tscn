@@ -435,7 +435,8 @@ autostart = false
 
 editor/display_folded = true
 script = ExtResource( 6 )
-file = "res://midi/Tetris - Song A.mid"
+_sections_unfolded = [ "Pause" ]
+file = "res://midi/Korobeiniki.mid"
 volume_db = -24
 loop = true
 loop_start = 1.81
@@ -550,8 +551,6 @@ align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [connection signal="timeout" from="DropTimer" to="." method="_on_DropTimer_timeout"]
-
-[connection signal="timeout" from="LockDelay" to="." method="_on_LockDelay_timeout"]
 
 [connection signal="timeout" from="AutoShiftDelay" to="." method="_on_AutoShiftDelay_timeout"]
 
