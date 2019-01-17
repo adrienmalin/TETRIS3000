@@ -74,7 +74,7 @@ func _unhandled_input(event):
 	if event.is_action_pressed("pause"):
 		if playing:
 			pause($controls_ui)
-		elif $controls_ui.enable_resume:
+		else:
 			resume()
 	if event.is_action_pressed("toggle_fullscreen"):
 		OS.window_fullscreen = not OS.window_fullscreen
