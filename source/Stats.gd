@@ -16,13 +16,12 @@ var score
 var high_score
 var time
 var combos
-var flash_text
 
 signal level_up(level)
+signal flash_text(text)
 
 func _ready():
 	load_user_data()
-	flash_text = get_node("../FlashText")
 	
 func load_user_data():
 	var save_game = File.new()
@@ -49,7 +48,7 @@ func new_level():
 	goal += 5 * level
 	$VBC/Level.text = str(level)
 	$VBC/Goal.text = str(goal)
-	flash_text.print("Level\n%d"%level)
+	emit_signal("flash_text", "Level\n%d"%level)
 	emit_signal("level_up", level)
 
 func _on_Clock_timeout():
@@ -70,15 +69,15 @@ func piece_locked(lines, t_spin):
 	var ds
 	if lines or t_spin:
 		if lines and t_spin:
-			flash_text.print(t_spin + " " + LINES_CLEARED_NAMES[lines])
+			emit_signal("flash_text", t_spin + " " + LINES_CLEARED_NAMES[lines])
 		elif lines:
-			flash_text.print(LINES_CLEARED_NAMES[lines])
+			emit_signal("flash_text", LINES_CLEARED_NAMES[lines])
 		elif t_spin:
-			flash_text.print(t_spin)
+			emit_signal("flash_text", t_spin)
 		goal -= SCORES[lines][""]
 		$VBC/Goal.text = str(goal)
 		ds = 100 * level * SCORES[lines][t_spin]
-		flash_text.print(str(ds))
+		emit_signal("flash_text", str(ds))
 		score += ds
 		$VBC/Score.text = str(score)
 	if score > high_score:
@@ -89,9 +88,9 @@ func piece_locked(lines, t_spin):
 		combos += 1
 		if combos > 0:
 			if combos == 1:
-				flash_text.print("COMBO")
+				emit_signal("flash_text", "COMBO")
 			else:
-				flash_text.print("COMBO x%d"%combos)
+				emit_signal("flash_text", "COMBO x%d"%combos)
 			ds = (20 if lines==1 else 50) * combos * level
 			emit_signal("flash_text", str(ds))
 			score += ds
