@@ -255,7 +255,7 @@ opacity = 1.0
 pixel_size = 0.01
 axis = 2
 transparent = false
-shaded = true
+shaded = false
 double_sided = false
 alpha_cut = 0
 texture = ExtResource( 2 )
@@ -439,6 +439,7 @@ _sections_unfolded = [ "Pause" ]
 file = "res://midi/Korobeiniki.mid"
 volume_db = -24
 loop = true
+loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
