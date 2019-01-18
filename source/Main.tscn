@@ -439,7 +439,6 @@ _sections_unfolded = [ "Pause" ]
 file = "res://midi/Korobeiniki.mid"
 volume_db = -24
 loop = true
-loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
