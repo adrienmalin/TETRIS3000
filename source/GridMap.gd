@@ -1,12 +1,12 @@
 extends GridMap
 
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
-const ExplodingLine = preload("res://ExplodingLine.tscn")
+const ExplodingMino = preload("res://Tetrominos/Mino/ExplodingMino.tscn")
 
 const EMPTY_CELL = -1
 const MINO = 0
 
-var exploding_lines = []
+var exploding_minoes = []
 var nb_collumns
 var nb_lines
 
@@ -14,9 +14,11 @@ func _ready():
 	nb_collumns = int(get_parent().scale.x)
 	nb_lines = int(get_parent().scale.y)
 	for y in range(nb_lines):
-		exploding_lines.append(ExplodingLine.instance())
-		add_child(exploding_lines[y])
-		exploding_lines[y].translation = Vector3(nb_collumns/2, y, 1)
+		exploding_minoes.append([])
+		for x in range(nb_collumns):
+			exploding_minoes[y].append(ExplodingMino.instance())
+			add_child(exploding_minoes[y][x])
+			exploding_minoes[y][x].translation = Vector3(x, y, 0)
 
 func clear():
 	for used_cell in get_used_cells():
@@ -65,6 +67,7 @@ func clear_lines():
 					var above_cell = get_cell_item(x, y2+1, 0)
 					set_cell_item(x, y2, 0, above_cell)
 			lines_cleared += 1
-			exploding_lines[y].emitting = true
-			exploding_lines[y].restart()
+			for x in range(nb_collumns):
+				exploding_minoes[y][x].emitting = true
+				exploding_minoes[y][x].restart()
 	return lines_cleared
