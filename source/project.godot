@@ -50,4 +50,5 @@ toggle_fullscreen=[ Object(InputEventKey,"resource_local_to_scene":false,"resour
 [rendering]
 
 environment/default_clear_color=Color( 0, 0, 0, 1 )
+environment/default_environment="res://Environment.tres"
 quality/main_loop_type=""
