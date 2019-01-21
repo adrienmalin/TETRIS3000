@@ -1,5 +1,5 @@
 extends "Tetromino.gd"
 
-func rotate(direction):
+func turn(direction):
 	return false
 	

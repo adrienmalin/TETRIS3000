@@ -3,7 +3,8 @@ extends Spatial
 const NB_MINOES = 4
 const CLOCKWISE = -1
 const COUNTERCLOCKWISE = 1
-const SUPER_ROTATION_SYSTEM = [
+
+var super_rotation_system = [
     {
         COUNTERCLOCKWISE: [
 			Vector3(0, 0, 0),
@@ -101,7 +102,7 @@ func move(movement):
 		return true
 	return false
 	
-func rotate(direction):
+func turn(direction):
 	var translations = get_translations()
 	var rotated_translations = [translations[0]]
 	var center = translations[0]
@@ -110,7 +111,7 @@ func rotate(direction):
 		rt = Vector3(-1*direction*rt.y, direction*rt.x, 0)
 		rt += center
 		rotated_translations.append(rt)
-	var movements = SUPER_ROTATION_SYSTEM[orientation][direction]
+	var movements = super_rotation_system[orientation][direction]
 	for i in range(movements.size()):
 		if grid_map.possible_positions(rotated_translations, movements[i]):
 			orientation = (orientation - direction) % NB_MINOES

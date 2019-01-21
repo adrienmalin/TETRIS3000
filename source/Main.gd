@@ -100,9 +100,9 @@ func _unhandled_input(event):
 		if event.is_action_pressed("hard_drop"):
 			hard_drop()
 		if event.is_action_pressed("rotate_clockwise"):
-			current_piece.rotate(Tetromino.CLOCKWISE)
+			current_piece.turn(Tetromino.CLOCKWISE)
 		if event.is_action_pressed("rotate_counterclockwise"):
-			current_piece.rotate(Tetromino.COUNTERCLOCKWISE)
+			current_piece.turn(Tetromino.COUNTERCLOCKWISE)
 		if event.is_action_pressed("hold"):
 			hold()
 
