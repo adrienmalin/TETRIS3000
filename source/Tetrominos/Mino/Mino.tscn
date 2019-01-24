@@ -162,7 +162,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="Mino" type="Spatial" index="0"]
+[node name="Mino" type="Spatial"]
 
 transform = Transform( 0.997027, 0, 0, 0, 0.997027, 0, 0, 0, 0.997027, 0, 0, 0 )
 _sections_unfolded = [ "Pause", "Transform", "Visibility" ]
@@ -204,7 +204,7 @@ _sections_unfolded = [ "Draw Passes", "Drawing", "Geometry", "LOD", "Process Mat
 
 [node name="SpotLight" type="SpotLight" parent="." index="2"]
 
-transform = Transform( 1, 0, 0, 0, -4.37114e-008, 1, 0, -1, -4.37114e-008, 0, -0.5, 0.5 )
+transform = Transform( 1, 0, 0, 0, 0.0174524, 0.999848, 0, -0.999848, 0.0174524, 0, -0.5, 0.6 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 16.0
