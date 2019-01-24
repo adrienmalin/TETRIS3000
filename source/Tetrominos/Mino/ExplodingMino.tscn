@@ -36,7 +36,7 @@ flag_rotate_y = true
 flag_disable_z = false
 spread = 0.0
 flatness = 0.0
-gravity = Vector3( 0, -10, 20 )
+gravity = Vector3( 0, -10, 10 )
 initial_velocity = 100.0
 initial_velocity_random = 1.0
 angular_velocity = 210.0
@@ -63,7 +63,7 @@ anim_offset_random = 0.0
 anim_loop = false
 _sections_unfolded = [ "Angular Velocity", "Color", "Emission Shape", "Gravity", "Initial Velocity", "Linear Accel", "Scale", "Spread" ]
 
-[node name="ExplodingMino" type="Particles"]
+[node name="ExplodingMino" type="Particles" index="0"]
 
 layers = 1
 material_override = null

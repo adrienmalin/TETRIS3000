@@ -145,14 +145,14 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 13 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Background" type="Sprite3D" parent="." index="0"]
 
-transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, -3, -30 )
+transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, 25, -16 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -184,7 +184,7 @@ _sections_unfolded = [ "Animation", "Flags", "Geometry", "Transform" ]
 
 [node name="Camera" type="Camera" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 4.5, 16, 15 )
+transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 4.5, 2, 17 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -230,7 +230,6 @@ _sections_unfolded = [ "Light", "Transform" ]
 [node name="Matrix" type="MeshInstance" parent="." index="3"]
 
 transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
-visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -274,8 +273,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Hold" type="MeshInstance" parent="." index="4"]
 
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 1, -4.5, 16.5, 0 )
-visible = false
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, -5, 16, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -297,8 +295,7 @@ _sections_unfolded = [ "Transform" ]
 
 [node name="Next" type="MeshInstance" parent="." index="5"]
 
-transform = Transform( 6, 0, 0, 0, 6, 0, 0, 0, 1, 13.5, 16.5, 0 )
-visible = false
+transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, 14, 16, 0 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -425,10 +422,10 @@ anchor_left = 0.0
 anchor_top = 1.0
 anchor_right = 0.0
 anchor_bottom = 1.0
-margin_left = 30.0
-margin_top = -215.0
-margin_right = 140.0
-margin_bottom = -30.0
+margin_left = 55.0
+margin_top = -250.0
+margin_right = 165.0
+margin_bottom = -40.0
 
 [node name="controls_ui" parent="." index="13" instance=ExtResource( 11 )]
 
