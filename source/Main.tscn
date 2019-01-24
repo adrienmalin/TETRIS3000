@@ -184,7 +184,7 @@ _sections_unfolded = [ "Animation", "Flags", "Geometry", "Transform" ]
 
 [node name="Camera" type="Camera" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 4.5, 0, 10 )
+transform = Transform( 1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 4.5, -0.5, 12 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
@@ -230,6 +230,7 @@ _sections_unfolded = [ "Light", "Transform" ]
 [node name="Matrix" type="MeshInstance" parent="." index="3"]
 
 transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -274,6 +275,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="Hold" type="MeshInstance" parent="." index="4"]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, -5, 16, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -296,6 +298,7 @@ _sections_unfolded = [ "Transform" ]
 [node name="Next" type="MeshInstance" parent="." index="5"]
 
 transform = Transform( 7, 0, 0, 0, 7, 0, 0, 0, 1, 14, 16, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
