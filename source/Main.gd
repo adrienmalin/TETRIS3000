@@ -122,6 +122,8 @@ func hard_drop():
 	var score = 0
 	while current_piece.move(movements["soft_drop"]):
 		score += 2
+		for mino in current_piece.minoes:
+			mino.get_node("Trail").emit()
 	$Stats.piece_dropped(score)
 	$LockDelay.stop()
 	lock()
