@@ -83,20 +83,9 @@ func _unhandled_input(event):
 			$AutoShiftDelay.stop()
 			$AutoShiftTimer.stop()
 			autoshift_action = ""
-			for action in movements:
-				if Input.is_action_pressed(action):
-					autoshift_action = action
-					process_autoshift()
-					$AutoShiftDelay.start()
-					break
-		for action in movements:
-			if action != autoshift_action:
-				if event.is_action_pressed(action):
-					$AutoShiftTimer.stop()
-					autoshift_action = action
-					process_autoshift()
-					$AutoShiftDelay.start()
-					break
+			process_new_action(Input)
+		else:
+			process_new_action(event)
 		if event.is_action_pressed("hard_drop"):
 			hard_drop()
 		if event.is_action_pressed("rotate_clockwise"):
@@ -105,6 +94,15 @@ func _unhandled_input(event):
 			current_piece.turn(Tetromino.COUNTERCLOCKWISE)
 		if event.is_action_pressed("hold"):
 			hold()
+			
+func process_new_action(event):
+	for action in movements:
+		if action != autoshift_action and event.is_action_pressed(action):
+			$AutoShiftTimer.stop()
+			autoshift_action = action
+			process_autoshift()
+			$AutoShiftDelay.start()
+			break
 
 func _on_AutoShiftDelay_timeout():
 	if autoshift_action:
