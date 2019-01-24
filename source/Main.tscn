@@ -145,7 +145,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 13 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment"]
+[node name="Main" type="WorldEnvironment" index="0"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
