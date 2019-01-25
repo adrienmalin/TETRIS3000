@@ -123,8 +123,16 @@ func hard_drop():
 	while current_piece.move(movements["soft_drop"]):
 		score += 2
 	$Stats.piece_dropped(score)
+	var translations = current_piece.get_translations()
+	for i in range(Tetromino.NB_MINOES):
+		get_node("DropTrail/"+str(i)).translation = translations[i]
+	$DropTrail.visible = true
+	$DropTrail/Delay.start()
 	$LockDelay.stop()
 	lock()
+
+func _on_DropTrailDelay_timeout():
+	$DropTrail.visible = false
 
 func _on_DropTimer_timeout():
 	if not current_piece.move(movements["soft_drop"]):
