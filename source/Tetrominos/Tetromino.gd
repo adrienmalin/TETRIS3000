@@ -3,6 +3,7 @@ extends Spatial
 const NB_MINOES = 4
 const CLOCKWISE = -1
 const COUNTERCLOCKWISE = 1
+const DROP_MOVEMENT = Vector3(0, -1, 0)
 
 var super_rotation_system = [
     {
@@ -97,10 +98,16 @@ func get_translations():
 func move(movement):
 	if grid_map.possible_positions(get_translations(), movement):
 		translate(movement)
-		lock_delay.start()
+		if movement == DROP_MOVEMENT:
+			locking(false)
+			lock_delay.stop()
 		rotated_last = false
 		return true
-	return false
+	else:
+		if movement == DROP_MOVEMENT:
+			locking(true)
+			lock_delay.start()
+		return false
 	
 func turn(direction):
 	var translations = get_translations()
@@ -117,7 +124,8 @@ func turn(direction):
 			orientation = (orientation - direction) % NB_MINOES
 			set_translations(rotated_translations)
 			translate(movements[i])
-			lock_delay.start()
+			lock_delay.stop()
+			locking(false)
 			rotated_last = true
 			if i == 4:
 				rotation_point_5_used = true
@@ -131,3 +139,6 @@ func turn_light(on):
 	for mino in minoes:
 		mino.get_node("SpotLight").visible = on
 		
+func locking(visible):
+	for mino in minoes:
+		mino.get_node("LockingMesh").visible = visible

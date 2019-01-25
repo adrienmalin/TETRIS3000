@@ -135,10 +135,8 @@ func _on_DropTrailDelay_timeout():
 	$DropTrail.visible = false
 
 func _on_DropTimer_timeout():
-	if not current_piece.move(movements["soft_drop"]):
-		if $LockDelay.is_stopped():
-			lock()
-		
+	current_piece.move(movements["soft_drop"])
+
 func lock():
 	if $Matrix/GridMap.lock(current_piece):
 		var t_spin = current_piece.t_spin()
@@ -168,7 +166,6 @@ func hold():
 func resume():
 	playing = true
 	$DropTimer.start()
-	$LockDelay.start()
 	$Stats.time = OS.get_system_time_secs() - $Stats.time
 	$Stats/Clock.start()
 	$MidiPlayer.resume()
@@ -206,7 +203,6 @@ func pause(gui=null):
 
 func game_over():
 	pause()
-	current_piece.emit_trail(false)
 	$FlashText.print("GAME\nOVER")
 	$ReplayButton.visible = true
 
