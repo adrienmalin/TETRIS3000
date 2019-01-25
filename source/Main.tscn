@@ -88,7 +88,7 @@ subdivide_depth = 0
 
 [sub_resource type="DynamicFont" id=4]
 
-size = 30
+size = 50
 use_mipmaps = true
 use_filter = false
 font_data = ExtResource( 9 )
@@ -372,9 +372,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -250.0
-margin_top = -250.0
+margin_top = -300.0
 margin_right = 250.0
-margin_bottom = 250.0
+margin_bottom = 200.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -382,7 +382,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = ExtResource( 8 )
-_sections_unfolded = [ "Material", "Size Flags", "Theme" ]
+_sections_unfolded = [ "Material", "Rect", "Size Flags", "Theme" ]
 
 [node name="Label" type="Label" parent="FlashText" index="0"]
 
@@ -390,9 +390,9 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 190.0
+margin_top = -100.0
 margin_right = 500.0
-margin_bottom = 690.0
+margin_bottom = 400.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 2
@@ -468,6 +468,7 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [node name="DropTrail" type="Spatial" parent="." index="16"]
 
+editor/display_folded = true
 visible = false
 _sections_unfolded = [ "Transform" ]
 
