@@ -66,7 +66,7 @@ func random_piece():
 
 func new_level(level):
 	if level <= 15:
-		$DropTimer.wait_time = pow(0.8 - ((level - 1) * 0.007), level - 1)
+		$DropTimer.wait_time = pow(0.8 - ((level-1)*0.007), level-1)
 	else:
 		$LockDelay.wait_time = 0.5 * pow(0.9, level-15)
 
