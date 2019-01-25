@@ -43,7 +43,7 @@ func new_game(level):
 func new_piece():
 	current_piece = next_piece
 	current_piece.translation = $Matrix/Position3D.translation
-	current_piece.emit_trail(true)
+	current_piece.turn_light(true)
 	next_piece = random_piece()
 	next_piece.translation = $Next/Position3D.translation
 	if current_piece.move(THERE):
@@ -157,11 +157,11 @@ func hold():
 		var swap = current_piece
 		current_piece = held_piece
 		held_piece = swap
-		held_piece.emit_trail(false)
+		held_piece.turn_light(false)
 		held_piece.translation = $Hold/Position3D.translation
 		if current_piece:
 			current_piece.translation = $Matrix/Position3D.translation
-			current_piece.emit_trail(true)
+			current_piece.turn_light(true)
 		else:
 			new_piece()
 		

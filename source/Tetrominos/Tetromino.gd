@@ -127,10 +127,7 @@ func turn(direction):
 func t_spin():
 	return ""
 	
-func emit_trail(visible):
-	var trail
+func turn_light(on):
 	for mino in minoes:
-		trail = mino.get_node("Trail")
-		trail.emitting = visible
-		trail.visible = visible
-		mino.get_node("SpotLight").visible = visible
+		mino.get_node("SpotLight").visible = on
+		
