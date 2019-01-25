@@ -99,14 +99,12 @@ func move(movement):
 	if grid_map.possible_positions(get_translations(), movement):
 		translate(movement)
 		if movement == DROP_MOVEMENT:
-			locking(false)
-			lock_delay.stop()
+			unlocking()
 		rotated_last = false
 		return true
 	else:
 		if movement == DROP_MOVEMENT:
-			locking(true)
-			lock_delay.start()
+			locking()
 		return false
 	
 func turn(direction):
@@ -124,8 +122,7 @@ func turn(direction):
 			orientation = (orientation - direction) % NB_MINOES
 			set_translations(rotated_translations)
 			translate(movements[i])
-			lock_delay.stop()
-			locking(false)
+			unlocking()
 			rotated_last = true
 			if i == 4:
 				rotation_point_5_used = true
@@ -139,6 +136,12 @@ func turn_light(on):
 	for mino in minoes:
 		mino.get_node("SpotLight").visible = on
 		
-func locking(visible):
+func locking():
+	if lock_delay.is_stopped():
+		lock_delay.start()
 	for mino in minoes:
-		mino.get_node("LockingMesh").visible = visible
+		mino.get_node("LockingMesh").visible = true
+
+func unlocking():
+	if not lock_delay.is_stopped():
+		lock_delay.start()

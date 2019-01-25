@@ -46,7 +46,7 @@ func new_piece():
 	current_piece.turn_light(true)
 	next_piece = random_piece()
 	next_piece.translation = $Next/Position3D.translation
-	if current_piece.move(THERE):
+	if $Matrix/GridMap.possible_positions(current_piece.get_translations(), THERE):
 		$DropTimer.start()
 		current_piece_held = false
 	else:
@@ -138,7 +138,7 @@ func _on_DropTimer_timeout():
 	current_piece.move(movements["soft_drop"])
 	
 func _on_LockDelay_timeout():
-	if not current_piece.move(movements["soft_drop"]):
+	if not $Matrix/GridMap.possible_positions(current_piece.get_translations(), movements["soft_drop"]):
 		lock()
 
 func lock():
@@ -160,6 +160,8 @@ func hold():
 		current_piece = held_piece
 		held_piece = swap
 		held_piece.turn_light(false)
+		for mino in held_piece.minoes:
+			mino.get_node("LockingMesh").visible = false
 		held_piece.translation = $Hold/Position3D.translation
 		if current_piece:
 			current_piece.translation = $Matrix/Position3D.translation
