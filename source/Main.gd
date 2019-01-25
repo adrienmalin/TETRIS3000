@@ -136,6 +136,10 @@ func _on_DropTrailDelay_timeout():
 
 func _on_DropTimer_timeout():
 	current_piece.move(movements["soft_drop"])
+	
+func _on_LockDelay_timeout():
+	if not current_piece.move(movements["soft_drop"]):
+		lock()
 
 func lock():
 	if $Matrix/GridMap.lock(current_piece):
