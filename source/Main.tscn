@@ -146,7 +146,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 13 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
@@ -468,6 +468,7 @@ _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
 
 [node name="DropTrail" type="Spatial" parent="." index="16"]
 
+visible = false
 _sections_unfolded = [ "Transform" ]
 
 [node name="0" type="Spatial" parent="DropTrail" index="0"]
