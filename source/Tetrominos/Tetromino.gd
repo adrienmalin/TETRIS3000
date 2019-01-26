@@ -98,8 +98,7 @@ func get_translations():
 func move(movement):
 	if grid_map.possible_positions(get_translations(), movement):
 		translate(movement)
-		if movement == DROP_MOVEMENT:
-			unlocking()
+		unlocking()
 		rotated_last = false
 		return true
 	else:
