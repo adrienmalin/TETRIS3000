@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=22 format=2]
 
 [ext_resource path="res://Environment.tres" type="Environment" id=1]
 [ext_resource path="res://Main.gd" type="Script" id=2]
@@ -14,6 +14,7 @@
 [ext_resource path="res://controls.tscn" type="PackedScene" id=12]
 [ext_resource path="res://Start.tscn" type="PackedScene" id=13]
 [ext_resource path="res://fonts/Gamer.ttf" type="DynamicFontData" id=14]
+[ext_resource path="res://Tetrominos/Ghost.tscn" type="PackedScene" id=15]
 
 [sub_resource type="SpatialMaterial" id=1]
 
@@ -146,14 +147,14 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 14 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment" index="0"]
+[node name="Main" type="WorldEnvironment"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
 
 [node name="Background" type="Sprite3D" parent="." index="0"]
 
-transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, 29, -34 )
+transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, 28.8, -34 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -626,6 +627,10 @@ text = "play again"
 flat = false
 align = 1
 _sections_unfolded = [ "Margin", "custom_colors", "custom_fonts" ]
+
+[node name="Ghost" parent="." index="16" instance=ExtResource( 15 )]
+
+visible = false
 
 [connection signal="timeout" from="Matrix/DropTrail/Delay" to="." method="_on_DropTrailDelay_timeout"]
 

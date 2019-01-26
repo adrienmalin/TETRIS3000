@@ -43,7 +43,7 @@ func new_game(level):
 func new_piece():
 	current_piece = next_piece
 	current_piece.translation = $Matrix/Position3D.translation
-	current_piece.turn_light(true)
+	current_piece.move_ghost()
 	next_piece = random_piece()
 	next_piece.translation = $Next/Position3D.translation
 	if $Matrix/GridMap.possible_positions(current_piece.get_translations(), THERE):
@@ -159,13 +159,12 @@ func hold():
 		var swap = current_piece
 		current_piece = held_piece
 		held_piece = swap
-		held_piece.turn_light(false)
 		for mino in held_piece.minoes:
 			mino.get_node("LockingMesh").visible = false
 		held_piece.translation = $Hold/Position3D.translation
 		if current_piece:
 			current_piece.translation = $Matrix/Position3D.translation
-			current_piece.turn_light(true)
+			current_piece.move_ghost()
 		else:
 			new_piece()
 		
@@ -182,6 +181,7 @@ func resume():
 	$Hold.visible = true
 	$Next.visible = true
 	current_piece.visible = true
+	$Ghost.visible = true
 	if held_piece:
 		held_piece.visible = true
 	next_piece.visible = true
@@ -203,6 +203,7 @@ func pause(gui=null):
 		$Hold.visible = false
 		$Next.visible = false
 		current_piece.visible = false
+		$Ghost.visible = false
 		if held_piece:
 			held_piece.visible = false
 		next_piece.visible = false

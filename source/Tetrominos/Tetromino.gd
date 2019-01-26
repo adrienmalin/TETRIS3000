@@ -73,17 +73,19 @@ var super_rotation_system = [
 ]
 
 var minoes = []
-var grid_map
-var lock_delay
 var orientation = 0
 var rotation_point_5_used = false
 var rotated_last = false
+var grid_map
+var lock_delay
+var ghost
 
 func _ready():
 	for i in range(NB_MINOES):
 		minoes.append(get_node("Mino"+str(i)))
 	grid_map = get_node("../Matrix/GridMap")
 	lock_delay = get_node("../LockDelay")
+	ghost = get_node("../Ghost")
 	
 func set_translations(translations):
 	for i in range(NB_MINOES):
@@ -100,6 +102,7 @@ func move(movement):
 		translate(movement)
 		unlocking()
 		rotated_last = false
+		move_ghost()
 		return true
 	else:
 		if movement == DROP_MOVEMENT:
@@ -125,16 +128,18 @@ func turn(direction):
 			rotated_last = true
 			if i == 4:
 				rotation_point_5_used = true
+			move_ghost()
 			return true
 	return false
+	
+func move_ghost():
+	ghost.set_translations(get_translations())
+	while grid_map.possible_positions(ghost.get_translations(), DROP_MOVEMENT):
+		ghost.translate(DROP_MOVEMENT)
 	
 func t_spin():
 	return ""
 	
-func turn_light(on):
-	for mino in minoes:
-		mino.get_node("SpotLight").visible = on
-		
 func locking():
 	if lock_delay.is_stopped():
 		lock_delay.start()
