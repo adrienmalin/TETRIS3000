@@ -153,7 +153,7 @@ script = ExtResource( 2 )
 
 [node name="Background" type="Sprite3D" parent="." index="0"]
 
-transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, 25, -32 )
+transform = Transform( 12.8, 0, 0, 0, 8.53, 0, 0, 0, 1, 4.5, 29, -34 )
 layers = 1
 material_override = null
 cast_shadow = 1
@@ -231,6 +231,7 @@ _sections_unfolded = [ "Light", "Transform" ]
 [node name="Matrix" type="MeshInstance" parent="." index="3"]
 
 transform = Transform( 10, 0, 0, 0, 20, 0, 0, 0, 1, 4.5, 9.5, 0 )
+visible = false
 layers = 1
 material_override = null
 cast_shadow = 1
