@@ -146,7 +146,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 13 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment"]
+[node name="Main" type="WorldEnvironment" index="0"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
@@ -185,7 +185,7 @@ _sections_unfolded = [ "Animation", "Flags", "Geometry", "Transform" ]
 
 [node name="Camera" type="Camera" parent="." index="1"]
 
-transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 4.5, 2, 17 )
+transform = Transform( 1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 4.5, 2, 19 )
 keep_aspect = 1
 cull_mask = 1048575
 environment = null
