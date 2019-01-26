@@ -2,7 +2,7 @@ extends "midi/MidiPlayer.gd"
 
 const Tetromino = preload("res://Tetrominos/Tetromino.gd")
 
-const LINE_CLEAR_CHANNELS = [2]
+const LINE_CLEAR_CHANNELS = [3]
 
 var muted_events = []
 

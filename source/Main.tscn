@@ -147,7 +147,7 @@ extra_spacing_bottom = 5
 font_data = ExtResource( 14 )
 _sections_unfolded = [ "Extra Spacing", "Font", "Settings" ]
 
-[node name="Main" type="WorldEnvironment"]
+[node name="Main" type="WorldEnvironment" index="0"]
 
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
@@ -514,10 +514,9 @@ autostart = false
 editor/display_folded = true
 script = ExtResource( 8 )
 _sections_unfolded = [ "Pause" ]
-file = "res://midi/Korobeiniki.mid"
+file = "res://midi/music-a-dance-remix-.mid"
 volume_db = -24
 loop = true
-loop_start = 1.81
 soundfont = "res://midi/TimGM6mb.sf2"
 
 [node name="LineCLearTimer" type="Timer" parent="MidiPlayer" index="1"]
