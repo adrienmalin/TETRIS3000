@@ -10,7 +10,5 @@ func print(text):
 	$AnimationPlayer.play("Flash")
 
 func _on_AnimationPlayer_animation_finished(anim_name):
-	texts = PoolStringArray()
-
-func _on_Stats_flash_text(text):
-	self.print(text)
+	texts.resize(0)
+	
