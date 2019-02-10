@@ -121,7 +121,7 @@ func turn(direction):
 	var movements = super_rotation_system[orientation][direction]
 	for i in range(movements.size()):
 		if grid_map.possible_positions(rotated_translations, movements[i]):
-			orientation = (orientation - direction) % NB_MINOES
+			orientation = (orientation - direction) % 4
 			set_translations(rotated_translations)
 			translate(movements[i])
 			unlocking()
